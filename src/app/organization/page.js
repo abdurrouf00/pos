@@ -1,6 +1,9 @@
 export default function OrganizationPage() {
   return(
 
-      <div>Organization Page content</div>;
+      <div>
+
+        <p>Organization Page content</p>
+      </div>
   )
 }
