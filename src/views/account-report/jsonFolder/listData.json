@@ -1,0 +1,369 @@
+[
+  {
+    "name": "Quote",
+    "children": [
+      {
+        "name": "Contacts",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Quote Item",
+        "children": [
+          { "name": "Item" },
+          { "name": "Projects" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Invoice",
+    "children": [
+      {
+        "name": "Contacts",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Invoice Item",
+        "children": [
+          { "name": "Item" }
+        ]
+      },
+      {
+        "name": "Quote",
+        "children": [
+          { "name": "Contacts" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Quote Item" },
+          { "name": "Invoice" }
+        ]
+      },
+      {
+        "name": "Credit Note",
+        "children": [
+          { "name": "Contacts" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Credit Notes Item" },
+          { "name": "Invoice" }
+        ]
+      },
+      {
+        "name": "Customer Payment",
+        "children": [
+          { "name": "Contacts" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Invoice" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Credit Note",
+    "children": [
+      {
+        "name": "Contacts",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Credit Notes Item",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Invoice",
+        "children": [
+          { "name": "Contacts" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Invoice Item" },
+          { "name": "Quote" },
+          { "name": "Credit Note" },
+          { "name": "Customer Payment" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Customer Payment",
+    "children": [
+      {
+        "name": "Contacts",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Invoice",
+        "children": [
+          { "name": "Contacts" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Invoice Item" },
+          { "name": "Quote" },
+          { "name": "Credit Note" },
+          { "name": "Customer Payment" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sales Receipt",
+    "children": [
+      {
+        "name": "Contacts",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Sales Receipt Items",
+        "children": [
+          { "name": "Item" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Expense",
+    "children": [
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Expense Item"
+      }
+    ]
+  },
+  {
+    "name": "Bill",
+    "children": [
+      {
+        "name": "Vendors",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Bill Item",
+        "children": [
+          { "name": "Item" },
+          { "name": "Projects" }
+        ]
+      },
+      {
+        "name": "Vendor Credits",
+        "children": [
+          { "name": "Vendors" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Vendor Credits Item" },
+          { "name": "Bill" }
+        ]
+      },
+      {
+        "name": "Vendor Payment",
+        "children": [
+          { "name": "Vendors" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Bill" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Vendor Credits",
+    "children": [
+      {
+        "name": "Vendors",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Vendor Credits Item",
+        "children": [
+          { "name": "Item" }
+        ]
+      },
+      {
+        "name": "Bill",
+        "children": [
+          { "name": "Vendors" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Bill Item" },
+          { "name": "Vendor Credits" },
+          { "name": "Vendor Payment" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Vendor Payment",
+    "children": [
+      {
+        "name": "Vendors",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Created By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Users (Last Modified By)",
+        "children": [
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" }
+        ]
+      },
+      {
+        "name": "Bill",
+        "children": [
+          { "name": "Vendors" },
+          { "name": "Users (Created By)" },
+          { "name": "Users (Last Modified By)" },
+          { "name": "Bill Item" },
+          { "name": "Vendor Credits" },
+          { "name": "Vendor Payment" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Journal",
+    "children": []
+  }
+]

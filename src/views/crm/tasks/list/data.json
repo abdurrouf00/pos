@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Sales Deal A",
+    "company": "Rangoni Of Florence",
+    "amount": 100,
+    "stage": "Not Started",
+    "owner": "Rouf",
+    "date": "2025-10-09"
+  },
+  {
+    "id": 2,
+    "name": "Needs Analysis Deal",
+    "company": "Oh My Goodknits Inc",
+    "amount": 1044,
+    "stage": "Not Started",
+    "owner": "Rouf",
+    "date": "2025-10-10"
+  },
+  {
+    "id": 3,
+    "name": "Value Proposition Deal",
+    "company": "Chemcol",
+    "amount": 70000,
+    "stage": "Deferred",
+    "owner": "Rouf",
+    "date": "2025-10-09"
+  },
+  {
+    "id": 4,
+    "name": "Identify Decision Deal",
+    "company": "King Identity Services",
+    "amount": 105000,
+    "stage": "In Progress",
+    "owner": "Rouf",
+    "date": "2025-10-10"
+  },
+  {
+    "id": 5,
+    "name": "Proposal Quote Deal",
+    "company": "Printing Dimensions",
+    "amount": 25000,
+    "stage": "Waiting for input",
+    "owner": "Donette Filler",
+    "date": "2025-10-11"
+  },
+  {
+    "id": 6,
+    "name": "Negotiation Deal",
+    "company": "Chapman",
+    "amount": 70000,
+    "stage": "Deferred",
+    "owner": "Simon Morasca",
+    "date": "2025-10-09"
+  },
+  {
+    "id": 7,
+    "name": "Closed Won Deal",
+    "company": "Morlong Associates",
+    "amount": 35000,
+    "stage": "In Progress",
+    "owner": "Milieu Tullior",
+    "date": "2025-10-08"
+  },
+   {
+    "id": 8,
+    "name": "Identify Decision Deal",
+    "company": "King Identity Services",
+    "amount": 105000,
+    "stage": "Completed",
+    "owner": "Rouf",
+    "date": "2025-10-10"
+  }
+]

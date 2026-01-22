@@ -1,0 +1,62 @@
+[
+  {
+    "period": "Q2 2025",
+    "target": 200,
+    "gap": "100%",
+    "achievement": "-",
+    "predicted": 0,
+    "pipeline": 0,
+    "committed": 0,
+    "bestCase": 0
+  },
+  {
+    "period": "Q3 2025",
+    "target": 123,
+    "gap": "100%",
+    "achievement": "-",
+    "predicted": 0,
+    "pipeline": 0,
+    "committed": 0,
+    "bestCase": 0
+  },
+  {
+    "period": "Q4 2025 (Current Quarter)",
+    "target": 100,
+    "gap": 1,
+    "achievement": "(1%)",
+    "predicted": 8,
+    "pipeline": 0,
+    "committed": 1,
+    "bestCase": "-"
+  },
+  {
+    "period": "Robiul Kaka",
+    "target": 10,
+    "gap": "100%",
+    "achievement": "-",
+    "predicted": 0,
+    "pipeline": 0,
+    "committed": 1,
+    "bestCase": 0
+  },
+  {
+    "period": "Rouf",
+    "target": 90,
+    "gap": 1,
+    "achievement": "(1.11%)",
+    "predicted": 7,
+    "pipeline": 0,
+    "committed": 0,
+    "bestCase": 0
+  },
+  {
+    "period": "Manager",
+    "target": 100,
+    "gap": "100%",
+    "achievement": "-",
+    "predicted": 1,
+    "pipeline": 0,
+    "committed": 0,
+    "bestCase": 0
+  }
+]

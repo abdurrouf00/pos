@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Sales Deal A",
+    "subject": "Website Development",
+    "status": "Closed Won",
+    "account": "TechWave Ltd",
+    "owner": "Rouf",
+    "name": "Rasidul Islam Khanom"
+  },
+    {
+        "id": 2,
+        "title": "Needs Analysis Deal",
+        "subject": "Mobile App Subscription",
+        "status": "Closed Won",
+        "account": "SmartSoft",
+        "owner": "Arif",
+        "name": "Qeene Maree"
+    },
+    {
+        "id": 3,
+        "title": "Proposal Deal ",
+        "subject": "SEO Optimization",
+        "status": "In Progress",
+        "account": "WebSolutions Inc",
+        "owner": "Nadia",
+        "name": "Liam Johnson"
+    }
+]

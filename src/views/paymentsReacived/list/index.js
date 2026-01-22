@@ -1,0 +1,40 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+export default function SecondHeader() {
+  const pathname = usePathname();
+
+  const title = pathname
+    ?.split('/')
+    ?.pop()
+    ?.replace(/^\w/, c => c.toUpperCase()) || '';
+
+  return (
+    <div className="border border-gray-100 bg-white  px-4 pr-10 rounded">
+      <div className="flex items-center justify-between h-10 md:h-12  ">
+        <div className="   hover:bg-gray-100 font-bold text-2xl p-2 rounded">All {title}s</div>
+
+
+
+        <>
+          <Link href="/dashboard/payments-received/new-paymentsReceived">
+            <Button>
+              <span className="text-2xl">+</span> New
+            </Button>
+          </Link>
+          {/* <div>
+              <div className="border flex items-center gap-2 py-1 px-3 cursor-pointer rounded-sm bg-[#e0ecfe] text-[#227BF6] text-[14px] font-[400]">
+                <FaCirclePlus />
+                New
+              </div>
+            </div> */}
+        </>
+
+
+      </div>
+    </div>
+  );
+}
