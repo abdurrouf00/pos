@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: '.next',
   reactStrictMode: true,
   // TypeScript errors are strictly enforced; fix them or use 'tsc --noEmit' to check.
   typescript: {
