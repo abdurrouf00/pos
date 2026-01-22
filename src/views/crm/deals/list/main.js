@@ -142,7 +142,7 @@
 
 import { useState } from "react";
 import dealsData from "@/tableData.json";
-import DealColumn from "./DealColumn";
+import DealColumn from "./table";
 import { DragDropContext } from "@hello-pangea/dnd";
 
 export default function DealsBoard() {
