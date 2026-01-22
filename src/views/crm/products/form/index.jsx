@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 export default function ProductCreateForm() {
   const [preview, setPreview] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
-
   const [formData, setFormData] = useState({
     productOwner: '',
     productCode: '',
@@ -438,6 +437,7 @@ export default function ProductCreateForm() {
         </div>
 
         {/* Submit Button */}
+
         <div className="text-right mr-4">
           <Button type="submit">Save Product</Button>
         </div>
