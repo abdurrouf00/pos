@@ -47,28 +47,31 @@ export default function SalesReturnTopSection({
       {/* ====================TOP ====================== */}
       <div className="flex justify-between items-center ">
         <div className="grid grid-cols-4 gap-3 mb-4">
-          <HrSelect
-            label="Customer"
-            name="customerName"
-            value={formData.customerName}
-            onChange={handleChange}
-            options={[
-              { value: 'Customer A', label: 'Customer A' },
-              { value: 'Customer B', label: 'Customer B' },
-            ]}
-          />
-
-          <div className="flex items-end gap-1">
-            <HrSelect
+             <HrSelect
               label="Sales Man"
               name="salesperson"
               value={formData.salesperson}
               onChange={handleChange}
+              placeholder="Select Salesman"
               options={[
                 { value: 'Salesman A', label: 'Salesman A' },
                 { value: 'Salesman B', label: 'Salesman B' },
               ]}
             />
+          
+
+          <div className="flex items-end gap-1">
+            <HrSelect
+            label="Customer"
+            name="customerName"
+            value={formData.customerName}
+            onChange={handleChange}
+            placeholder="Select Customer"
+            options={[
+              { value: 'Customer A', label: 'Customer A' },
+              { value: 'Customer B', label: 'Customer B' },
+            ]}
+          />         
             <button
               type="button"
               onClick={() => setOpenCustomer(true)}
@@ -103,11 +106,24 @@ export default function SalesReturnTopSection({
       {/* =======================search bar======================= */}
       <div className="mb-3 relative" ref={searchRef}>
         <HrInput
-          placeholder="Search item & press Enter"
+          placeholder="Scan barcode or search item..."
           value={searchText}
           onChange={(e) => {
-            setSearchText(e.target.value)
+            const value = e.target.value
+            setSearchText(value)
             setShowList(true)
+            
+            // Auto-add when exact code match found (for barcode scanner)
+            if (value.trim()) {
+              const exactCodeMatch = productsData.find(
+                (p) => p.code?.toLowerCase() === value.toLowerCase().trim()
+              )
+              if (exactCodeMatch) {
+                handleAddItem(exactCodeMatch)
+                setSearchText('')
+                setShowList(false)
+              }
+            }
           }}
           onFocus={() => {
             if (searchText) {
@@ -116,11 +132,28 @@ export default function SalesReturnTopSection({
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              const found = productsData.find((p) =>
-                p.name.toLowerCase().includes(searchText.toLowerCase())
+              e.preventDefault()
+              const searchTerm = searchText.toLowerCase().trim()
+              
+              // First try exact code match
+              const exactCodeMatch = productsData.find(
+                (p) => p.code?.toLowerCase() === searchTerm
               )
-              if (found) {
-                handleAddItem(found)
+              
+              if (exactCodeMatch) {
+                handleAddItem(exactCodeMatch)
+                setSearchText('')
+                setShowList(false)
+                return
+              }
+              
+              // Then try name match - add first filtered item
+              const filtered = productsData.filter((p) =>
+                p.name.toLowerCase().includes(searchTerm) ||
+                p.code?.toLowerCase().includes(searchTerm)
+              )
+              if (filtered.length > 0) {
+                handleAddItem(filtered[0])
                 setSearchText('')
                 setShowList(false)
               }
@@ -129,24 +162,30 @@ export default function SalesReturnTopSection({
         />
 
         {showList && searchText && (
-          <div className="absolute left-0 top-full w-full bg-sky-200 border z-10 max-h-60 overflow-y-auto">
+          <div className="absolute left-0 top-full w-full bg-white border border-gray-300 shadow-lg z-10 max-h-60 overflow-y-auto">
             {productsData
-              .filter((p) =>
-                p.name.toLowerCase().includes(searchText.toLowerCase())
-              )
+              .filter((p) => {
+                const searchTerm = searchText.toLowerCase().trim()
+                return (
+                  p.name.toLowerCase().includes(searchTerm) ||
+                  p.code?.toLowerCase().includes(searchTerm)
+                )
+              })
               .map((p) => (
-                <div
-                  key={p.id}
-                  className="p-2 cursor-pointer hover:bg-gray-100"
-                  onClick={() => {
-                    handleAddItem(p)
-                    setSearchText('')
-                    setShowList(false)
-                  }}
-                >
-                  {p.name}
-                </div>
-              ))}
+                  <div
+                    key={p.id}
+                    className="p-2 cursor-pointer hover:bg-sky-100 border-b border-gray-100"
+                    onClick={() => {
+                      handleAddItem(p)
+                      setSearchText('')
+                      setShowList(false)
+                    }}
+                  >
+                    <span className="text-gray-800">
+                      {p.code} --{p.name}
+                    </span>
+                  </div>
+                ))}
           </div>
         )}
       </div>
