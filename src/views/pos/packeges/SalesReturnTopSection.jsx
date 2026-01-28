@@ -60,7 +60,7 @@ export default function SalesReturnTopSection({
           />
           <div className="flex items-end gap-1">
             <HrSelect
-              label="Sales Man"
+              label="Select Member"
               name="customer"
               value={formData.customer}
               onChange={handleChange}
@@ -73,13 +73,7 @@ export default function SalesReturnTopSection({
 
             
 
-            <button
-              type="button"
-              onClick={() => setOpenCustomer(true)}
-              className="border bg-sky-50 p-2 rounded"
-            >
-              <UserPlus />
-            </button>
+           
           </div>
 
           <HrInput
@@ -90,6 +84,16 @@ export default function SalesReturnTopSection({
             onChange={handleChange}
           />
         </div>
+        <div className=' gap-10 flex'>
+          {/* ==================== hold LoanList=================== */}
+
+         <button
+              type="button"
+              onClick={() => setOpenCustomer(true)}
+              className="border bg-sky-400 p-2 rounded"
+            >
+             Membership 
+            </button>
         {/* ==================== hold LoanList=================== */}
         <button
           onClick={() => setShowHoldList(true)}
@@ -102,6 +106,7 @@ export default function SalesReturnTopSection({
             </span>
           )}
         </button>
+        </div>
       </div>
 
       {/* =======================search bar======================= */}

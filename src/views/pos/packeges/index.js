@@ -101,13 +101,22 @@ export default function SalesInvoice() {
     setCustomerForm((prev) => ({ ...prev, [name]: value }))
   }
   const [customerForm, setCustomerForm] = useState({
-    name: '',
-    mobile: '',
-    email: '',
-    city: '',
-    state: '',
-    zip: '',
+    branch: '',
+    activationDate: '',
+    childName: '',
+    parentName: '',
+    dob: '',
+    guardianName: '',
+    childClass: '',
     address: '',
+    schoolName: '',
+    contactNo: '',
+    secondaryContactNo: '',
+    email: '',
+    paymentType: '',
+    packageFor: '',
+    packageType: '',
+    image: '',
   })
   
 
@@ -191,7 +200,7 @@ export default function SalesInvoice() {
     }
 
     // 3. Print
-    const printWindow = window.open('', '', 'width=400,height=600')
+    const printWindow = window.open('', '', 'width=800,height=600')
     if (printWindow) {
       printWindow.document.write(`
         <html>
@@ -256,7 +265,7 @@ export default function SalesInvoice() {
 
   // Common Print Logic
   const printReceipt = (saleData) => {
-    const printWindow = window.open('', '', 'width=800,height=600')
+    const printWindow = window.open('', '', 'width=400,height=600')
     if (printWindow) {
       printWindow.document.write(`
         <html>
@@ -313,6 +322,52 @@ export default function SalesInvoice() {
     }
   }
 
+  // Helper to start countdown
+  const startCountdownParams = (items) => {
+    const massageItems = items.filter(i => {
+       // Find the original product to allow category check if it is not in items
+       // items in state only has id,name,stock,qty,rate,tax,amount. category is missing.
+       // However, we have productsData imported.
+       const product = productsData.find(p => p.id === i.id)
+       return product?.category === 'massage'
+    })
+
+    if (massageItems.length > 0) {
+        const newCountdowns = massageItems.flatMap(item => {
+            const product = productsData.find(p => p.id === item.id)
+            // Parse time string like "10 minutis"
+            const timeStr = product?.time || "0"
+            const durationMatch = timeStr.match(/(\d+)/)
+            const durationMinutes = durationMatch ? parseInt(durationMatch[0]) : 0
+            
+            if (durationMinutes > 0) {
+                // Create one countdown entry per Quantity? Or one per Line Item?
+                // Usually for massage chairs, if someone buys 2 qty, it might mean 2 chairs or 2 sessions.
+                // Let's create `qty` number of entries for granularity, or just one entry with qty.
+                // User requirement: "massage category poduct sale korle... countdown suru hobe".
+                // I'll create one entry per unit of quantity to be safe, so they can be tracked individually if needed, 
+                // but grouping them is safer for UI. Let's do one entry per line item for now.
+                return Array.from({ length: item.qty }).map((_, idx) => ({
+                    id: Date.now() + Math.random(), // unique id
+                    itemName: item.name,
+                    startTime: Date.now(),
+                    durationMinutes: durationMinutes,
+                    endTime: Date.now() + (durationMinutes * 60 * 1000),
+                    status: 'active' // active, finished
+                }))
+            }
+            return []
+        })
+
+        if (newCountdowns.length > 0) {
+            const existing = JSON.parse(localStorage.getItem('pos_active_countdowns') || '[]')
+            localStorage.setItem('pos_active_countdowns', JSON.stringify([...existing, ...newCountdowns]))
+            // Notify other tabs/windows if needed, but localStorage event works automatically for other tabs
+             window.dispatchEvent(new Event("storage"));
+        }
+    }
+  }
+
   // Single Payment Save
   const handleSinglePaymentSave = (shouldPrint) => {
     const saleData = {
@@ -323,6 +378,8 @@ export default function SalesInvoice() {
         paid: paidAmount,
         note: paymentNote
     }
+    
+    startCountdownParams(items)
 
     if (shouldPrint) {
         printReceipt(saleData)
@@ -346,6 +403,8 @@ export default function SalesInvoice() {
         paid: totalPaid,
         payments: payments
     }
+
+    startCountdownParams(items)
 
     if (shouldPrint) {
         printReceipt(saleData)
