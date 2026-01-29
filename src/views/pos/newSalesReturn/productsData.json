@@ -3,7 +3,7 @@
     "id": 1,
     "code": "IT001",
     "name": "toy",
-    "category": "Vegetables",
+    "category": "Foods",
     "price": 120,
     "stock": 111,
     "image": "/img/potato.webp"
@@ -12,7 +12,7 @@
     "id": 2,
     "code": "IT002",
     "name": "EGG1",
-    "category": "Vegetables",
+    "category": "Foods",
     "price": 110,
     "stock": 41,
     "image": "/img/egg.png"
@@ -21,7 +21,7 @@
     "id": 3,
     "code": "IT003",
     "name": "Rice",
-    "category": "Electronics",
+    "category": "Foods",
     "price": 300,
     "stock": 8,
     "image": "/img/miniket.jpg"
@@ -30,7 +30,7 @@
     "id": 4,
     "code": "IT004",
     "name": "FRESH WATER",
-    "category": "drinks",
+    "category": "Toy",
     "price": 120,
     "stock": 9,
     "image": "/img/fresh.jpg"
@@ -39,7 +39,7 @@
     "id": 5,
     "code": "IT005",
     "name": "POTATO-2",
-    "category": "Vegetables",
+    "category": "Foods",
     "price": 120,
     "stock": 111,
     "image": "/img/potato.webp"
@@ -48,7 +48,7 @@
     "id": 6,
     "code": "IT006",
     "name": "EGG2",
-    "category": "Vegetables",
+    "category": "Foods",
     "price": 110,
     "stock": 41,
     "image": "/img/egg.png"
@@ -57,7 +57,7 @@
     "id": 7,
     "code": "IT007",
     "name": "Rice Miniket",
-    "category": "Electronics",
+    "category": "Foods",
     "price": 300,
     "stock": 8,
     "image": "/img/miniket.jpg"
@@ -66,7 +66,7 @@
     "id": 8,
     "code": "IT008",
     "name": "FRESH WATER 2",
-    "category": "drinks",
+    "category": "Toy",
     "price": 120,
     "stock": 9,
     "image": "/img/fresh.jpg"
@@ -75,7 +75,7 @@
     "id": 11,
     "code": "IT009",
     "name": "POTATO-3",
-    "category": "Vegetables",
+    "category": "Foods",
     "price": 120,
     "stock": 111,
     "image": "/img/potato.webp"
@@ -84,7 +84,7 @@
     "id": 12,
     "code": "IT010",
     "name": "EGG3",
-    "category": "Vegetables",
+    "category": "Foods",
     "price": 110,
     "stock": 41,
     "image": "/img/egg.png"
@@ -93,7 +93,7 @@
     "id": 17,
     "code": "IT011",
     "name": "Rice Premium",
-    "category": "Electronics",
+    "category": "Foods",
     "price": 300,
     "stock": 8,
     "image": "/img/miniket.jpg"
@@ -102,61 +102,7 @@
     "id": 18,
     "code": "IT012",
     "name": "FRESH WATER 3",
-    "category": "drinks",
-    "price": 120,
-    "stock": 9,
-    "image": "/img/fresh.jpg"
-  },
-  {
-    "id": 111,
-    "code": "IT013",
-    "name": "POTATO-4",
-    "category": "Vegetables",
-    "price": 120,
-    "stock": 111,
-    "image": "/img/potato.webp"
-  },
-  {
-    "id": 112,
-    "code": "IT014",
-    "name": "EGG4",
-    "category": "Vegetables",
-    "price": 110,
-    "stock": 41,
-    "image": "/img/egg.png"
-  },
-  {
-    "id": 117,
-    "code": "IT015",
-    "name": "Rice Deluxe",
-    "category": "Electronics",
-    "price": 300,
-    "stock": 8,
-    "image": "/img/miniket.jpg"
-  },
-  {
-    "id": 118,
-    "code": "IT016",
-    "name": "FRESH WATER 4",
-    "category": "drinks",
-    "price": 120,
-    "stock": 9,
-    "image": "/img/fresh.jpg"
-  },
-  {
-    "id": 124,
-    "code": "IT018",
-    "name": "Toy 4",
-    "category": "toy",
-    "price": 120,
-    "stock": 9,
-    "image": "/img/fresh.jpg"
-  },
-  {
-    "id": 126,
-    "code": "IT017",
-    "name": "Toy 4",
-    "category": "toy",
+    "category": "Toy",
     "price": 120,
     "stock": 9,
     "image": "/img/fresh.jpg"

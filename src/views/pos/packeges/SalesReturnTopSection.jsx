@@ -46,8 +46,9 @@ export default function SalesReturnTopSection({
     <div className="flex-[2] bg-white p-4 border rounded">
       {/* ====================TOP ====================== */}
       <div className="flex justify-between items-center ">
-        <div className="grid grid-cols-4 gap-3 mb-4">
-          <HrSelect
+        <div className="flex flex-col gap-2">
+          <div className="grid grid-cols-4 gap-3 ">
+            <HrSelect
             label="Sales Man"
             name="salesperson"
             value={formData.salesperson}
@@ -58,7 +59,7 @@ export default function SalesReturnTopSection({
               { value: 'Salesman B', label: 'Salesman B' },
             ]}
           />
-          <div className="flex items-end gap-1">
+        
             <HrSelect
               label="Select Member"
               name="customer"
@@ -69,12 +70,7 @@ export default function SalesReturnTopSection({
                 { value: 'customer A', label: 'customer A' },
                 { value: 'customer customer', label: 'customer B' },
               ]}
-            />
-
-            
-
-           
-          </div>
+            />      
 
           <HrInput
             label="Sales Date"
@@ -83,8 +79,47 @@ export default function SalesReturnTopSection({
             value={formData.salesdate}
             onChange={handleChange}
           />
+          </div>
+          <div className="grid grid-cols-4 gap-3 mb-4">
+            <HrInput
+            label="Guardian Name"
+            name="guardianName"
+            value={formData.guardianName || ''}
+            onChange={handleChange}
+            placeholder="Guardian Name"
+          />
+          
+          <HrInput
+            label="Kids Name"
+            name="kidsName"
+            value={formData.kidsName || ''}
+            onChange={handleChange}
+            placeholder="Kids Name"
+          />
+          
+          <HrInput
+             label="Age"
+             name="age"
+             type="number"
+             value={formData.age || ''}
+             onChange={handleChange}
+             placeholder="Age"
+          />
+
+           <HrInput
+             label="Total Crowd"
+             name="totalCrowd"
+             type="number"
+             value={formData.totalCrowd || ''}
+             onChange={handleChange}
+             placeholder="Total Crowd"
+          />
+
+          </div>
+          
+          
         </div>
-        <div className=' gap-10 flex'>
+        <div className=' space-y-2 text-end'>
           {/* ==================== hold LoanList=================== */}
 
          <button

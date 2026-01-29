@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SalesReturnTopSection from './SalesReturnTopSection'
 import SalesReturnRightSection from './SalesReturnRightSection'
 import SalesReturnModals from './SalesReturnModals'
@@ -95,6 +95,29 @@ export default function SalesInvoice() {
   const [itemSearch, setItemSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
+  useEffect(() => {
+    const savedSalesperson = localStorage.getItem('pos_salesperson')
+    if (savedSalesperson) {
+      setFormData((prev) => ({ ...prev, salesperson: savedSalesperson }))
+    }
+    const savedCategory = localStorage.getItem('pos_selected_category')
+    if (savedCategory) {
+      setSelectedCategory(savedCategory)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (formData.salesperson) {
+      localStorage.setItem('pos_salesperson', formData.salesperson)
+    }
+  }, [formData.salesperson])
+
+  useEffect(() => {
+    if (selectedCategory) {
+      localStorage.setItem('pos_selected_category', selectedCategory)
+    }
+  }, [selectedCategory])
+
   //todo=================================== Handle Customer
   const handleCustomerChange = (e) => {
     const { name, value } = e.target
@@ -153,11 +176,11 @@ export default function SalesInvoice() {
     setHoldSales((prev) => [...prev, holdData])
 
     setItems([])
-    setFormData({
+    setFormData(prev => ({
+      ...prev,
       customerName: '',
       salesdate: today,
-      salesperson: '',
-    })
+    }))
   }
 
   const handleItemChange = (idx, field, value) => {
@@ -188,6 +211,9 @@ export default function SalesInvoice() {
     // 1. Set full payment
     setPaidAmount(total)
     
+    // 1.5 Start Countdown for massage items
+    startCountdownParams(items)
+    
     // 2. Prepare data
     const saleData = {
         date: formData.salesdate,
@@ -200,24 +226,45 @@ export default function SalesInvoice() {
     }
 
     // 3. Print
-    const printWindow = window.open('', '', 'width=800,height=600')
+    const printWindow = window.open('', '', 'width=300,height=600')
     if (printWindow) {
       printWindow.document.write(`
         <html>
           <head>
             <title>Receipt</title>
             <style>
-              body { font-family: 'Courier New', monospace; font-size: 12px; }
-              table { width: 100%; border-collapse: collapse; }
-              th, td { border-bottom: 1px dashed #000; padding: 4px; text-align: left; }
+              @page { size: 80mm auto; margin: 0; }
+              body { 
+                font-family: 'Courier New', Courier, monospace; 
+                font-size: 13px; 
+                width: 72mm; /* Printable area is usually 72mm for 80mm paper */
+                margin: 0 auto;
+                padding: 10px 0;
+                color: #000;
+              }
+              .header { text-align: center; margin-bottom: 5px; }
+              .header h2 { margin: 0; font-size: 16px; }
+              .info { margin-bottom: 5px; font-size: 12px; }
+              table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+              th { border-bottom: 1px dashed #000; text-align: left; padding: 2px; }
+              td { padding: 2px; vertical-align: top; }
               .right { text-align: right; }
               .center { text-align: center; }
+              .total-section { margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
+              .total-row { display: flex; justify-content: space-between; font-weight: bold; }
+              .footer { text-align: center; margin-top: 15px; font-size: 11px; }
+              hr { border-top: 1px dashed #000; border-bottom: none; margin: 5px 0; }
             </style>
           </head>
           <body>
-            <h3 class="center">Sales Return Receipt</h3>
-            <p>Date: ${saleData.date}</p>
-            <p>Customer: ${saleData.customer}</p>
+            <div class="header">
+              <h2>SALES RECEIPT</h2>
+              <p>POS SYSTEM</p>
+            </div>
+            <div class="info">
+              <div>Date: ${saleData.date}</div>
+              <div>Customer: ${saleData.customer}</div>
+            </div>
             <hr/>
             <table>
               <thead>
@@ -239,14 +286,28 @@ export default function SalesInvoice() {
                 `).join('')}
               </tbody>
             </table>
-            <br/>
-            <div class="right">
-              <p><strong>Total: ${saleData.total.toFixed(2)}</strong></p>
-              <p>Paid: ${saleData.paid.toFixed(2)}</p>
-              <p>Change: 0.00</p>
+            
+            <div class="total-section">
+              <div class="total-row">
+                <span>TOTAL:</span>
+                <span>${saleData.total.toFixed(2)}</span>
+              </div>
+              <div class="total-row">
+                <span>PAID:</span>
+                <span>${saleData.paid.toFixed(2)}</span>
+              </div>
+              <div class="total-row">
+                <span>CHANGE:</span>
+                <span>0.00</span>
+              </div>
             </div>
             <hr/>
-            <p class="center">Thank you!</p>
+            <div class="footer">
+              <p>Thank you for your visit!</p>
+              <p>Please come again</p>
+              <br/>
+              <br/> <!-- Space for tearing -->
+            </div>
           </body>
         </html>
       `)
@@ -259,30 +320,51 @@ export default function SalesInvoice() {
     // 4. Save (Simulation) & Reset
     console.log("Saved Sale:", saleData)
     setItems([])
-    setFormData(prev => ({ ...prev, customerName: '', salesperson: '' }))
+    setFormData(prev => ({ ...prev, customerName: '' }))
     setPaidAmount(0)
   }
 
   // Common Print Logic
   const printReceipt = (saleData) => {
-    const printWindow = window.open('', '', 'width=400,height=600')
+    const printWindow = window.open('', '', 'width=300,height=600')
     if (printWindow) {
       printWindow.document.write(`
         <html>
           <head>
             <title>Receipt</title>
             <style>
-              body { font-family: 'Courier New', monospace; font-size: 12px; }
-              table { width: 100%; border-collapse: collapse; }
-              th, td { border-bottom: 1px dashed #000; padding: 4px; text-align: left; }
+              @page { size: 80mm auto; margin: 0; }
+              body { 
+                font-family: 'Courier New', Courier, monospace; 
+                font-size: 13px; 
+                width: 72mm;
+                margin: 0 auto;
+                padding: 10px 0;
+                color: #000;
+              }
+              .header { text-align: center; margin-bottom: 5px; }
+              .header h2 { margin: 0; font-size: 16px; }
+              .info { margin-bottom: 5px; font-size: 12px; }
+              table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+              th { border-bottom: 1px dashed #000; text-align: left; padding: 2px; }
+              td { padding: 2px; vertical-align: top; }
               .right { text-align: right; }
               .center { text-align: center; }
+              .total-section { margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
+              .total-row { display: flex; justify-content: space-between; font-weight: bold; }
+              .footer { text-align: center; margin-top: 15px; font-size: 11px; }
+              hr { border-top: 1px dashed #000; border-bottom: none; margin: 5px 0; }
             </style>
           </head>
           <body>
-            <h3 class="center">Sales Return Receipt</h3>
-            <p>Date: ${saleData.date}</p>
-            <p>Customer: ${saleData.customer}</p>
+            <div class="header">
+              <h2>SALES RECEIPT</h2>
+              <p>POS SYSTEM</p>
+            </div>
+            <div class="info">
+              <div>Date: ${saleData.date}</div>
+              <div>Customer: ${saleData.customer}</div>
+            </div>
             <hr/>
             <table>
               <thead>
@@ -304,14 +386,28 @@ export default function SalesInvoice() {
                 `).join('')}
               </tbody>
             </table>
-            <br/>
-            <div class="right">
-              <p><strong>Total: ${saleData.total.toFixed(2)}</strong></p>
-              <p>Paid: ${saleData.paid.toFixed(2)}</p>
-              <p>Change: ${(saleData.paid - saleData.total).toFixed(2)}</p>
+            
+            <div class="total-section">
+              <div class="total-row">
+                <span>TOTAL:</span>
+                <span>${saleData.total.toFixed(2)}</span>
+              </div>
+              <div class="total-row">
+                <span>PAID:</span>
+                <span>${saleData.paid.toFixed(2)}</span>
+              </div>
+              <div class="total-row">
+                <span>CHANGE:</span>
+                <span>${(saleData.paid - saleData.total).toFixed(2)}</span>
+              </div>
             </div>
             <hr/>
-            <p class="center">Thank you!</p>
+            <div class="footer">
+              <p>Thank you for your visit!</p>
+              <p>Please come again</p>
+              <br/>
+              <br/>
+            </div>
           </body>
         </html>
       `)
@@ -387,7 +483,7 @@ export default function SalesInvoice() {
 
     console.log("Saved Single Payment Sale:", saleData)
     setItems([])
-    setFormData(prev => ({ ...prev, customerName: '', salesperson: '' }))
+    setFormData(prev => ({ ...prev, customerName: '' }))
     setPaidAmount(0)
     setPaymentNote('')
     setopenPayment(false)
@@ -412,7 +508,7 @@ export default function SalesInvoice() {
 
     console.log("Saved Multiple Payment Sale:", saleData)
     setItems([])
-    setFormData(prev => ({ ...prev, customerName: '', salesperson: '' }))
+    setFormData(prev => ({ ...prev, customerName: '' }))
     setPayments([{ method: 'cash', amount: '', note: '' }])
     setopenMulitplePayment(false)
   }
