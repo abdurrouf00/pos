@@ -62,7 +62,7 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
 
             <div className="ml-2 sm:ml-4 lg:hidden">
               {/* Mobile logo */}
-              <img src="/hr360-logo.png" alt="HR360" className="h-14" />
+              <img src="/logo.png" alt="HR360" className="h-14" />
             </div>
             <Link href="/organization/modules" className="relative">
               <MdDashboard

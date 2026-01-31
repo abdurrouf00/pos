@@ -9,6 +9,9 @@ const nextConfig = {
   // eslint in next.config.js might be deprecated in this version, avoiding it.
   experimental: {
     // any experimental features if needed
+    turbopack: {
+      root: '.',
+    },
   },
 };
 
