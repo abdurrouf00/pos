@@ -4,15 +4,23 @@ import { useState, useEffect } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   // Close sidebar on wider screens by default
   useEffect(() => {
     const handleResize = () => {
-      setSidebarOpen(window.innerWidth >= 1024);
+      const isPosOrPackages = pathname?.includes('/dashboard/pos') || pathname?.includes('/dashboard/packeges');
+      
+      if (isPosOrPackages) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(window.innerWidth >= 1024);
+      }
     };
 
     // Set initial state
@@ -23,7 +31,14 @@ export default function DashboardLayout({ children }) {
 
     // Clean up
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [pathname]);
+
+  // Close sidebar automatically when navigating to POS or Packages
+  useEffect(() => {
+    if (pathname?.includes('/dashboard/pos') || pathname?.includes('/dashboard/packeges')) {
+      setSidebarOpen(false);
+    }
+  }, [pathname]);
 
   // This would normally check for authentication
   const isAuthenticated = true;

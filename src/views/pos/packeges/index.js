@@ -1,8 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
-import SalesReturnTopSection from './SalesReturnTopSection'
-import SalesReturnRightSection from './SalesReturnRightSection'
-import SalesReturnModals from './SalesReturnModals'
+import SalesReturnTopSection from './leftSection'
+import SalesReturnRightSection from './rightSection'
+import SalesReturnModals from './modals'
 import productsData from './productsData.json'
 
 const today = new Date().toISOString().split('T')[0]
@@ -21,7 +21,9 @@ export default function SalesInvoice() {
   // ================= PAYMENT =================
   const [shipping] = useState(0)
   const [adjustment] = useState(0)
-  const [descount] = useState(0) // Fixed typo per user requirement
+  const [descount, setDescount] = useState(0) 
+  const [discountType, setDiscountType] = useState('fixed') // 'fixed' or 'percent'
+  const [discountValue, setDiscountValue] = useState(0)
   
   const [paidAmount, setPaidAmount] = useState(0)
   const [paymentNote, setPaymentNote] = useState('')
@@ -30,6 +32,7 @@ export default function SalesInvoice() {
 
   // MULTIPLE PAYMENT STATE
   const [openMulitplePayment, setopenMulitplePayment] = useState(false)
+  const [openDiscount, setOpenDiscount] = useState(false)
   const [payments, setPayments] = useState([
     { method: 'cash', amount: '', note: '' }
   ])
@@ -59,36 +62,23 @@ export default function SalesInvoice() {
   }
 
   const handleAddItem = (product) => {
-    setItems((prev) => {
-      const exist = prev.find((i) => i.id === product.id)
-
-      if (exist) {
-        if (exist.qty >= product.stock) return prev // 🚫 stock limit
-
-        return prev.map((i) =>
-          i.id === product.id
-            ? {
-                ...i,
-                qty: i.qty + 1,
-                amount: (i.qty + 1) * i.rate,
-              }
-            : i
-        )
-      }
-
-      return [
-        ...prev,
-        {
-          id: product.id,
-          name: product.name,
-          stock: product.stock,
-          qty: 1,
-          rate: product.price,
-          tax: 0,
-          amount: product.price,
-        },
-      ]
-    })
+    setItems((prev) => [
+      ...prev,
+      {
+        rowId: Date.now() + Math.random(), // Unique ID for each row
+        id: product.id,
+        name: product.name,
+        stock: product.stock,
+        qty: 1, // Always 1 per row now
+        rate: product.price,
+        tax: 0,
+        amount: product.price,
+        guardianName: '',
+        kidsName: '',
+        age: '',
+        mobile: '',
+      },
+    ])
   }
 
   // right site filtaration ===================
@@ -160,7 +150,18 @@ export default function SalesInvoice() {
   // ================= CALC =================
   const totalQty = items.reduce((q, i) => q + i.qty, 0)
   const subtotal = items.reduce((s, i) => s + i.amount, 0)
-  const total = subtotal + shipping + adjustment
+  
+  // Recalculate discount
+  useEffect(() => {
+    if (discountType === 'percent') {
+      const calculated = (subtotal * Number(discountValue)) / 100
+      setDescount(calculated)
+    } else {
+      setDescount(Number(discountValue))
+    }
+  }, [subtotal, discountType, discountValue])
+
+  const total = subtotal + shipping + adjustment - descount
 
   const handleHoldSale = () => {
     if (items.length === 0) return
@@ -185,21 +186,18 @@ export default function SalesInvoice() {
 
   const handleItemChange = (idx, field, value) => {
     const updated = [...items]
-    updated[idx][field] = Number(value)
-
-    const { qty, rate, tax } = updated[idx]
-    updated[idx].amount = qty * rate + (qty * rate * tax) / 100
+    
+    // For calculation fields, convert to Number. For others, keep as is (string).
+    if (['qty', 'rate', 'tax', 'amount'].includes(field)) {
+        updated[idx][field] = Number(value)
+        const { qty, rate, tax } = updated[idx]
+        updated[idx].amount = qty * rate + (qty * rate * tax) / 100
+    } else {
+        updated[idx][field] = value
+    }
+    
     setItems(updated)
   }
-
-  const increaseQty = (i) => {
-    if (items[i].qty < items[i].stock) {
-      handleItemChange(i, 'qty', items[i].qty + 1)
-    }
-  }
-
-  const decreaseQty = (i) =>
-    items[i].qty > 1 && handleItemChange(i, 'qty', items[i].qty - 1)
 
   const removeItem = (i) => setItems(items.filter((_, idx) => idx !== i))
 
@@ -528,8 +526,6 @@ export default function SalesInvoice() {
         productsData={productsData}
         handleAddItem={handleAddItem}
         items={items}
-        increaseQty={increaseQty}
-        decreaseQty={decreaseQty}
         handleItemChange={handleItemChange}
         removeItem={removeItem}
         totalQty={totalQty}
@@ -538,6 +534,13 @@ export default function SalesInvoice() {
         setopenPayment={setopenPayment}
         setopenMulitplePayment={setopenMulitplePayment}
         descount={descount}
+        setDescount={setDescount}
+        discountType={discountType}
+        setDiscountType={setDiscountType}
+        discountValue={discountValue}
+        setDiscountValue={setDiscountValue}
+        subtotal={subtotal}
+        setOpenDiscount={setOpenDiscount}
         handlePayAll={handlePayAll}
       />
 
@@ -581,6 +584,15 @@ export default function SalesInvoice() {
         // Save Handlers
         handleSinglePaymentSave={handleSinglePaymentSave}
         handleMultiplePaymentSave={handleMultiplePaymentSave}
+        // Discount Props
+        openDiscount={openDiscount}
+        setOpenDiscount={setOpenDiscount}
+        discountType={discountType}
+        setDiscountType={setDiscountType}
+        discountValue={discountValue}
+        setDiscountValue={setDiscountValue}
+        setDescount={setDescount}
+        subtotal={subtotal}
      />
     </div>
   )

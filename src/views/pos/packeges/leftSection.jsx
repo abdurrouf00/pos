@@ -14,8 +14,6 @@ export default function SalesReturnTopSection({
   productsData,
   handleAddItem,
   items,
-  increaseQty,
-  decreaseQty,
   handleItemChange,
   removeItem,
   //Summary Props
@@ -25,6 +23,8 @@ export default function SalesReturnTopSection({
   setopenPayment,
   setopenMulitplePayment,
   descount,
+  setOpenDiscount,
+  subtotal,
   handlePayAll,
 }) {
   // search
@@ -46,8 +46,9 @@ export default function SalesReturnTopSection({
     <div className="flex-[2] bg-white p-4 border rounded">
       {/* ====================TOP ====================== */}
       <div className="flex justify-between items-center ">
-        <div className="grid grid-cols-4 gap-3 mb-4">
-          <HrSelect
+        <div className="flex flex-col gap-2">
+          <div className="grid grid-cols-4 gap-3 ">
+            <HrSelect
             label="Sales Man"
             name="salesperson"
             value={formData.salesperson}
@@ -58,9 +59,9 @@ export default function SalesReturnTopSection({
               { value: 'Salesman B', label: 'Salesman B' },
             ]}
           />
-          <div className="flex items-end gap-1">
+        
             <HrSelect
-              label="Sales Man"
+              label="Select Member"
               name="customer"
               value={formData.customer}
               onChange={handleChange}
@@ -69,18 +70,7 @@ export default function SalesReturnTopSection({
                 { value: 'customer A', label: 'customer A' },
                 { value: 'customer customer', label: 'customer B' },
               ]}
-            />
-
-            
-
-            <button
-              type="button"
-              onClick={() => setOpenCustomer(true)}
-              className="border bg-sky-50 p-2 rounded"
-            >
-              <UserPlus />
-            </button>
-          </div>
+            />      
 
           <HrInput
             label="Sales Date"
@@ -89,11 +79,34 @@ export default function SalesReturnTopSection({
             value={formData.salesdate}
             onChange={handleChange}
           />
+
+              <HrInput
+             label="Total Crowd"
+             name="totalCrowd"
+             type="number"
+             value={formData.totalCrowd || ''}
+             onChange={handleChange}
+             placeholder="Total Crowd"
+          />
+          </div>
+         
+          
+          
         </div>
+        <div className=' space-y-2 text-end'>
+          {/* ==================== hold LoanList=================== */}
+
+         <button
+              type="button"
+              onClick={() => setOpenCustomer(true)}
+              className="border bg-sky-400 p-2 rounded "
+            >
+             Membership 
+            </button>
         {/* ==================== hold LoanList=================== */}
         <button
           onClick={() => setShowHoldList(true)}
-          className="relative bg-yellow-300 text-white px-3 py-3 w-24  rounded text-sm"
+          className="relative bg-yellow-300 text-white px-3 py-3 w-27 mb-2 border rounded text-sm"
         >
           Hold List
           {holdSales.length > 0 && (
@@ -102,6 +115,7 @@ export default function SalesReturnTopSection({
             </span>
           )}
         </button>
+        </div>
       </div>
 
       {/* =======================search bar======================= */}
@@ -193,73 +207,74 @@ export default function SalesReturnTopSection({
       </div>
 
       {/* ======================= ITEMS TABLE ======================= */}
-      <div className="border rounded overflow-x-auto h-80">
+      <div className="border rounded overflow-x-auto h-70">
         <table className="w-full border text-sm table-fixed">
           <thead className="bg-gray-100">
             <tr>
               <th className="border p-2 w-36">Item</th>
-              <th className="border p-2 ">Qty</th>
-              <th className="border p-2 w-22">Tax</th>
-              <th className="border p-2 ">Amount</th>
-              <th className="border p-2 ">Rate</th>
-              <th className="border p-2 ">Stock</th>
+              <th className="border p-2 ">Guardian Name</th>
+              <th className="border p-2 ">Kids Name</th>
+              <th className="border p-2 ">Age</th>  
+              <th className="border p-2 ">Mobile</th> 
+              <th className="border p-2 ">Amount</th>          
               <th className="border p-2 ">Action</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, idx) => (
-              <tr key={idx}>
+              <tr key={item.rowId || idx}>
                 <td className="border p-1">
-                  <p>{item.name}</p>
-                </td>
-
-                <td className=" p-3 flex gap-2 justify-center items-center text-center border">
-                  <button
-                    onClick={() => decreaseQty(idx)}
-                    className="border rounded-full px-1.5 bg-sky-100"
-                  >
-                    -
-                  </button>
-
-                  <p>{item.qty}</p>
-
-                  <button
-                    onClick={() => increaseQty(idx)}
-                    className="border rounded-full px-1.5 bg-sky-100"
-                  >
-                    +
-                  </button>
+                  <p className="font-medium text-xs text-gray-700">{item.name}</p>
                 </td>
 
                 <td className="border p-1">
-                  <HrSelect
-                    value={item.tax}
-                    onChange={(e) =>
-                      handleItemChange(idx, 'tax', e.target.value)
-                    }
-                    options={[
-                      { value: 0, label: '0%' },
-                      { value: 5, label: '5%' },
-                      { value: 10, label: '10%' },
-                    ]}
+                   <input
+                    type="text"
+                    value={item.guardianName}
+                    onChange={(e) => handleItemChange(idx, 'guardianName', e.target.value)}
+                    className="w-full border rounded p-1 text-xs focus:outline-sky-400"
+                    placeholder="Guardian"
+                  />
+                </td>
+
+                <td className="border p-1">
+                  <input
+                    type="text"
+                    value={item.kidsName}
+                    onChange={(e) => handleItemChange(idx, 'kidsName', e.target.value)}
+                    className="w-full border rounded p-1 text-xs focus:outline-sky-400"
+                    placeholder="Kid Name"
+                  />
+                </td>
+
+                <td className="border p-1">
+                  <input
+                    type="number"
+                    value={item.age}
+                    onChange={(e) => handleItemChange(idx, 'age', e.target.value)}
+                    className="w-full border rounded p-1 text-xs focus:outline-sky-400"
+                    placeholder="Age"
                   />
                 </td>
 
                 <td className="border p-1 text-center">
-                  {item.amount.toFixed(2)}
-                </td>
-                <td className="border p-1 text-center">
-                  <p>{item.rate}</p>
+                  <input
+                    type="text"
+                    value={item.mobile}
+                    onChange={(e) => handleItemChange(idx, 'mobile', e.target.value)}
+                    className="w-full border rounded p-2 text-xs focus:outline-sky-400"
+                    placeholder="Mobile"
+                  />
                 </td>
 
-                <td className="border p-1 text-center">
-                  <p>{item.stock}</p>
+                <td className="border p-1">
+                  <p className="font-medium text-xs text-gray-700">{item.amount}</p>
                 </td>
 
                 <td className="border p-1 text-center">
                   <button
                     onClick={() => removeItem(idx)}
-                    className="bg-red-500 text-white px-2 rounded"
+                    className="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"
                   >
                     ❌
                   </button>
@@ -271,28 +286,51 @@ export default function SalesReturnTopSection({
       </div>
 
       {/* SUMMARY */}
-      <div className="flex justify-around bg-gray-200 p-4 mt-4 rounded">
+      <div className="flex flex-col justify-around border-2 p-4 mt-4 rounded">
+      <div className="flex justify-around  p-4 rounded">
         <div>
-          <p>Quantity</p>
-          <p>{totalQty}</p>
+          <p className='border-2 p-2 rounded broder-black '>Quantity: {totalQty}</p>  
+        </div>
+        <div className="cursor-pointer border-2 p-1 rounded transition-colors" onClick={() => setOpenDiscount(true)}>
+          <p>Edit Discount: {descount.toFixed(2)}</p>         
+        </div>
+        <div>
+          <p className='border-2 p-2 rounded  '>Subtotal: {subtotal.toFixed(2)}</p>         
+        </div>
+
+        <div>
+          <p className='border-2 p-2 rounded  '>Grand Total: {total.toFixed(2)} </p>
+          </div>
+      </div>
+
+
+
+
+      <div  className="flex  justify-around   rounded">
+
+
+        <div>
+          {/* <p>Quantity</p>
+          <p>{totalQty}</p> */}
           <Button onClick={handleHoldSale}>Hold</Button>
         </div>
         <div>
-          <p>Total Amount</p>
-          <p>{total.toFixed(2)}</p>
+          {/* <p>Total Amount</p>
+          <p>{total.toFixed(2)}</p> */}
           <Button onClick={() => setopenMulitplePayment(true)}>Multiple</Button>
         </div>
 
         <div>
-          <p>Total Amount</p>
-          <p>{descount.toFixed(2)}</p>
+          {/* <p>Discount</p>
+          <p>{descount.toFixed(2)}</p> */}
           <Button onClick={() => setopenPayment(true)}>Cash</Button>
         </div>
         <div>
-          <p>Grand Total</p>
-          <p> {total.toFixed(2)} </p>
+          {/* <p>Grand Total</p>
+          <p> {total.toFixed(2)} </p> */}
           <Button onClick={handlePayAll}>Pay All</Button>
         </div>
+              </div>
       </div>
     </div>
   )

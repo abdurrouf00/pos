@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import HrInput from '@/components/common/HrInput'
 import HrSelect from '@/components/common/HrSelect'
 import { Button } from '@/components/ui/button'
@@ -36,9 +37,96 @@ export default function SalesReturnModals({
   // Save Handlers
   handleSinglePaymentSave,
   handleMultiplePaymentSave,
+  // Discount Props
+  openDiscount,
+  setOpenDiscount,
+  discountType,
+  setDiscountType,
+  discountValue,
+  setDiscountValue,
+  setDescount,
+  subtotal,
 }) {
+  const [localType, setLocalType] = useState(discountType)
+  const [localValue, setLocalValue] = useState(discountValue)
+
+  // Sync with current applied settings whenever modal opens
+  useEffect(() => {
+    if (openDiscount) {
+      setLocalType(discountType)
+      setLocalValue(discountValue)
+    }
+  }, [openDiscount, discountType, discountValue])
+
   return (
     <>
+      {/* ================= POPUP for Discount ================= */}
+      {openDiscount && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white w-96 rounded-xl shadow-2xl">
+            <div className="relative flex items-center border-b p-4 bg-sky-50 rounded-t-xl">
+              <h3 className="w-full text-center font-bold text-lg text-sky-900 uppercase">
+                Apply Discount
+              </h3>
+              <span
+                onClick={() => setOpenDiscount(false)}
+                className="absolute right-4 cursor-pointer hover:bg-gray-200 rounded-full px-2 py-1 transition-colors"
+              >
+                ✕
+              </span>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <HrSelect
+                label="Discount Type"
+                value={localType}
+                onChange={(e) => setLocalType(e.target.value)}
+                options={[
+                  { value: 'fixed', label: 'Fixed Amount (৳)' },
+                  { value: 'percent', label: 'Percentage (%)' },
+                ]}
+              />
+
+              <HrInput
+                label={localType === 'fixed' ? 'Discount Amount' : 'Discount Percentage'}
+                type="number"
+                value={localValue}
+                onChange={(e) => setLocalValue(Number(e.target.value))}
+                placeholder="Enter value"
+              />
+
+              <div className="bg-gray-100 p-3 rounded text-sm ">               
+                <p className="flex justify-between text-blue-600 font-bold  pt-2">
+                  <span>Calculated Discount:</span>
+                  <span>
+                    ৳{' '}
+                    {(localType === 'fixed' 
+                      ? localValue 
+                      : (subtotal * localValue) / 100).toFixed(2)}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3 p-4 border-t bg-gray-50 rounded-b-xl justify-end">
+              <Button variant="outline" onClick={() => setOpenDiscount(false)}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={() => {
+                  setDiscountType(localType);
+                  setDiscountValue(localValue);
+                  setOpenDiscount(false);
+                }}
+                className="bg-sky-600 hover:bg-sky-700"
+              >
+                Apply Discount
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================= POPUP 1 for Add New Membership ================= */}
       {openCustomer && (
         <div className="fixed top-0  flex  items-center z-50 overflow-y-auto  ">

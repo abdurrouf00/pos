@@ -21,10 +21,12 @@ export default function SalesReturnTopSection({
   //Summary Props
   totalQty,
   total,
+  subtotal,
   handleHoldSale,
   setopenPayment,
   setopenMulitplePayment,
   descount,
+  setOpenDiscount,
   handlePayAll,
 }) {
   // search
@@ -45,10 +47,9 @@ export default function SalesReturnTopSection({
   return (
     <div className="flex-[2] bg-white p-4 border rounded">
       {/* ====================TOP ====================== */}
-      <div className="flex justify-between items-center ">
-        <div className="flex flex-col gap-2">
-          <div className="grid grid-cols-4 gap-3 ">
-            <HrSelect
+      <div className="flex justify-between items-center gap-4 ">
+        <div className="grid grid-cols-4 gap-3 mb-4">
+          <HrSelect
             label="Sales Man"
             name="salesperson"
             value={formData.salesperson}
@@ -59,9 +60,9 @@ export default function SalesReturnTopSection({
               { value: 'Salesman B', label: 'Salesman B' },
             ]}
           />
-        
+          <div className="flex items-end gap-1">
             <HrSelect
-              label="Select Member"
+              label="Sales Man"
               name="customer"
               value={formData.customer}
               onChange={handleChange}
@@ -70,7 +71,18 @@ export default function SalesReturnTopSection({
                 { value: 'customer A', label: 'customer A' },
                 { value: 'customer customer', label: 'customer B' },
               ]}
-            />      
+            />
+
+            
+
+            <button
+              type="button"
+              onClick={() => setOpenCustomer(true)}
+              className="border bg-sky-50 p-2 rounded"
+            >
+              <UserPlus />
+            </button>
+          </div>
 
           <HrInput
             label="Sales Date"
@@ -79,60 +91,52 @@ export default function SalesReturnTopSection({
             value={formData.salesdate}
             onChange={handleChange}
           />
-          </div>
-          <div className="grid grid-cols-4 gap-3 mb-4">
-            <HrInput
-            label="Guardian Name"
-            name="guardianName"
-            value={formData.guardianName || ''}
-            onChange={handleChange}
-            placeholder="Guardian Name"
-          />
-          
+
           <HrInput
-            label="Kids Name"
-            name="kidsName"
-            value={formData.kidsName || ''}
-            onChange={handleChange}
-            placeholder="Kids Name"
-          />
-          
-          <HrInput
-             label="Age"
-             name="age"
-             type="number"
-             value={formData.age || ''}
-             onChange={handleChange}
-             placeholder="Age"
+          label="Gurdian Name"
+          name="gurdianName"
+          value={formData.gurdianName}
+          onChange={handleChange}
+          placeholder="Enter Gurdian Name"
           />
 
-           <HrInput
-             label="Total Crowd"
-             name="totalCrowd"
-             type="number"
-             value={formData.totalCrowd || ''}
-             onChange={handleChange}
-             placeholder="Total Crowd"
+          <HrInput
+          label="Contact Number"
+          name="contactNumber"
+          value={formData.contactNumber}
+          onChange={handleChange}
+          placeholder="Enter Contact Number"
+          />
+          <HrInput
+          label="Kids Name"
+          name="kidsName"
+          value={formData.kidsName}
+          onChange={handleChange}
+          placeholder="Enter Kids Name"
+          />
+          <HrInput
+          label="Kids Age"
+          name="kidsAge"
+          value={formData.kidsAge}
+          onChange={handleChange}
+          placeholder="Enter Kids Age"
           />
 
-          </div>
-          
-          
+          <HrInput 
+          label="Total Crowd"
+          name="totalCrowd"
+          value={formData.totalCrowd}
+          onChange={handleChange}
+          placeholder="Enter Total Crowd"
+          />
+
+
+
         </div>
-        <div className=' space-y-2 text-end'>
-          {/* ==================== hold LoanList=================== */}
-
-         <button
-              type="button"
-              onClick={() => setOpenCustomer(true)}
-              className="border bg-sky-400 p-2 rounded"
-            >
-             Membership 
-            </button>
         {/* ==================== hold LoanList=================== */}
         <button
           onClick={() => setShowHoldList(true)}
-          className="relative bg-yellow-300 text-white px-3 py-3 w-24  rounded text-sm"
+          className="relative bg-yellow-300 text-white px-3 py-3 w-27 border rounded text-sm"
         >
           Hold List
           {holdSales.length > 0 && (
@@ -141,7 +145,6 @@ export default function SalesReturnTopSection({
             </span>
           )}
         </button>
-        </div>
       </div>
 
       {/* =======================search bar======================= */}
@@ -239,17 +242,15 @@ export default function SalesReturnTopSection({
             <tr>
               <th className="border p-2 w-36">Item</th>
               <th className="border p-2 ">Qty</th>
-              <th className="border p-2 w-22">Tax</th>
+              <th className="border p-2 ">Rate</th>              
               <th className="border p-2 ">Amount</th>
-              <th className="border p-2 ">Rate</th>
-              <th className="border p-2 ">Stock</th>
               <th className="border p-2 ">Action</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, idx) => (
               <tr key={idx}>
-                <td className="border p-1">
+                <td className="border p-1 text-center">
                   <p>{item.name}</p>
                 </td>
 
@@ -271,29 +272,12 @@ export default function SalesReturnTopSection({
                   </button>
                 </td>
 
-                <td className="border p-1">
-                  <HrSelect
-                    value={item.tax}
-                    onChange={(e) =>
-                      handleItemChange(idx, 'tax', e.target.value)
-                    }
-                    options={[
-                      { value: 0, label: '0%' },
-                      { value: 5, label: '5%' },
-                      { value: 10, label: '10%' },
-                    ]}
-                  />
-                </td>
+                <td className="border p-1 text-center">
+                  <p>{item.rate}</p>
+                </td>              
 
                 <td className="border p-1 text-center">
                   {item.amount.toFixed(2)}
-                </td>
-                <td className="border p-1 text-center">
-                  <p>{item.rate}</p>
-                </td>
-
-                <td className="border p-1 text-center">
-                  <p>{item.stock}</p>
                 </td>
 
                 <td className="border p-1 text-center">
@@ -310,30 +294,53 @@ export default function SalesReturnTopSection({
         </table>
       </div>
 
-      {/* SUMMARY */}
-      <div className="flex justify-around bg-gray-200 p-4 mt-4 rounded">
+        {/* SUMMARY */}
+      <div className="flex flex-col justify-around border-2 p-4 mt-4 rounded">
+      <div className="flex justify-around  p-4 rounded">
         <div>
-          <p>Quantity</p>
-          <p>{totalQty}</p>
+          <p className='border-2 p-2 rounded broder-black '>Quantity: {totalQty}</p>  
+        </div>
+        <div className="cursor-pointer border-2 p-1 rounded transition-colors" onClick={() => setOpenDiscount(true)}>
+          <p>Edit Discount: {descount.toFixed(2)}</p>         
+        </div>
+        <div>
+          <p className='border-2 p-2 rounded  '>Subtotal: {subtotal.toFixed(2)}</p>         
+        </div>
+
+        <div>
+          <p className='border-2 p-2 rounded  '>Grand Total: {total.toFixed(2)} </p>
+          </div>
+      </div>
+
+
+
+
+      <div  className="flex  justify-around   rounded">
+
+
+        <div>
+          {/* <p>Quantity</p>
+          <p>{totalQty}</p> */}
           <Button onClick={handleHoldSale}>Hold</Button>
         </div>
         <div>
-          <p>Total Amount</p>
-          <p>{total.toFixed(2)}</p>
+          {/* <p>Total Amount</p>
+          <p>{total.toFixed(2)}</p> */}
           <Button onClick={() => setopenMulitplePayment(true)}>Multiple</Button>
         </div>
 
         <div>
-          <p>Total Amount</p>
-          <p>{descount.toFixed(2)}</p>
+          {/* <p>Discount</p>
+          <p>{descount.toFixed(2)}</p> */}
           <Button onClick={() => setopenPayment(true)}>Cash</Button>
         </div>
         <div>
-          <p>Grand Total</p>
-          <p> {total.toFixed(2)} </p>
+          {/* <p>Grand Total</p>
+          <p> {total.toFixed(2)} </p> */}
           <Button onClick={handlePayAll}>Pay All</Button>
         </div>
-      </div>
+              </div>
+              </div>
     </div>
   )
 }

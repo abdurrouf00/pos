@@ -810,16 +810,17 @@
   "menu_icon": "<i class=\"fa fa-dollar-sign\"></i>",
   "has_child": 1,
   "children": [
+
+       {
+      "id": 100,
+      "menu_name": "Pos",
+      "menu_uid": "pos",
+      "parent_id": 41,
+      "order_no": 41.0,
+      "menu_icon": null,
+      "has_child": 0
+    },
     {
-        "id": 170,
-        "menu_name": "pos",
-        "menu_uid": "pos",
-        "parent_id": 41,
-        "order_no": 10.0,
-        "menu_icon": null,
-        "has_child": 0
-      },
-      {
         "id": 171,
         "menu_name": "packeges",
         "menu_uid": "packeges",
@@ -837,8 +838,6 @@
         "menu_icon": null,
         "has_child": 0
       }
-
-   
   ]
 }
 

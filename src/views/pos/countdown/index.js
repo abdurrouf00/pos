@@ -12,7 +12,9 @@ export default function CountdownPage() {
     const loadCountdowns = () => {
       const stored = localStorage.getItem('pos_active_countdowns')
       if (stored) {
-        setCountdowns(JSON.parse(stored))
+        const parsed = JSON.parse(stored)
+        const sorted = parsed.sort((a, b) => b.startTime - a.startTime)
+        setCountdowns(sorted)
       }
     }
 

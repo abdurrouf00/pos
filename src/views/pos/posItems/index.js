@@ -1,8 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
-import SalesReturnTopSection from './SalesReturnTopSection'
-import SalesReturnRightSection from './SalesReturnRightSection'
-import SalesReturnModals from './SalesReturnModals'
+import SalesReturnTopSection from './leftSection'
+import SalesReturnRightSection from './rightSection'
+import SalesReturnModals from './modals'
 import productsData from './productsData.json'
 
 const today = new Date().toISOString().split('T')[0]
@@ -13,6 +13,11 @@ export default function SalesInvoice() {
     customerName: '',
     salesdate: today,
     salesperson: '',
+    gurdianName: '',
+    contactNumber: '',
+    kidsName: '',
+    kidsAge: '',
+    totalCrowd: '',
   })
 
   // ================= ITEMS =================
@@ -21,7 +26,9 @@ export default function SalesInvoice() {
   // ================= PAYMENT =================
   const [shipping] = useState(0)
   const [adjustment] = useState(0)
-  const [descount] = useState(0) // Fixed typo per user requirement
+  const [descount, setDescount] = useState(0) 
+  const [discountType, setDiscountType] = useState('fixed') // 'fixed' or 'percent'
+  const [discountValue, setDiscountValue] = useState(0)
   
   const [paidAmount, setPaidAmount] = useState(0)
   const [paymentNote, setPaymentNote] = useState('')
@@ -30,6 +37,7 @@ export default function SalesInvoice() {
 
   // MULTIPLE PAYMENT STATE
   const [openMulitplePayment, setopenMulitplePayment] = useState(false)
+  const [openDiscount, setOpenDiscount] = useState(false)
   const [payments, setPayments] = useState([
     { method: 'cash', amount: '', note: '' }
   ])
@@ -151,7 +159,18 @@ export default function SalesInvoice() {
   // ================= CALC =================
   const totalQty = items.reduce((q, i) => q + i.qty, 0)
   const subtotal = items.reduce((s, i) => s + i.amount, 0)
-  const total = subtotal + shipping + adjustment
+
+  // Recalculate discount
+  useEffect(() => {
+    if (discountType === 'percent') {
+      const calculated = (subtotal * Number(discountValue)) / 100
+      setDescount(calculated)
+    } else {
+      setDescount(Number(discountValue))
+    }
+  }, [subtotal, discountType, discountValue])
+
+  const total = subtotal + shipping + adjustment - descount
 
   const handleHoldSale = () => {
     if (items.length === 0) return
@@ -159,8 +178,8 @@ export default function SalesInvoice() {
     const holdData = {
       id: Date.now(),
       customer: formData.customerName || 'Walk-in Customer',
+      formData: { ...formData }, // ✅ copy including new fields
       items: JSON.parse(JSON.stringify(items)), // ✅ deep copy
-      formData: { ...formData }, // ✅ copy
       total,
     }
 
@@ -171,6 +190,11 @@ export default function SalesInvoice() {
       ...prev,
       customerName: '',
       salesdate: today,
+      gurdianName: '',
+      contactNumber: '',
+      kidsName: '',
+      kidsAge: '',
+      totalCrowd: '',
     }))
   }
 
@@ -206,6 +230,11 @@ export default function SalesInvoice() {
     const saleData = {
         date: formData.salesdate,
         customer: formData.customerName || 'Walk-in',
+        gurdianName: formData.gurdianName,
+        contactNumber: formData.contactNumber,
+        kidsName: formData.kidsName,
+        kidsAge: formData.kidsAge,
+        totalCrowd: formData.totalCrowd,
         items: items,
         total: total,
         paid: total,
@@ -308,7 +337,15 @@ export default function SalesInvoice() {
     // 4. Save (Simulation) & Reset
     console.log("Saved Sale:", saleData)
     setItems([])
-    setFormData(prev => ({ ...prev, customerName: '' }))
+    setFormData(prev => ({ 
+      ...prev, 
+      customerName: '',
+      gurdianName: '',
+      contactNumber: '',
+      kidsName: '',
+      kidsAge: '',
+      totalCrowd: '',
+    }))
     setPaidAmount(0)
   }
 
@@ -411,6 +448,11 @@ export default function SalesInvoice() {
     const saleData = {
         date: formData.salesdate,
         customer: formData.customerName || 'Walk-in',
+        gurdianName: formData.gurdianName,
+        contactNumber: formData.contactNumber,
+        kidsName: formData.kidsName,
+        kidsAge: formData.kidsAge,
+        totalCrowd: formData.totalCrowd,
         items: items,
         total: total,
         paid: paidAmount,
@@ -423,7 +465,15 @@ export default function SalesInvoice() {
 
     console.log("Saved Single Payment Sale:", saleData)
     setItems([])
-    setFormData(prev => ({ ...prev, customerName: '' }))
+    setFormData(prev => ({ 
+      ...prev, 
+      customerName: '',
+      gurdianName: '',
+      contactNumber: '',
+      kidsName: '',
+      kidsAge: '',
+      totalCrowd: '',
+    }))
     setPaidAmount(0)
     setPaymentNote('')
     setopenPayment(false)
@@ -434,6 +484,11 @@ export default function SalesInvoice() {
     const saleData = {
         date: formData.salesdate,
         customer: formData.customerName || 'Walk-in',
+        gurdianName: formData.gurdianName,
+        contactNumber: formData.contactNumber,
+        kidsName: formData.kidsName,
+        kidsAge: formData.kidsAge,
+        totalCrowd: formData.totalCrowd,
         items: items,
         total: total,
         paid: totalPaid,
@@ -446,7 +501,15 @@ export default function SalesInvoice() {
 
     console.log("Saved Multiple Payment Sale:", saleData)
     setItems([])
-    setFormData(prev => ({ ...prev, customerName: '' }))
+    setFormData(prev => ({ 
+      ...prev, 
+      customerName: '',
+      gurdianName: '',
+      contactNumber: '',
+      kidsName: '',
+      kidsAge: '',
+      totalCrowd: '',
+    }))
     setPayments([{ method: 'cash', amount: '', note: '' }])
     setopenMulitplePayment(false)
   }
@@ -472,10 +535,12 @@ export default function SalesInvoice() {
         removeItem={removeItem}
         totalQty={totalQty}
         total={total}
+        subtotal={subtotal}
         handleHoldSale={handleHoldSale}
         setopenPayment={setopenPayment}
         setopenMulitplePayment={setopenMulitplePayment}
         descount={descount}
+        setOpenDiscount={setOpenDiscount}
         handlePayAll={handlePayAll}
       />
 
@@ -519,6 +584,15 @@ export default function SalesInvoice() {
         // Save Handlers
         handleSinglePaymentSave={handleSinglePaymentSave}
         handleMultiplePaymentSave={handleMultiplePaymentSave}
+        // Discount Props
+        openDiscount={openDiscount}
+        setOpenDiscount={setOpenDiscount}
+        discountType={discountType}
+        setDiscountType={setDiscountType}
+        discountValue={discountValue}
+        setDiscountValue={setDiscountValue}
+        setDescount={setDescount}
+        subtotal={subtotal}
      />
     </div>
   )
