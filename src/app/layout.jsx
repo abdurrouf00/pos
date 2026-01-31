@@ -23,7 +23,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "HR360 - HR Mangement System",
+  title: "ERP Cloud 17 HR Mangement System",
   description: "The Smart HR Mangement solution",
 };
 

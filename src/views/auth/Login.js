@@ -14,8 +14,8 @@ import AuthTitle from "./common/AuthTitle";
 
 const accountsMenu = {
   id: 41,
-  menu_name: "Accounting2",
-  menu_uid: "accounting2",
+  menu_name: "pos",
+  menu_uid: "pos",
   parent_id: 0,
   order_no: 11,
   menu_icon: "<i class=\"fa fa-dollar-sign\"></i>",
@@ -398,7 +398,7 @@ export default function LoginPage() {
       <div className='flex items-center justify-center min-h-screen font-inter'>
         <div className='space-y-4 sm:w-md w-full px-4 md:px-0'>
           <div className='w-[200px]  mx-auto'>
-            <img src="/hr360-logo.png" alt="logo" className='w-full h-full object-cover' />
+            <img src="/logo.png" alt="logo" className='w-full h-full object-cover' />
           </div>
           {error && <Alert message={error} type="error" />}
           <div className=''>

@@ -211,7 +211,7 @@ export default function Sidebar({ open, setOpen }) {
       `}
       >
         <div className="flex items-center">
-          <img src="/hr360-logo.png" alt="HR360 Logo" className="h-18" />
+          <img src="/logo.png" alt="HR360 Logo" className="h-18" />
         </div>
         <div className="p-4">
           <MenuSkeleton />
@@ -234,7 +234,7 @@ export default function Sidebar({ open, setOpen }) {
         <div className="flex items-center justify-between  pr-4">
           <div className="h-18 w-24">
             <img
-              src="/hr360-logo.png"
+              src="/logo.png"
               alt="HR360 Logo"
               className="w-full h-full object-cover"
             />

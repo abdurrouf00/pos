@@ -25,7 +25,7 @@ export default function OrganizationLayout() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Image
-                src="/hr360-logo.png"
+                src="/logo.png"
                 alt="HR360 Logo"
                 className=""
                 width={100}
