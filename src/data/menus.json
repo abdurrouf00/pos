@@ -822,8 +822,8 @@
     },
     {
         "id": 171,
-        "menu_name": "packeges",
-        "menu_uid": "packeges",
+        "menu_name": "packege Sales",
+        "menu_uid": "packegeSales",
         "parent_id": 41,
         "order_no": 10.1,
         "menu_icon": null,
