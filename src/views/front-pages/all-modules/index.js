@@ -97,7 +97,7 @@ const ModuleScreen = () => {
     },
     {
       name: "POS",
-      label: "POS (Point of Sale)",
+      // label: "POS (Point of Sale)",
       icon: (
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="14" y="10" width="36" height="44" rx="6" fill="#282560" />
