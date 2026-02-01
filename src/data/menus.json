@@ -803,7 +803,7 @@
   
   {
   "id": 41,
-  "menu_name": "POS ",
+  "menu_name": "POS",
   "menu_uid": "pos",
   "parent_id": 0,
   "order_no": 11,
@@ -812,8 +812,8 @@
   "children": [
 
        {
-      "id": 100,
-      "menu_name": "Pos Sales",
+      "id": 1001,
+      "menu_name": "Pos",
       "menu_uid": "posSales",
       "parent_id": 41,
       "order_no": 41.0,
@@ -821,8 +821,8 @@
       "has_child": 0
     },
     {
-        "id": 171,
-        "menu_name": "packege Sales",
+        "id": 1002,
+        "menu_name": "Packeges",
         "menu_uid": "packegeSales",
         "parent_id": 41,
         "order_no": 10.1,
@@ -830,7 +830,7 @@
         "has_child": 0
       },
       {
-        "id": 171,
+        "id": 1003,
         "menu_name": "Count Down",
         "menu_uid": "countDown",
         "parent_id": 41,
@@ -839,7 +839,7 @@
         "has_child": 0
       },
       {
-        "id": 171,
+        "id": 1004,
         "menu_name": "sales Voucher Report",
         "menu_uid": "salesVoucherReport",
         "parent_id": 41,
