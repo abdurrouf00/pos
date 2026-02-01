@@ -837,6 +837,15 @@
         "order_no": 10.1,
         "menu_icon": null,
         "has_child": 0
+      },
+      {
+        "id": 171,
+        "menu_name": "sales Voucher Report",
+        "menu_uid": "salesVoucherReport",
+        "parent_id": 41,
+        "order_no": 10.1,
+        "menu_icon": null,
+        "has_child": 0
       }
   ]
 }
