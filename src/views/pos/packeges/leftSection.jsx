@@ -47,7 +47,7 @@ export default function SalesReturnTopSection({
       {/* ====================TOP ====================== */}
       <div className="flex justify-between items-center ">
         <div className="flex flex-col gap-2">
-          <div className="grid grid-cols-4 gap-3 ">
+          <div className="grid grid-cols-4 gap-3 mb-5 ">
             <HrSelect
             label="Sales Man"
             name="salesperson"
@@ -93,20 +93,20 @@ export default function SalesReturnTopSection({
           
           
         </div>
-        <div className=' space-y-2 text-end'>
+        <div className=' space-y-2 text-end '>
           {/* ==================== hold LoanList=================== */}
 
          <button
               type="button"
               onClick={() => setOpenCustomer(true)}
-              className="border bg-sky-400 p-2 rounded "
+              className="border bg-sky-400 p-2 rounded  px-3 py-2 "
             >
              Membership 
             </button>
         {/* ==================== hold LoanList=================== */}
         <button
           onClick={() => setShowHoldList(true)}
-          className="relative bg-yellow-300 text-white px-3 py-3 w-27 mb-2 border rounded text-sm"
+          className="relative bg-yellow-300 text-white px-3 py-3 ml-3 w-27 mb-2 border rounded text-sm"
         >
           Hold List
           {holdSales.length > 0 && (

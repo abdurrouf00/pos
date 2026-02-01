@@ -224,7 +224,7 @@ export default function SalesInvoice() {
     }
 
     // 3. Print
-    const printWindow = window.open('', '', 'width=300,height=600')
+    const printWindow = window.open('', '', 'width=600,height=600')
     if (printWindow) {
       printWindow.document.write(`
         <html>
@@ -324,7 +324,7 @@ export default function SalesInvoice() {
 
   // Common Print Logic
   const printReceipt = (saleData) => {
-    const printWindow = window.open('', '', 'width=300,height=600')
+    const printWindow = window.open('', '', 'width=600,height=600')
     if (printWindow) {
       printWindow.document.write(`
         <html>
