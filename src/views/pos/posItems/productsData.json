@@ -66,7 +66,7 @@
     "id": 8,
     "code": "IT004",
     "name": "Toy",
-    "category": "Toy",
+    "category": "Toy",  
     "price": 120,
     "stock": 9,
     "image": "/img/images.jpg"

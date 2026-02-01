@@ -1,6 +1,46 @@
 'use client'
+import { useState, useEffect } from 'react'
 
 export default function SalesVoucherPage() {
+
+  const denominations = [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1]
+
+  const [cash, setCash] = useState(
+    denominations.reduce((a, d) => ({ ...a, [d]: 0 }), {})
+  )
+
+  const [nonCash, setNonCash] = useState({
+    UCBL: 0,
+    DBBL: 0,
+    CITY: 0,
+    PUBALI: 0,
+    EBL: 0,
+    card: 0,
+    bkash: 0,
+    nagad: 0,
+  })
+
+  const cashSubtotal = denominations.reduce(
+    (sum, d) => sum + d * (cash[d] || 0),
+    0
+  )
+
+  const nonCashSubtotal = Object.values(nonCash).reduce(
+    (a, b) => a + Number(b || 0),
+    0
+  )
+
+  const [isConfirmed, setIsConfirmed] = useState(false)
+
+  const grandTotal = cashSubtotal + nonCashSubtotal
+
+  const handleUpdate = () => {
+    // Here you would normally save the data to a database or API
+    console.log('Saving settlement data...', { cash, nonCash, grandTotal })
+    alert('Settlement updated successfully!')
+    window.location.reload()
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
@@ -8,116 +48,152 @@ export default function SalesVoucherPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* FOOD CASH */}
+          {/* CASH */}
           <div className="border rounded">
             <div className="bg-teal-600 text-white px-4 py-2 font-semibold">
               FOOD | Cash
             </div>
 
             <div className="p-4 space-y-2 text-sm">
-              {[
-                [1000, 6, 6000],
-                [500, 5, 2500],
-                [200, 6, 1200],
-                [100, 20, 2000],
-                [50, 12, 600],
-                [20, 2, 40],
-                [10, 2, 20],
-                [5, 0, 0],
-                [2, 1, 2],
-                [1, 22, 22],
-              ].map((item, i) => (
-                <div key={i} className="grid grid-cols-3 gap-2">
+              {denominations.map((d) => (
+                <div key={d} className="grid grid-cols-3 gap-2 items-center">
+                  <div className="border p-1 rounded" >{d}  x</div>
+
                   <input
+                    type="number"
                     className="border p-1 rounded"
-                    value={`${item[0]} x`}
-                    readOnly
+                    value={cash[d] === 0 ? '' : cash[d]}
+                    placeholder="0"
+                    onFocus={(e) => e.target.select()}
+                    onChange={(e) =>
+                      setCash({ ...cash, [d]: e.target.value === '' ? 0 : Number(e.target.value) })
+                    }
                   />
-                  <input
-                    className="border p-1 rounded"
-                    value={item[1]}
-                    readOnly
-                  />
+
                   <input
                     className="border p-1 rounded bg-gray-50"
-                    value={item[2]}
+                    value={d * cash[d]}
                     readOnly
                   />
                 </div>
               ))}
 
               <div className="text-right font-semibold pt-2">
-                Sub-Total of Cash : <span className="ml-2">12384</span>
+                Sub-Total of Cash : {cashSubtotal}
               </div>
             </div>
           </div>
 
-          {/* FOOD NON CASH */}
+          {/* NON CASH */}
           <div className="border rounded">
             <div className="bg-orange-500 text-white px-4 py-2 font-semibold">
               FOOD | Non-Cash
             </div>
 
-            <div className="p-4 space-y-3 text-sm">
-              {['UCBL', 'DBBL', 'CITY', 'PUBALI'].map((bank, i) => (
-                <div key={i} className="grid grid-cols-2 gap-2">
+            <div className="p-4 space-y-3 text-sm ">
+
+              {[
+                ['UCBL', 'UCBL'],
+                ['DBBL', 'DBBL'],
+                ['CITY', 'CITY'],
+                ['PUBALI', 'PUBALI'],
+                ['EBL', 'EBL'],
+              ].map(([key, label]) => (
+                <div key={key} className="grid grid-cols-2 gap-2">
+                  <div className="border p-1 rounded">{label}</div>
                   <input
+                    type="number"
                     className="border p-1 rounded"
-                    value={bank}
-                    readOnly
+                    value={nonCash[key] === 0 ? '' : nonCash[key]}
+                    placeholder="0"
+                    onFocus={(e) => e.target.select()}
+                    onChange={(e) =>
+                      setNonCash({ ...nonCash, [key]: e.target.value === '' ? 0 : Number(e.target.value) })
+                    }
                   />
-                  <button className="border rounded px-2 py-1 text-left bg-gray-50">
-                    {bank} File
-                  </button>
                 </div>
               ))}
 
               <div className="grid grid-cols-2 gap-2">
-                <input className="border p-1 rounded" value="EBL" readOnly />
-                <input className="border p-1 rounded" value="200" readOnly />
+                <div>Card Sales</div>
+                <input
+                  type="number"
+                  className="border p-1 rounded"
+                  value={nonCash.card === 0 ? '' : nonCash.card}
+                  placeholder="0"
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) =>
+                    setNonCash({ ...nonCash, card: e.target.value === '' ? 0 : Number(e.target.value) })
+                  }
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <input className="border p-1 rounded" value="Card Sales" readOnly />
-                <input className="border p-1 rounded" value="200" readOnly />
+                <div>Food Bkash</div>
+                <input
+                  type="number"
+                  className="border p-1 rounded"
+                  value={nonCash.bkash === 0 ? '' : nonCash.bkash}
+                  placeholder="0"
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) =>
+                    setNonCash({ ...nonCash, bkash: e.target.value === '' ? 0 : Number(e.target.value) })
+                  }
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <input className="border p-1 rounded" value="Food Bkash" readOnly />
-                <input className="border p-1 rounded" value="399" readOnly />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <input className="border p-1 rounded" value="Food Nagad" readOnly />
-                <input className="border p-1 rounded" />
+                <div>Food Nagad</div>
+                <input
+                  type="number"
+                  className="border p-1 rounded"
+                  value={nonCash.nagad === 0 ? '' : nonCash.nagad}
+                  placeholder="0"
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) =>
+                    setNonCash({ ...nonCash, nagad: e.target.value === '' ? 0 : Number(e.target.value) })
+                  }
+                />
               </div>
 
               <div className="font-semibold">
-                Sub Total (B): <span className="ml-2">12983</span>
+                Sub Total (B): {nonCashSubtotal}
               </div>
 
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked readOnly />
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={isConfirmed}
+                  onChange={(e) => setIsConfirmed(e.target.checked)}
+                />
                 Confirm Settlement?
               </label>
 
               <input
                 className="border p-2 rounded w-full"
-                value="rabi + jhumur"
-                readOnly
+                placeholder="Remarks"
               />
             </div>
           </div>
         </div>
 
-        {/* FOOTER BUTTONS */}
-        <div className="flex justify-between mt-6">
-          <button className="bg-red-500 text-white px-4 py-2 rounded">
-            Close
-          </button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded">
-            Update
-          </button>
+        <div className="flex justify-between mt-6 font-semibold">
+          <div>Total Amount : {grandTotal}</div>
+
+          <div className="space-x-3">
+            <button className="bg-red-500 text-white px-4 py-2 rounded">
+              Close
+            </button>
+            <button 
+              disabled={!isConfirmed}
+              onClick={handleUpdate}
+              className={`px-4 py-2 rounded text-white transition-colors ${
+                isConfirmed ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'
+              }`}
+            >
+              Update
+            </button>
+          </div>
         </div>
       </div>
     </div>
