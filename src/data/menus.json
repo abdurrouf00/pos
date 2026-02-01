@@ -803,7 +803,7 @@
   
   {
   "id": 41,
-  "menu_name": "POS",
+  "menu_name": "POS ",
   "menu_uid": "pos",
   "parent_id": 0,
   "order_no": 11,
@@ -813,8 +813,8 @@
 
        {
       "id": 100,
-      "menu_name": "Pos",
-      "menu_uid": "pos",
+      "menu_name": "Pos Sales",
+      "menu_uid": "posSales",
       "parent_id": 41,
       "order_no": 41.0,
       "menu_icon": null,
