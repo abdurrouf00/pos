@@ -7,31 +7,31 @@ const BalanceSheet = () => {
   const data = {
     assets: {
       current: [
-        { name: "Cash and Equivalents", amount: 1580500.0 },
-        { name: "Accounts Receivable", amount: 845600.0 },
-        { name: "Inventory", amount: 2425000.0 },
-        { name: "Prepaid Expenses", amount: 127800.0 },
+        { name: "Cash and Equivalents", amount: 1580.0 },
+        { name: "Accounts Receivable", amount: 8456.0 },
+        { name: "Inventory", amount: 24250.0 },
+        { name: "Prepaid Expenses", amount: 1278.0 },
       ],
       nonCurrent: [
-        { name: "Property, Plant & Equipment", amount: 8350000.0 },
-        { name: "Intangible Assets", amount: 450000.0 },
-        { name: "Long-term Investments", amount: 1200000.0 },
+        { name: "Property, Plant & Equipment", amount: 8350.0 },
+        { name: "Intangible Assets", amount: 450.0 },
+        { name: "Long-term Investments", amount: 1200.0 },
       ]
     },
     liabilities: {
       current: [
-        { name: "Accounts Payable", amount: 432000.0 },
-        { name: "Accrued Expenses", amount: 115400.0 },
-        { name: "Short-term Debt", amount: 525000.0 },
+        { name: "Accounts Payable", amount: 4320.0 },
+        { name: "Accrued Expenses", amount: 1154.0 },
+        { name: "Short-term Debt", amount: 5250.0 },
       ],
       longTerm: [
-        { name: "Long-term Debt", amount: 2180000.0 },
-        { name: "Deferred Tax Liabilities", amount: 112500.0 },
+        { name: "Long-term Debt", amount: 2180.0 },
+        { name: "Deferred Tax Liabilities", amount: 11500.0 },
       ]
     },
     equity: [
-      { name: "Common Stock", amount: 5000000.0 },
-      { name: "Retained Earnings", amount: 6614000.0 },
+      { name: "Common Stock", amount: 5000.0 },
+      { name: "Retained Earnings", amount: 66140.0 },
     ]
   };
 

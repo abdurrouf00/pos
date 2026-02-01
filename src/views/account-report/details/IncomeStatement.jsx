@@ -162,7 +162,7 @@ const IncomeStatement = () => {
                              <DollarSign className="w-4 h-4 text-[#F49420]" />
                              <span className="text-[10px] font-black tracking-widest uppercase">Certified Result</span>
                           </div>
-                          <div className="text-6xl md:text-8xl font-black text-[#F49420] drop-shadow-2xl">
+                          <div className="text-3xl md:text-4xl font-black text-[#F49420] drop-shadow-2xl">
                              ৳ {netIncome.toLocaleString()}
                           </div>
                        </div>
