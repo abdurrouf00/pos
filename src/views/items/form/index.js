@@ -201,7 +201,7 @@ export default function ProductSalesPurchaseForm() {
                 <h3 className="text-lg font-semibold">Sales Information</h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 <HrInput
                   name="sellingPrice"
@@ -251,7 +251,7 @@ export default function ProductSalesPurchaseForm() {
                 <h3 className="text-lg font-semibold">Purchase Information</h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 <HrInput
                   name="costPrice"
@@ -300,7 +300,7 @@ export default function ProductSalesPurchaseForm() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex fixed bottom-0 w-[82%] items-center shadow-lg h-28 md:h-12 gap-8 bg-gray-200 rounded sm:px-4 md:px-6 z-50">
+          <div className="flex fixed  right-4  items-center  gap-8  rounded sm:px-4 md:px-6 z-50">
             <Button type="submit">Save Information</Button>
           </div>
         </form>

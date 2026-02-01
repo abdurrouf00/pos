@@ -291,7 +291,7 @@ export default function VendorCreditNoteForm() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex fixed bottom-0 w-[82%] items-center shadow-lg h-28 md:h-12 gap-8 bg-gray-200 rounded sm:px-4 md:px-6 z-50">
+          <div className="flex fixed right-4  bottom-4 items-center    rounded sm:px-4 md:px-6 z-50">
             <Button type="submit">Save Vendor Credit Note</Button>
           </div>
         </form>

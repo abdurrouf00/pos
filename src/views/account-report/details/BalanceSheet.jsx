@@ -7,31 +7,31 @@ const BalanceSheet = () => {
   const data = {
     assets: {
       current: [
-        { name: "Cash and Equivalents", amount: 98300.0 },
-        { name: "Accounts Receivable", amount: 45600.0 },
-        { name: "Inventory", amount: 125000.0 },
-        { name: "Prepaid Expenses", amount: 7800.0 },
+        { name: "Cash and Equivalents", amount: 1580500.0 },
+        { name: "Accounts Receivable", amount: 845600.0 },
+        { name: "Inventory", amount: 2425000.0 },
+        { name: "Prepaid Expenses", amount: 127800.0 },
       ],
       nonCurrent: [
-        { name: "Property, Plant & Equipment", amount: 350000.0 },
-        { name: "Intangible Assets", amount: 45000.0 },
-        { name: "Long-term Investments", amount: 120000.0 },
+        { name: "Property, Plant & Equipment", amount: 8350000.0 },
+        { name: "Intangible Assets", amount: 450000.0 },
+        { name: "Long-term Investments", amount: 1200000.0 },
       ]
     },
     liabilities: {
       current: [
-        { name: "Accounts Payable", amount: 32000.0 },
-        { name: "Accrued Expenses", amount: 15400.0 },
-        { name: "Short-term Debt", amount: 25000.0 },
+        { name: "Accounts Payable", amount: 432000.0 },
+        { name: "Accrued Expenses", amount: 115400.0 },
+        { name: "Short-term Debt", amount: 525000.0 },
       ],
       longTerm: [
-        { name: "Long-term Debt", amount: 180000.0 },
-        { name: "Deferred Tax Liabilities", amount: 12500.0 },
+        { name: "Long-term Debt", amount: 2180000.0 },
+        { name: "Deferred Tax Liabilities", amount: 112500.0 },
       ]
     },
     equity: [
-      { name: "Common Stock", amount: 300000.0 },
-      { name: "Retained Earnings", amount: 226800.0 },
+      { name: "Common Stock", amount: 5000000.0 },
+      { name: "Retained Earnings", amount: 6614000.0 },
     ]
   };
 
@@ -59,7 +59,7 @@ const BalanceSheet = () => {
               <h1 className="text-4xl font-black text-[#282560] tracking-tighter">Balance Sheet</h1>
               <div className="flex items-center gap-3 mt-1">
                  <span className="text-xs font-bold bg-[#F49420] text-white px-3 py-1 rounded-full uppercase tracking-tighter">Verified</span>
-                 <p className="text-gray-400 text-sm font-medium italic">Statement of Financial Position as of Dec 31, 2024</p>
+                 <p className="text-gray-400 text-sm font-medium italic">Statement of Financial Position as of June 30, 2025</p>
               </div>
             </div>
           </div>
@@ -76,15 +76,15 @@ const BalanceSheet = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 border-b-4 border-b-blue-500">
               <span className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] block mb-2">Total Assets</span>
-              <span className="text-2xl font-black text-[#282560]">৳ {totalAssets.toLocaleString()}</span>
+              <span className="text-3xl font-black text-[#282560]">৳ {totalAssets.toLocaleString()}</span>
            </div>
            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 border-b-4 border-b-orange-500">
               <span className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] block mb-2">Total Liabilities</span>
-              <span className="text-2xl font-black text-[#282560]">৳ {totalLiabilities.toLocaleString()}</span>
+              <span className="text-3xl font-black text-[#282560]">৳ {totalLiabilities.toLocaleString()}</span>
            </div>
            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 border-b-4 border-b-emerald-500">
               <span className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] block mb-2">Total Equity</span>
-              <span className="text-2xl font-black text-[#282560]">৳ {totalEquity.toLocaleString()}</span>
+              <span className="text-3xl font-black text-[#282560]">৳ {totalEquity.toLocaleString()}</span>
            </div>
         </div>
 
@@ -143,7 +143,7 @@ const BalanceSheet = () => {
 
                 <div className="pt-8 border-t-2 border-[#282560]/5 mt-4 flex justify-between items-center">
                    <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Total Assets Balance</span>
-                   <span className="text-2xl font-black text-[#282560] border-b-2 border-[#F49420]">৳ {totalAssets.toLocaleString()}</span>
+                   <span className="text-3xl font-black text-[#282560] border-b-2 border-[#F49420]">৳ {totalAssets.toLocaleString()}</span>
                 </div>
               </div>
             </section>
@@ -201,7 +201,7 @@ const BalanceSheet = () => {
 
                 <div className="pt-8 border-t-2 border-orange-500/5 mt-4 flex justify-between items-center">
                    <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Combined Balance</span>
-                   <span className="text-2xl font-black text-[#282560] border-b-2 border-emerald-500">৳ {totalLiabilitiesAndEquity.toLocaleString()}</span>
+                   <span className="text-3xl font-black text-[#282560] border-b-2 border-emerald-500">৳ {totalLiabilitiesAndEquity.toLocaleString()}</span>
                 </div>
               </div>
             </section>

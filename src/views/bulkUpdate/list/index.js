@@ -5,13 +5,13 @@ import { useState } from "react";
 
 export default function BulkUpdateTransactions() {
   return (
-    <div className="flex flex-col items-center text-center ">
+    <div className="flex flex-col items-center text-center mt-32 ">
       {/* ✅ flex + items-center = horizontally center */}
-      <img
+      {/* <img
         src="/account-recode.png"
         alt="laim logo"
         className="h-32 mb-4"
-      />
+      /> */}
 
       <h3 className="text-2xl font-medium mb-2">
         Bulk Update Accounts in Transactions

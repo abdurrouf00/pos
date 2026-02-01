@@ -6,7 +6,7 @@ import Table from '@/views/items/list/table';
 const page = () => {
   return (
     <div>
-      {/* <Header/>      */}
+      <Header/>     
       <Table />
 
     </div>

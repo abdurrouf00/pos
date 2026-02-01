@@ -17,11 +17,11 @@ export default function SecondHeader() {
       <div className="flex items-center justify-between h-10 md:h-12  ">
         <div className="   hover:bg-gray-100 font-bold text-2xl p-2 rounded">All {title}</div>
           <>
-          <Link href="/dashboard/quotes/new-quote">
-           <Button>
-            <span className="text-2xl">+</span> New
-           </Button>
-          </Link>
+            <Link href="/dashboard/bulk-update/new-bulkUpdate">
+              <Button>
+                <span className="text-2xl">+</span> New
+              </Button>
+            </Link>            
           </>
       </div>
     </div>

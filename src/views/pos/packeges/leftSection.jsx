@@ -61,7 +61,7 @@ export default function SalesReturnTopSection({
           />
         
             <HrSelect
-              label="Select Member"
+              label="Select customer"
               name="customer"
               value={formData.customer}
               onChange={handleChange}
@@ -80,14 +80,14 @@ export default function SalesReturnTopSection({
             onChange={handleChange}
           />
 
-              <HrInput
+              {/* <HrInput
              label="Total Crowd"
              name="totalCrowd"
              type="number"
              value={formData.totalCrowd || ''}
              onChange={handleChange}
              placeholder="Total Crowd"
-          />
+          /> */}
           </div>
          
           
@@ -212,10 +212,12 @@ export default function SalesReturnTopSection({
           <thead className="bg-gray-100">
             <tr>
               <th className="border p-2 w-36">Item</th>
-              <th className="border p-2 ">Guardian Name</th>
+              <th className="border p-2 w-36">Quantity</th>
+              <th className="border p-2 w-36">Price</th>
+              {/* <th className="border p-2 ">Guardian Name</th>
               <th className="border p-2 ">Kids Name</th>
               <th className="border p-2 ">Age</th>  
-              <th className="border p-2 ">Mobile</th> 
+              <th className="border p-2 ">Mobile</th>  */}
               <th className="border p-2 ">Amount</th>          
               <th className="border p-2 ">Action</th>
             </tr>
@@ -227,7 +229,7 @@ export default function SalesReturnTopSection({
                   <p className="font-medium text-xs text-gray-700">{item.name}</p>
                 </td>
 
-                <td className="border p-1">
+                {/* <td className="border p-1">
                    <input
                     type="text"
                     value={item.guardianName}
@@ -265,10 +267,31 @@ export default function SalesReturnTopSection({
                     className="w-full border rounded p-2 text-xs focus:outline-sky-400"
                     placeholder="Mobile"
                   />
-                </td>
+                </td> */}
+
+                
 
                 <td className="border p-1">
-                  <p className="font-medium text-xs text-gray-700">{item.amount}</p>
+                  <input
+                    type="number"
+                    value={item.qty}
+                    onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
+                    className="w-full border rounded p-1 text-xs focus:outline-sky-400"
+                  />
+                </td>
+                <td className="border p-1">
+                  <input
+                    type="number"
+                    value={item.rate}
+                    onChange={(e) => handleItemChange(idx, 'rate', e.target.value)}
+                    className="w-full border rounded p-1 text-xs focus:outline-sky-400"
+                  />
+                </td>
+
+                <td className="border p-1 text-right">
+                  <p className="font-medium text-xs text-gray-700">
+                    {Number(item.amount || 0).toFixed(2)}
+                  </p>
                 </td>
 
                 <td className="border p-1 text-center">

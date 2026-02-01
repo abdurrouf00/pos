@@ -8,29 +8,29 @@ const ProfitAndLoss = () => {
     {
       category: "Operating Income",
       items: [
-        { name: "Sales", amount: 150000.0 },
-        { name: "Service Income", amount: 25000.0 },
+        { name: "Sales", amount: 8500000.0 },
+        { name: "Service Income", amount: 1250000.0 },
       ],
-      total: 175000.0,
+      total: 9750000.0,
     },
     {
       category: "Cost of Goods Sold",
       items: [
-        { name: "Purchases", amount: 85000.0 },
-        { name: "Direct Labor", amount: 15000.0 },
+        { name: "Purchases", amount: 4850000.0 },
+        { name: "Direct Labor", amount: 815000.0 },
       ],
-      total: 100000.0,
+      total: 5665000.0,
     },
     {
       category: "Operating Expenses",
       items: [
-        { name: "Rent Expense", amount: 12000.0 },
-        { name: "Salaries and Wages", amount: 20000.0 },
-        { name: "Utilities", amount: 1500.0 },
-        { name: "Office Supplies", amount: 800.0 },
-        { name: "Marketing", amount: 3500.0 },
+        { name: "Rent Expense", amount: 620000.0 },
+        { name: "Salaries and Wages", amount: 1200000.0 },
+        { name: "Utilities", amount: 45500.0 },
+        { name: "Office Supplies", amount: 28800.0 },
+        { name: "Marketing", amount: 135500.0 },
       ],
-      total: 37800.0,
+      total: 2029800.0,
     },
   ];
 
@@ -84,7 +84,7 @@ const ProfitAndLoss = () => {
                   ))}
                   <div className="flex justify-between items-center pt-2 border-t font-bold text-[#282560]">
                     <span>Total Operating Income</span>
-                    <span className="text-lg underline decoration-double">৳ {data[0].total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                    <span className="text-xl underline decoration-double">৳ {data[0].total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                 </div>
               </section>
@@ -111,7 +111,7 @@ const ProfitAndLoss = () => {
               {/* Gross Profit Highlighting */}
               <div className="bg-blue-50/50 rounded-2xl p-6 border border-blue-100 flex justify-between items-center shadow-sm">
                 <span className="text-[#282560] font-black text-xl">GROSS PROFIT</span>
-                <span className="text-2xl font-black text-[#282560]">৳ {grossProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                <span className="text-3xl font-black text-[#282560]">৳ {grossProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
               </div>
 
               {/* Operating Expenses Section */}
@@ -138,7 +138,7 @@ const ProfitAndLoss = () => {
                   <span className="text-3xl font-black">NET INCOME</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-4xl font-black text-[#F49420]">
+                  <span className="text-5xl font-black text-[#F49420]">
                     ৳ {netIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                   <p className="text-blue-200 text-xs mt-1">Calculated automatically based on system data</p>

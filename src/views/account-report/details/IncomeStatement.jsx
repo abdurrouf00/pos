@@ -6,19 +6,19 @@ import { Printer, Download, Filter, FileText, Calendar, DollarSign } from "lucid
 const IncomeStatement = () => {
   const data = {
     revenue: [
-      { name: "Gross Sales", amount: 245000.0 },
-      { name: "Returns & Allowances", amount: -12500.0 },
-      { name: "Other Operating Income", amount: 5000.0 },
+      { name: "Gross Sales", amount: 4850000.0 },
+      { name: "Returns & Allowances", amount: -150000.0 },
+      { name: "Other Operating Income", amount: 85000.0 },
     ],
     expenses: [
-      { name: "Cost of Goods Sold", amount: 110000.0, isCogs: true },
-      { name: "Advertising", amount: 8500.0 },
-      { name: "Depreciation", amount: 4200.0 },
-      { name: "Insurance", amount: 2100.0 },
-      { name: "Office Expenses", amount: 3400.0 },
-      { name: "Rent", amount: 15000.0 },
-      { name: "Salaries & Benefits", amount: 48000.0 },
-      { name: "Utilities", amount: 2800.0 },
+      { name: "Cost of Goods Sold", amount: 2150000.0, isCogs: true },
+      { name: "Advertising", amount: 125000.0 },
+      { name: "Depreciation", amount: 64200.0 },
+      { name: "Insurance", amount: 32100.0 },
+      { name: "Office Expenses", amount: 53400.0 },
+      { name: "Rent", amount: 180000.0 },
+      { name: "Salaries & Benefits", amount: 648000.0 },
+      { name: "Utilities", amount: 42800.0 },
     ],
   };
 
@@ -96,7 +96,7 @@ const IncomeStatement = () => {
                   ))}
                   <div className="flex justify-between items-center pt-4 border-t-2 border-gray-50 mt-4">
                     <span className="text-[#282560] font-black text-lg">TOTAL REVENUE</span>
-                    <span className="text-[#282560] font-black text-xl">৳ {totalRevenue.toLocaleString()}</span>
+                    <span className="text-[#282560] font-black text-2xl">৳ {totalRevenue.toLocaleString()}</span>
                   </div>
                 </div>
               </section>
@@ -110,7 +110,7 @@ const IncomeStatement = () => {
                 <div className="flex justify-between items-center pt-6 border-t border-blue-100/50">
                    <h3 className="text-[#282560] font-black text-2xl tracking-tighter">GROSS PROFIT</h3>
                    <div className="text-right">
-                     <span className="text-[#282560] font-black text-3xl">৳ {grossProfit.toLocaleString()}</span>
+                     <span className="text-[#282560] font-black text-4xl">৳ {grossProfit.toLocaleString()}</span>
                      <div className="text-[10px] text-blue-400 font-bold uppercase mt-1 tracking-wider">Margin: {((grossProfit/totalRevenue)*100).toFixed(1)}%</div>
                    </div>
                 </div>
@@ -162,7 +162,7 @@ const IncomeStatement = () => {
                              <DollarSign className="w-4 h-4 text-[#F49420]" />
                              <span className="text-[10px] font-black tracking-widest uppercase">Certified Result</span>
                           </div>
-                          <div className="text-5xl md:text-7xl font-black text-[#F49420] drop-shadow-2xl">
+                          <div className="text-6xl md:text-8xl font-black text-[#F49420] drop-shadow-2xl">
                              ৳ {netIncome.toLocaleString()}
                           </div>
                        </div>

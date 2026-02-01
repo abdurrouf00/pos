@@ -6,24 +6,24 @@ import { Printer, Download, Filter, TrendingUp, TrendingDown, Wallet, Activity, 
 const CashFlowStatement = () => {
   const data = {
     operating: [
-      { name: "Net Income", amount: 65000.0, isStarting: true },
-      { name: "Depreciation & Amortization", amount: 12000.0 },
-      { name: "Increase in Accounts Receivable", amount: -8500.0 },
-      { name: "Decrease in Inventory", amount: 4200.0 },
-      { name: "Increase in Accounts Payable", amount: 5600.0 },
+      { name: "Net Income", amount: 1265000.0, isStarting: true },
+      { name: "Depreciation & Amortization", amount: 240000.0 },
+      { name: "Increase in Accounts Receivable", amount: -185000.0 },
+      { name: "Decrease in Inventory", amount: 84200.0 },
+      { name: "Increase in Accounts Payable", amount: 95600.0 },
     ],
     investing: [
-      { name: "Purchase of Equipment", amount: -25000.0 },
-      { name: "Sale of Investments", amount: 10000.0 },
+      { name: "Purchase of Equipment", amount: -450000.0 },
+      { name: "Sale of Investments", amount: 280000.0 },
     ],
     financing: [
-      { name: "Repayment of Long-term Debt", amount: -15000.0 },
-      { name: "Dividends Paid", amount: -5000.0 },
-      { name: "Proceeds from Stock Issuance", amount: 20000.0 },
+      { name: "Repayment of Long-term Debt", amount: -325000.0 },
+      { name: "Dividends Paid", amount: -150000.0 },
+      { name: "Proceeds from Stock Issuance", amount: 500000.0 },
     ],
     cash: {
-      beginning: 45000.0,
-      ending: 98300.0
+      beginning: 845000.0,
+      ending: 2199800.0
     }
   };
 
@@ -94,7 +94,7 @@ const CashFlowStatement = () => {
                 ))}
                 <div className="flex justify-between items-center pt-6 bg-slate-50/50 -mx-4 px-8 py-4 rounded-2xl border border-blue-50">
                    <span className="text-[#282560] font-black uppercase text-sm tracking-wider">Net Cash from Operating</span>
-                   <span className="text-[#282560] font-black text-2xl">৳ {netOperating.toLocaleString()}</span>
+                   <span className="text-[#282560] font-black text-3xl">৳ {netOperating.toLocaleString()}</span>
                 </div>
               </div>
             </section>
@@ -118,7 +118,7 @@ const CashFlowStatement = () => {
                 ))}
                 <div className="flex justify-between items-center pt-6 bg-orange-50/20 -mx-4 px-8 py-4 rounded-2xl border border-orange-50/50">
                    <span className="text-[#F49420] font-black uppercase text-sm tracking-wider">Net Cash from Investing</span>
-                   <span className="text-[#F49420] font-black text-2xl">৳ ({Math.abs(netInvesting).toLocaleString()})</span>
+                   <span className="text-[#F49420] font-black text-3xl">৳ ({Math.abs(netInvesting).toLocaleString()})</span>
                 </div>
               </div>
             </section>
@@ -142,7 +142,7 @@ const CashFlowStatement = () => {
                 ))}
                 <div className="flex justify-between items-center pt-6 bg-slate-50/50 -mx-4 px-8 py-4 rounded-2xl border border-blue-50 text-[#282560]">
                    <span className="font-black uppercase text-sm tracking-wider">Net Cash from Financing</span>
-                   <span className="font-black text-2xl">৳ ({Math.abs(netFinancing).toLocaleString()})</span>
+                   <span className="font-black text-3xl">৳ ({Math.abs(netFinancing).toLocaleString()})</span>
                 </div>
               </div>
             </section>
@@ -155,12 +155,12 @@ const CashFlowStatement = () => {
                         <TrendingUp className="w-6 h-6 text-[#282560] group-hover:text-blue-300" />
                      </div>
                      <span className="text-xs font-bold uppercase tracking-widest opacity-60 mb-2">Net Change in Cash</span>
-                     <span className="text-4xl font-black">৳ {netChange.toLocaleString()}</span>
+                     <span className="text-5xl font-black">৳ {netChange.toLocaleString()}</span>
                   </div>
 
                   <div className="bg-[#F49420] hover:bg-[#282560] p-8 rounded-[2.5rem] text-white flex flex-col justify-center items-center text-center shadow-2xl shadow-orange-100">
                      <span className="text-xs font-bold uppercase tracking-widest opacity-80 mb-2">Ending Cash Balance</span>
-                     <span className="text-5xl font-black">৳ {data.cash.ending.toLocaleString()}</span>
+                     <span className="text-6xl font-black">৳ {data.cash.ending.toLocaleString()}</span>
                      <div className="mt-4 flex items-center gap-2 text-[10px] font-bold bg-white/10 px-4 py-1.5 rounded-full">
                         <ArrowRight className="w-3 h-3" />
                         PREVIOUS: ৳ {data.cash.beginning.toLocaleString()}

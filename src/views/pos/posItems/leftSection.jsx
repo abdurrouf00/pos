@@ -62,7 +62,7 @@ export default function SalesReturnTopSection({
           />
           <div className="flex items-end gap-1">
             <HrSelect
-              label="Sales Man"
+              label="Sales Customer"
               name="customer"
               value={formData.customer}
               onChange={handleChange}
@@ -91,7 +91,7 @@ export default function SalesReturnTopSection({
             value={formData.salesdate}
             onChange={handleChange}
           />
-
+{/* 
           <HrInput
           label="Gurdian Name"
           name="gurdianName"
@@ -128,7 +128,7 @@ export default function SalesReturnTopSection({
           value={formData.totalCrowd}
           onChange={handleChange}
           placeholder="Enter Total Crowd"
-          />
+          /> */}
 
 
 
