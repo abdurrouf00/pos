@@ -4,7 +4,7 @@ import EntryLeftSection from './leftSection'
 import PriceCalculationSection from '../priceCalculate'
 import toast from 'react-hot-toast'
 
-const EntrySales = () => {
+const CounterSales = () => {
   const [items, setItems] = useState([])
   const [paidAmount, setPaidAmount] = useState(0)
 
@@ -94,7 +94,7 @@ const EntrySales = () => {
       />
       
       {/* Right Section */}
-      <div className="w-full md:w-[280px] lg:w-[320px]">
+      <div className="w-full md:w-[320px] lg:w-[350px]">
          <PriceCalculationSection 
             total={total}
             subtotal={subtotal}

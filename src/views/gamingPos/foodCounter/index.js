@@ -7,7 +7,7 @@ import productsData from './productsData.json'
 
 const today = new Date().toISOString().split('T')[0]
 
-export default function SalesInvoice() {
+export default function FoodCounter() {
   // ================= TOP FORM =================
   const [formData, setFormData] = useState({
     customerName: '',

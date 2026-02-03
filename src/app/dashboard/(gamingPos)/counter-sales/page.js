@@ -1,4 +1,4 @@
-import EntrySales from '@/views/gamingPos/posSales/index'
+import EntrySales from '@/views/gamingPos/counterSales/index'
 
 export default function PosSalesPage() {
   return <EntrySales />

@@ -1,11 +1,11 @@
 
-import GamingPosSales from "@/views/gamingPos/foodCounter/index";
+import FoodCounter from "@/views/gamingPos/foodCounter/index";
 
 
 export default function GamingPosSalesPage() {
     return (
         <div>
-            <GamingPosSales />
+            <FoodCounter />
         </div>
     );
 }
