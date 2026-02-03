@@ -828,25 +828,82 @@
         "order_no": 10.1,
         "menu_icon": null,
         "has_child": 0
-      },
-      {
-        "id": 1003,
-        "menu_name": "Count Down",
-        "menu_uid": "countDown",
-        "parent_id": 41,
+      }
+  ]
+},
+
+
+{
+  "id": 4040,
+  "menu_name": "Gaming POS",
+  "menu_uid": "gamingPos",
+  "parent_id": 0,
+  "order_no": 11,
+  "menu_icon": "<i class=\"fa fa-dollar-sign\"></i>",
+  "has_child": 1,
+  "children": [
+
+       {
+      "id": 4041,
+      "menu_name": "Food Counter",
+      "menu_uid": "foodCounter",
+      "parent_id": 4040,
+      "order_no": 41.0,
+      "menu_icon": null,
+      "has_child": 0
+    },
+    {
+        "id": 4042,
+        "menu_name": "Packeges Sales",
+        "menu_uid": "packegeSales",
+        "parent_id": 4040,
         "order_no": 10.1,
         "menu_icon": null,
         "has_child": 0
       },
       {
-        "id": 1004,
+        "id": 4043,
+        "menu_name": "Count Down",
+        "menu_uid": "countDown",
+        "parent_id": 4040,
+        "order_no": 10.1,
+        "menu_icon": null,
+        "has_child": 0
+      },
+      {
+        "id": 4044,
         "menu_name": "sales Voucher Report",
         "menu_uid": "salesVoucherReport",
-        "parent_id": 41,
+        "parent_id": 4040,
         "order_no": 10.1,
         "menu_icon": null,
         "has_child": 0
       }
+  ]
+},
+
+
+
+
+{
+  "id": 420,
+  "menu_name": "Restaurant POS",
+  "menu_uid": "restaurantPos",
+  "parent_id": 0,
+  "order_no": 12,
+  "menu_icon": "<i class=\"fa fa-dollar-sign\"></i>",
+  "has_child": 1,
+  "children": [
+
+       {  
+      "id": 401,
+      "menu_name": "Restaurant Pos",
+      "menu_uid": "restaurantPos",
+      "parent_id": 420,
+      "order_no": 420.0,
+      "menu_icon": null,
+      "has_child": 0
+    }
   ]
 }
 
