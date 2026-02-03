@@ -4,7 +4,7 @@ import EntryLeftSection from './leftSection'
 import PriceCalculationSection from '../priceCalculate'
 import toast from 'react-hot-toast'
 
-const CounterSales = () => {
+export default function CounterSales  ()  {
   const [items, setItems] = useState([])
   const [paidAmount, setPaidAmount] = useState(0)
 
@@ -108,4 +108,4 @@ const CounterSales = () => {
   )
 }
 
-export default EntrySales
+

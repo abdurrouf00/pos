@@ -14,6 +14,8 @@ export default function SalesReturnRightSection({
   handlePayAll,
 }) {
   const [method, setMethod] = useState('cash')
+  const [paidRef, setPaidRef] = useState('')
+  const [bankType, setBankType] = useState('Bank')
 
   return (
     <div className="flex-1 border p-2 rounded bg-white h-full flex flex-col gap-2 font-sans">
@@ -67,6 +69,8 @@ export default function SalesReturnRightSection({
                   { value: 'EBL', label: 'EBL' },
                 ]}
                 className="p-6"
+                value={bankType}
+                onChange={(e) => setBankType(e.target.value)}
               />
             </div>
           )}
@@ -88,7 +92,12 @@ export default function SalesReturnRightSection({
             <span className="text-red-500"> Discount</span> | Coupon
           </span>
         </button>
-        <HrInput type="text" placeholder="Paid Reference No" />
+        <HrInput 
+          type="text" 
+          placeholder="Paid Reference No" 
+          value={paidRef} 
+          onChange={(e) => setPaidRef(e.target.value)}
+        />
       </div>
       {/* Payment Summary */}
       <div className="flex flex-col gap-2 flex-1">
