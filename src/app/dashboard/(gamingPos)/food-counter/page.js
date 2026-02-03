@@ -1,5 +1,5 @@
 
-import GamingPosSales from "@/views/gamingPos/gamingPosSales/index";
+import GamingPosSales from "@/views/gamingPos/foodCounter/index";
 
 
 export default function GamingPosSalesPage() {

@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Appetizer",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "name": "Beef Kabab",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "name": "Chicken Kabab",
+    "status": "active"
+  },
+  {
+    "id": 4,
+    "name": "Chinese Beef",
+    "status": "active"
+  },
+  {
+    "id": 5,
+    "name": "Chinese Chicken",
+    "status": "active"
+  },
+  {
+    "id": 6,
+    "name": "Chinese Fish",
+    "status": "active"
+  },
+  {
+    "id": 7,
+    "name": "Chinese Noodle",
+    "status": "active"
+  },
+  {
+    "id": 8,
+    "name": "Chinese Rice",
+    "status": "active"
+  },
+  {
+    "id": 9,
+    "name": "Chinese Seafood",
+    "status": "active"
+  },
+  {
+    "id": 10,
+    "name": "Chinese Vegetable",
+    "status": "active"
+  },
+  {
+    "id": 11,
+    "name": "Cold Veverage",
+    "status": "active"
+  },
+  {
+    "id": 12,
+    "name": "Dessert",
+    "status": "active"
+  },
+  {
+    "id": 13,
+    "name": "Fish Kabab",
+    "status": "active"
+  },
+  {
+    "id": 14,
+    "name": "Fizzy",
+    "status": "active"
+  }
+]

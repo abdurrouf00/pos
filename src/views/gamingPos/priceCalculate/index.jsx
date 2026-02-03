@@ -9,13 +9,14 @@ export default function SalesReturnRightSection({
   paidAmount,
   setPaidAmount,
   changeReturn,
+  handlePayAll,
 }) {
   const [method, setMethod] = useState('cash')
 
   return (
     <div className="flex-1 border p-2 rounded bg-white h-full flex flex-col gap-2 font-sans">
       
-      {/* Total & Discountable */}
+      Total & Discountable
       <div className="grid grid-cols-1 gap-2">
         <div className="bg-green-300 p-3 rounded flex justify-between items-center shadow-sm">
            <span className="font-semibold text-slate-700">Total</span>
@@ -147,8 +148,15 @@ export default function SalesReturnRightSection({
                <span className="font-bold text-red-600 text-lg">{changeReturn}</span>
            </div>
 
-       </div>
+           
 
+           {/* Order Proceed */}
+            <button 
+                onClick={handlePayAll}
+                className="bg-red-600 text-white w-full py-2 rounded shadow-sm font-bold text-sm mt-1 hover:bg-red-700 uppercase">
+                &gt;&gt; Order Proceed
+            </button>
+       </div>
     </div>
   )
 }

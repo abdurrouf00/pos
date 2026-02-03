@@ -1,7 +1,6 @@
 'use client'
 import { UserPlus, Bell, Search, Trash2, Plus, Minus, RefreshCw, Printer } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
-import HrInput from '@/components/common/HrInput'
 import HrSelect from '@/components/common/HrSelect'
 import { Button } from '@/components/ui/button'
 
@@ -75,11 +74,11 @@ export default function SalesReturnTopSection({
     }
   }
 
-  // Dummy Active Packages Data
-  const activePackages = [
-    { name: 'Heavy Relax - 90 Days VR/MS - 10 Qty', availed: 2, remain: 8, start: '23-APR-25', end: '22-JUL-25' },
-    { name: 'Heavy Relax - 90 Days VR/MS - 10 Qty', availed: 0, remain: 1, start: '23-APR-25', end: '22-JUL-25' },
-  ]
+  // // Dummy Active Packages Data
+  // const activePackages = [
+  //   { name: 'Heavy Relax - 90 Days VR/MS - 10 Qty', availed: 2, remain: 8, start: '23-APR-25', end: '22-JUL-25' },
+  //   { name: 'Heavy Relax - 90 Days VR/MS - 10 Qty', availed: 0, remain: 1, start: '23-APR-25', end: '22-JUL-25' },
+  // ]
 
   return (
     <div className="flex-[3] flex flex-col gap-2 h-full font-sans">
@@ -137,11 +136,11 @@ export default function SalesReturnTopSection({
          </div>
 
          {/* Skip Button */}
-         <div className="h-8">
+         {/* <div className="h-8">
              <button className="bg-yellow-400 px-3 h-full rounded text-sm font-bold hover:bg-yellow-500 text-slate-800 flex items-center">
                &gt;&gt; Skip
              </button>
-         </div>
+         </div> */}
 
          {/* Consumer Membership */}
          <div className="flex-1">
@@ -162,8 +161,8 @@ export default function SalesReturnTopSection({
                 value={branchStore}
                 onChange={(e) => setBranchStore(e.target.value)}
              >
-                 <option>Chattogram (Bahaddarhat)</option>
-                 <option>Dhaka</option>
+                 <option>Bali Arcade</option>
+                 <option>Agrabad</option>                
              </select>
          </div>
       </div>
@@ -171,64 +170,25 @@ export default function SalesReturnTopSection({
        {/* ================= INPUTS ROW 2: ITEM ENTRY ================= */}
        <div className="bg-white p-2 rounded shadow-sm flex gap-2 items-end border">
            {/* Find Item Search */}
-           <div className="flex-[2] relative" ref={searchRef}>
+           <div className="flex-[2] relative">
                <label className="text-xs text-slate-500 block mb-1">Find Item</label>
-               <input 
-                  className="border p-1 w-full text-sm rounded focus:outline-none focus:border-blue-500 h-9"
+               <HrSelect 
                   placeholder="Scan / Search Item"
-                  value={searchText}
+                  options={productsData.map(p => ({
+                    label: `${p.name} (${p.stock})`,
+                    value: p.id
+                  }))}
+                  value={selectedProduct?.id}
                   onChange={(e) => {
-                      setSearchText(e.target.value)
-                      setShowList(true)
+                     const p = productsData.find(item => item.id === e.target.value)
+                     setSelectedProduct(p)
+                     handleAddItem(p)
                   }}
-                  onFocus={() => setShowList(true)}
-               />
-                {showList && searchText && (
-                  <div className="absolute left-0 top-full w-full bg-white border border-gray-300 shadow-lg z-20 max-h-60 overflow-y-auto">
-                    {productsData
-                      .filter((p) => {
-                        const term = searchText.toLowerCase().trim()
-                        return (
-                          p.name.toLowerCase().includes(term) ||
-                          p.code?.toLowerCase().includes(term)
-                        )
-                      })
-                      .map((p) => (
-                        <div
-                          key={p.id}
-                          className="p-2 cursor-pointer hover:bg-sky-100 border-b border-gray-100 text-sm"
-                          onClick={() => {
-                            setSelectedProduct(p)
-                            setSearchText(p.name)
-                            setShowList(false)
-                          }}
-                        >
-                          {p.name} ({p.stock})
-                        </div>
-                      ))}
-                  </div>
-                )}
-           </div>
-
-           {/* Qty */}
-           <div className="w-16">
-               <label className="text-xs text-slate-500 block mb-1">Qty</label>
-               <input 
-                  type="number"
-                  className="border p-1 w-full text-sm rounded focus:outline-none focus:border-blue-500 text-center h-9"
-                  value={qtyInput}
-                  onChange={(e) => setQtyInput(Number(e.target.value))}
+                  className="h-9"
                />
            </div>
 
-           {/* Add Button */}
-           <div>
-               <button 
-                onClick={handleManualAdd}
-                className="bg-green-600 text-white px-6 h-9 rounded text-sm font-bold hover:bg-green-700 flex items-center justify-center">
-                 + Add
-               </button>
-           </div>
+
 
            {/* Stock Display */}
            <div className="flex-1">
@@ -248,8 +208,18 @@ export default function SalesReturnTopSection({
 
            {/* Water Button */}
            <div>
-               <button className="bg-yellow-400 w-14 h-9 rounded flex items-center justify-center hover:bg-yellow-500 border border-yellow-500">
+               <button 
+                  onClick={() => handleAddItem({
+                    id: 'water-manual',
+                    name: 'Water',
+                    price: 20,
+                    stock: 1000,
+                    code: 'WATER'
+                  })}
+                  className="bg-yellow-400 w-28 h-9 rounded flex items-center justify-center hover:bg-yellow-500 border border-yellow-500">
                   <div className="grid grid-cols-2 gap-0.5 mr-1">
+                      <div className="w-1 h-1 bg-black rounded-full"></div>
+                      <div className="w-1 h-1 bg-black rounded-full"></div>
                       <div className="w-1 h-1 bg-black rounded-full"></div>
                       <div className="w-1 h-1 bg-black rounded-full"></div>
                       <div className="w-1 h-1 bg-black rounded-full"></div>
@@ -260,15 +230,15 @@ export default function SalesReturnTopSection({
            </div>
 
            {/* Plus/Minus Buttons */}
-           <div className="flex gap-1">
+           {/* <div className="flex gap-1">
                <button className="bg-white border text-slate-700 rounded px-2 h-9 text-xs font-bold hover:bg-gray-50 flex items-center justify-center w-16 shadow-sm">Plus (+)</button>
                <button className="bg-slate-700 text-white border border-slate-700 rounded px-2 h-9 text-xs font-bold hover:bg-slate-800 flex items-center justify-center w-16 shadow-sm">Minus (-)</button>
-           </div>
+           </div> */}
        </div>
 
        {/* ================= ACTIVE PACKAGES TABLE (Placeholder) ================= */}
-       <div className="border rounded bg-white overflow-hidden shadow-sm">
-           <table className="w-full text-xs">
+       {/* <div className=""> */}
+           {/* <table className="w-full text-xs">
                <thead className="bg-gray-100 border-b">
                    <tr>
                        <th className="p-2 text-left font-bold text-slate-700 w-1/3">Name</th>
@@ -293,50 +263,64 @@ export default function SalesReturnTopSection({
                        </tr>
                    ))}
                </tbody>
-           </table>
+           </table> */}
            {/* Pagination / Info Row */}
-           <div className="p-1 text-right text-xs text-slate-500 bg-white border-t">
+           {/* <div className="p-1 text-right text-xs text-slate-500 bg-white border-t">
                1 - 2
-           </div>
-       </div>
+           </div> */}
+       {/* </div> */}
 
        {/* ================= CART TABLE ================= */}
        <div className="border rounded bg-white flex-1 overflow-auto shadow-sm min-h-[250px] relative">
          <table className="w-full text-xs table-fixed">
-           <thead className="bg-white border-b sticky top-0 z-10 shadow-sm">
+           <thead className=" border bg-gray-100">
              <tr>
-               <th className="p-3 text-left font-bold text-slate-700 border-r w-[35%]">Item Name</th>
-               <th className="p-3 text-center font-bold text-slate-700 border-r">M.R.P</th>
-               <th className="p-3 text-center font-bold text-slate-700 border-r">QTY</th>              
-               <th className="p-3 text-center font-bold text-slate-700 border-r">DISCOUNT[%]</th>
-               <th className="p-3 text-center font-bold text-slate-700 border-r">VAT[%]</th>
-               <th className="p-3 text-center font-bold text-slate-700 border-r">ITEM AMT</th>
-               <th className="p-3 text-center font-bold text-slate-700">DELETE</th>
+               <th className="p-3 text-left font-bold  border-r w-[35%]">Item Name</th>
+               <th className="p-3 text-center font-bold  border-r">M.R.P</th>
+               <th className="p-3 text-center font-bold  border-r">QTY</th>              
+               <th className="p-3 text-center font-bold  border-r">DISCOUNT[%]</th>
+               <th className="p-3 text-center font-bold  border-r">VAT[%]</th>
+               <th className="p-3 text-center font-bold  border-r">ITEM AMT</th>
+               <th className="p-3 text-center font-bold ">DELETE</th>
              </tr>
            </thead>
            <tbody className="divide-y text-slate-600 font-medium">
              {items.map((item, idx) => (
-               <tr key={idx} className="hover:bg-slate-50 text-[11px]">
-                 <td className="border-r p-2 truncate">
+               <tr key={idx} className="hover:bg-gray-50 text-sm">
+                 <td className="border p-2 truncate">
                    {item.name}
                  </td>
-                 <td className="border-r p-2 text-center">
+                 <td className="border p-2 text-center">
                    {item.rate}
                  </td>
-                 <td className="border-r p-2 text-center">
-                    {item.qty} PCS
+                 <td className="border p-2 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                        <button 
+                            onClick={() => decreaseQty(idx)}
+                            className="bg-slate-200 hover:bg-slate-300 text-slate-700 rounded w-5 h-5 flex items-center justify-center"
+                        >
+                            <Minus size={12} />
+                        </button>
+                        <span>{item.qty} PCS</span>
+                        <button 
+                            onClick={() => increaseQty(idx)}
+                            className="bg-slate-200 hover:bg-slate-300 text-slate-700 rounded w-5 h-5 flex items-center justify-center"
+                        >
+                            <Plus size={12} />
+                        </button>
+                    </div>
                  </td>
-                 <td className="border-r p-2 text-center">
+                 <td className="border p-2 text-center">
                    0
                  </td>              
-                 <td className="border-r p-2 text-center">
+                 <td className="border p-2 text-center">
                    {item.tax || 0}
                  </td>
-                 <td className="border-r p-2 text-center font-bold text-slate-800">
+                 <td className="border p-2 text-center font-bold text-slate-800">
                    {item.amount.toFixed(2)}
                    <div className="text-[9px] text-slate-400 font-normal">0.00</div>
                  </td>
-                 <td className="p-2 text-center">
+                 <td className="border p-2 text-center">
                    <button
                      onClick={() => removeItem(idx)}
                      className="text-blue-400 hover:text-red-500 transition-colors"

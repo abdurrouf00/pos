@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import SalesReturnTopSection from './leftSection'
-import SalesReturnRightSection from './rightSection'
+import PriceCalculationSection from '../priceCalculate/index'
 import SalesReturnModals from './modals'
 import productsData from './productsData.json'
 
@@ -347,6 +347,7 @@ export default function SalesInvoice() {
       totalCrowd: '',
     }))
     setPaidAmount(0)
+    window.location.reload()
   }
 
   // Common Print Logic
@@ -545,13 +546,14 @@ export default function SalesInvoice() {
       />
 
       {/* ================= RIGHT SIDE COMPONENT ================= */}
-      <SalesReturnRightSection 
+      <PriceCalculationSection 
          total={total}
          subtotal={subtotal}
          descount={descount}
          paidAmount={paidAmount}
          setPaidAmount={setPaidAmount}
          changeReturn={changeReturn}
+         handlePayAll={handlePayAll}
       />
 
      {/* ================= MODALS COMPONENT ================= */}

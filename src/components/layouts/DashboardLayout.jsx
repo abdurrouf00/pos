@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }) {
   // Close sidebar on wider screens by default
   useEffect(() => {
     const handleResize = () => {
-      const isPosOrPackages = pathname?.includes('/dashboard/pos') || pathname?.includes('/dashboard/packeges');
+      const isPosOrPackages = pathname?.includes('/dashboard/pos') || pathname?.includes('/dashboard/packeges') ;
       
       if (isPosOrPackages) {
         setSidebarOpen(false);
@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }) {
 
   // Close sidebar automatically when navigating to POS or Packages
   useEffect(() => {
-    if (pathname?.includes('/dashboard/pos') || pathname?.includes('/dashboard/packeges')) {
+    if (pathname?.includes('/dashboard/pos') || pathname?.includes('/dashboard/packeges') ) {
       setSidebarOpen(false);
     }
   }, [pathname]);

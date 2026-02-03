@@ -320,6 +320,7 @@ export default function SalesInvoice() {
     setItems([])
     setFormData(prev => ({ ...prev, customerName: '' }))
     setPaidAmount(0)
+    window.location.reload()
   }
 
   // Common Print Logic
