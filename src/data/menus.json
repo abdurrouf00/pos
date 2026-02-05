@@ -854,8 +854,8 @@
     },
     {
         "id": 4042,
-        "menu_name": "Counter Sales",
-        "menu_uid": "counterSales",
+        "menu_name": "Sales Counter",
+        "menu_uid": "salesCounter",
         "parent_id": 4040,
         "order_no": 10.1,
         "menu_icon": null,

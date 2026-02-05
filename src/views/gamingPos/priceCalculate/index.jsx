@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import HrInput from '@/components/common/HrInput'
 import HrSelect from '@/components/common/HrSelect'
+import { Button } from '@/components/ui/button'
 
 export default function SalesReturnRightSection({
   total,
@@ -12,6 +13,7 @@ export default function SalesReturnRightSection({
   setPaidAmount,
   changeReturn,
   handlePayAll,
+  setOpenDiscount,
 }) {
   const [method, setMethod] = useState('cash')
   const [paidRef, setPaidRef] = useState('')
@@ -21,15 +23,15 @@ export default function SalesReturnRightSection({
     <div className="flex-1 border p-2 rounded bg-white h-full flex flex-col gap-2 font-sans">
       Total & Discountable
       <div className="grid grid-cols-2 gap-2">
-        <div className="bg-green-300 p-3 rounded flex justify-between items-center shadow-sm">
+        <div className="border p-3 rounded flex justify-between items-center shadow-sm">
           <span className="font-semibold text-slate-700">Total</span>
           <span className="font-bold text-xl">
             {typeof total === 'number' ? total.toFixed(2) : total}
           </span>
         </div>
-        <div className="bg-orange-400 p-3 rounded flex justify-between items-center shadow-sm">
-          <span className="font-semibold text-white">Discountable Amount</span>
-          <span className="font-bold text-xl text-white">0</span>
+        <div className="border p-3 rounded flex justify-between items-center shadow-sm">
+          <span className="font-semibold text-slate-700">Discountable Amount</span>
+          <span className="font-bold text-xl text-slate-700">0</span>
         </div>
       </div>
       {/* Method Toggle */}
@@ -44,7 +46,7 @@ export default function SalesReturnRightSection({
                 name="method"
                 checked={method === 'cash'}
                 onChange={() => setMethod('cash')}
-                className="accent-green-600 w-4 h-4"
+                className="accent-sky-600 w-4 h-4"
               />
               <span className="font-bold text-sm">Cash</span>
             </label>
@@ -54,7 +56,7 @@ export default function SalesReturnRightSection({
                 name="method"
                 checked={method === 'non-cash'}
                 onChange={() => setMethod('non-cash')}
-                className="accent-green-600 w-4 h-4"
+                className="accent-sky-600 w-4 h-4"
               />
               <span className="font-bold text-sm text-gray-400">Non-Cash</span>
             </label>
@@ -77,7 +79,7 @@ export default function SalesReturnRightSection({
 
           {method === 'cash' && (
             <div className="mt-0">
-              <div className="bg-gray-50 border p-3 rounded text-xs text-slate-500 flex justify-between">
+              <div className="border p-4 rounded text-xs text-slate-500 flex justify-between">
                 Machine Name
                 <span className="text-black font-semibold">Cash</span>
               </div>
@@ -87,11 +89,15 @@ export default function SalesReturnRightSection({
       </div>
       {/* Discount / Coupon Button */}
       <div className="grid grid-cols-2 gap-2 mb-4">
-        <button className="bg-gray-200 border p-1 rounded flex justify-between items-center font-bold text-gray-700 hover:bg-gray-300 shadow-sm transition-colors">
-          <span className="flex items-center gap-1">
+        <button 
+          onClick={() => setOpenDiscount && setOpenDiscount(true)}
+          className=" border p-1 rounded flex justify-between items-center font-bold text-gray-700 hover:bg-gray-300 shadow-sm transition-colors"
+        >
+          <p className="flex items-center gap-1">
             <span className="text-red-500"> Discount</span> | Coupon
-          </span>
+          </p>
         </button>
+        
         <HrInput 
           type="text" 
           placeholder="Paid Reference No" 
@@ -102,18 +108,13 @@ export default function SalesReturnRightSection({
       {/* Payment Summary */}
       <div className="flex flex-col gap-2 flex-1">
         {/* Discount Amount */}
-        <div className="bg-green-300 p-2 rounded flex justify-between items-center h-10 shadow-sm">
-          <div className="flex items-center gap-2">
-            <button className="bg-slate-700 text-white w-6 h-6 flex items-center justify-center rounded text-sm font-bold">
-              -
-            </button>
-            <span className="text-xs font-semibold">Discount Amount</span>
-          </div>
-          <span className="font-bold text-sm">{descount || 0}</span>
+        <div className="border p-2 rounded flex justify-between items-center h-10 shadow-sm">
+          <p className="text-xs font-semibold">Discount Amount</p>
+          <p className="font-bold text-sm">{descount || 0}</p>
         </div>
 
         {/* Sub Total */}
-        <div className="bg-green-300 p-2 rounded flex justify-between items-center h-10 shadow-sm">
+        <div className="border p-2 rounded flex justify-between items-center h-10 shadow-sm">
           <div className="flex items-center gap-2">
             <button className="bg-transparent text-slate-700 w-6 h-6 flex items-center justify-center rounded">
               <ArrowRight size={16} />
@@ -125,19 +126,18 @@ export default function SalesReturnRightSection({
           </span>
         </div>
 
-        {/* VAT */}
-        {/* Net Amt */}
+        {/* VAT &&  Net Amt */}
         <div className='grid grid-cols-2 gap-2'>
-          <div className="bg-green-300 p-2 rounded flex justify-between items-center h-12 shadow-sm">
-            <p className="text-xs font-semibold text-red-600">
+          <div className="border p-2 rounded flex justify-between items-center h-12 shadow-sm">
+            <p className="text-xs font-semibold ">
               VAT [Excluding]
             </p>
 
             <p className="font-bold text-red-600 text-sm">0</p>
           </div>
 
-          <div className="bg-gray-200 p-2 rounded flex justify-between items-center h-12 shadow-sm border border-gray-300">
-            <p className="text-sm font-semibold">Net Amt</p>
+          <div className="border p-2 rounded flex justify-between items-center h-12 shadow-sm border border-gray-300">
+            <p className="text-sm font-semibold">Net Amount</p>
 
             <p className="font-bold text-red-600 text-lg">
               {typeof total === 'number' ? total.toFixed(0) : total}
@@ -147,7 +147,7 @@ export default function SalesReturnRightSection({
 
         {/* Received Amount */}
         <div className="grid grid-cols-2 gap-2 ">
-          <div className="bg-green-300 p-2 rounded  h-15 shadow-sm  pb-3">
+          <div className="border p-2 rounded  h-15 shadow-sm  pb-3">
             <p className="text-xs font-semibold">Received Amount</p>
 
             <input
@@ -160,7 +160,7 @@ export default function SalesReturnRightSection({
           </div>
 
           {/* Return Amount */}
-          <div className="bg-green-300 p-2 rounded  h-15 shadow-sm ">
+          <div className="border p-2 rounded  h-15 shadow-sm ">
             <p className="text-xs font-semibold">Return Amount</p>
             <p className="font-bold text-red-600 text-lg w-full  h-full text-right pb-3 overflow-hidden">
               {changeReturn}
@@ -169,12 +169,20 @@ export default function SalesReturnRightSection({
         </div>
 
         {/* Order Proceed */}
-        <button
-          onClick={handlePayAll}
-          className="bg-red-600 text-white w-full py-2 rounded shadow-sm font-bold text-sm mt-1 hover:bg-red-700 uppercase"
-        >
-          &gt;&gt; Order Proceed
-        </button>
+        <div className="flex gap-2">
+            <Button
+              onClick={() => handlePayAll(false)}
+              className="flex-1 bg-green-600 hover:bg-green-700"
+            >
+             Order Save
+            </Button>
+            <Button
+              onClick={() => handlePayAll(true)}
+              className="flex-1"
+            >
+             Order & Print
+            </Button>
+        </div>
       </div>
     </div>
   )

@@ -5,27 +5,13 @@ import HrSelect from '@/components/common/HrSelect'
 import { Button } from '@/components/ui/button'
 
 export default function SalesReturnTopSection({
-  formData,
-  handleChange,
-  holdSales,
-  setShowHoldList,
-  setOpenCustomer,
+
   productsData,
   handleAddItem,
   items,
   increaseQty,
   decreaseQty,
-  handleItemChange,
   removeItem,
-  //Summary Props
-  totalQty,
-  total,
-  subtotal,
-  handleHoldSale,
-  setopenPayment,
-  setopenMulitplePayment,
-  descount,
-  setOpenDiscount,
   handlePayAll,
 }) {
   // search
@@ -36,7 +22,6 @@ export default function SalesReturnTopSection({
   // Local state for the new inputs to match UI
   const [ticketNo, setTicketNo] = useState('985606')
   const [mobileNo, setMobileNo] = useState('01963822093')
-  const [skip, setSkip] = useState(false)
   const [membership, setMembership] = useState('')
   const [branchStore, setBranchStore] = useState('Chattogram (Bahaddarhat)')
   
@@ -74,14 +59,8 @@ export default function SalesReturnTopSection({
     }
   }
 
-  // // Dummy Active Packages Data
-  // const activePackages = [
-  //   { name: 'Heavy Relax - 90 Days VR/MS - 10 Qty', availed: 2, remain: 8, start: '23-APR-25', end: '22-JUL-25' },
-  //   { name: 'Heavy Relax - 90 Days VR/MS - 10 Qty', availed: 0, remain: 1, start: '23-APR-25', end: '22-JUL-25' },
-  // ]
-
   return (
-    <div className="flex-[3] flex flex-col gap-2 h-full font-sans">
+    <div className="w-[73%] flex flex-col gap-2 h-full font-sans">
       
       {/* ================= HEADER BAR ================= */}
       <div className="flex justify-between items-center bg-slate-200 p-2 rounded shadow-sm">
@@ -94,7 +73,10 @@ export default function SalesReturnTopSection({
                <button className="text-blue-500 text-sm hover:underline flex items-center gap-1 font-semibold">
                  Reprint
                </button>
-               <button className="bg-yellow-400 text-black hover:bg-yellow-500 px-4 py-1 rounded text-sm font-semibold">
+               <button 
+                  onClick={() => window.location.reload()}
+                  className="bg-yellow-400 text-black hover:bg-yellow-500 px-4 py-1 rounded text-sm font-semibold"
+                >
                  Refresh
                </button>
                <button 
@@ -133,14 +115,7 @@ export default function SalesReturnTopSection({
                     onChange={(e) => setMobileNo(e.target.value)}
                  />
              </div>
-         </div>
-
-         {/* Skip Button */}
-         {/* <div className="h-8">
-             <button className="bg-yellow-400 px-3 h-full rounded text-sm font-bold hover:bg-yellow-500 text-slate-800 flex items-center">
-               &gt;&gt; Skip
-             </button>
-         </div> */}
+         </div>   
 
          {/* Consumer Membership */}
          <div className="flex-1">

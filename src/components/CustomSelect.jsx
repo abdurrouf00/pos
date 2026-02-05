@@ -31,6 +31,11 @@ export default function CustomSelect({
 }) {
   const [open, setOpen] = React.useState(false)
   const [searchValue, setSearchValue] = React.useState('')
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const selectedOption = options.find(option => option.value === value)
 
@@ -62,7 +67,14 @@ export default function CustomSelect({
     onAddItem &&
     searchValue.trim() !== '' &&
     !options.some(option => option.label.toLowerCase() === searchValue.toLowerCase())
-  console.log('error', error)
+  
+  if (!mounted) return (
+     <div className={cn("w-full border rounded-md h-10 px-3 flex items-center bg-white justify-between", className)}>
+         <span className="text-muted-foreground text-sm">{placeholder}</span>
+         <ChevronsUpDown className="h-4 w-4 opacity-50" />
+     </div>
+  )
+
   return (
     <div>
       {/* {label && <Label>{label}</Label>} */}

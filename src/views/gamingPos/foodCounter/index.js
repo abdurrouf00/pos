@@ -1,9 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
-import SalesReturnTopSection from './leftSection'
+import SalesReturnTopSection from './foodCounter'
 import PriceCalculationSection from '../priceCalculate/index'
 import SalesReturnModals from './modals'
 import productsData from './productsData.json'
+import toast from 'react-hot-toast'
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -222,7 +223,13 @@ export default function FoodCounter() {
   const changeReturn =
     paidAmount > total ? (paidAmount - total).toFixed(2) : '0.00'
 
-  const handlePayAll = () => {
+  const handlePayAll = (shouldPrint = true) => {
+    // Check if cart is empty
+    if (items.length === 0) {
+      toast.error('Cart is empty!')
+      return
+    }
+
     // 1. Set full payment
     setPaidAmount(total)
     
@@ -243,99 +250,103 @@ export default function FoodCounter() {
     }
 
     // 3. Print
-    const printWindow = window.open('', '', 'width=600,height=600')
-    if (printWindow) {
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Receipt</title>
-            <style>
-              @page { size: 80mm auto; margin: 0; }
-              body { 
-                font-family: 'Courier New', Courier, monospace; 
-                font-size: 13px; 
-                width: 72mm; /* Printable area for 80mm paper */
-                margin: 0 auto;
-                padding: 10px 0;
-                color: #000;
-              }
-              .header { text-align: center; margin-bottom: 5px; }
-              .header h2 { margin: 0; font-size: 16px; }
-              .info { margin-bottom: 5px; font-size: 12px; }
-              table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-              th { border-bottom: 1px dashed #000; text-align: left; padding: 2px; }
-              td { padding: 2px; vertical-align: top; }
-              .right { text-align: right; }
-              .center { text-align: center; }
-              .total-section { margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
-              .total-row { display: flex; justify-content: space-between; font-weight: bold; }
-              .footer { text-align: center; margin-top: 15px; font-size: 11px; }
-              hr { border-top: 1px dashed #000; border-bottom: none; margin: 5px 0; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h2>SALES RECEIPT</h2>
-              <p>POS SYSTEM</p>
-            </div>
-            <div class="info">
-              <div>Date: ${saleData.date}</div>
-              <div>Customer: ${saleData.customer}</div>
-            </div>
-            <hr/>
-            <table>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th class="right">Qty</th>
-                  <th class="right">Price</th>
-                  <th class="right">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${items.map(item => `
+    if (shouldPrint) {
+      const printWindow = window.open('', '', 'width=600,height=600')
+      if (printWindow) {
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Receipt</title>
+              <style>
+                @page { size: 80mm auto; margin: 0; }
+                body { 
+                  font-family: 'Courier New', Courier, monospace; 
+                  font-size: 13px; 
+                  width: 72mm; /* Printable area for 80mm paper */
+                  margin: 0 auto;
+                  padding: 10px 0;
+                  color: #000;
+                }
+                .header { text-align: center; margin-bottom: 5px; }
+                .header h2 { margin: 0; font-size: 16px; }
+                .info { margin-bottom: 5px; font-size: 12px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+                th { border-bottom: 1px dashed #000; text-align: left; padding: 2px; }
+                td { padding: 2px; vertical-align: top; }
+                .right { text-align: right; }
+                .center { text-align: center; }
+                .total-section { margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
+                .total-row { display: flex; justify-content: space-between; font-weight: bold; }
+                .footer { text-align: center; margin-top: 15px; font-size: 11px; }
+                hr { border-top: 1px dashed #000; border-bottom: none; margin: 5px 0; }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h2>SALES RECEIPT</h2>
+                <p>POS SYSTEM</p>
+              </div>
+              <div class="info">
+                <div>Date: ${saleData.date}</div>
+                <div>Customer: ${saleData.customer}</div>
+              </div>
+              <hr/>
+              <table>
+                <thead>
                   <tr>
-                    <td>${item.name}</td>
-                    <td class="right">${item.qty}</td>
-                    <td class="right">${item.rate}</td>
-                    <td class="right">${item.amount.toFixed(2)}</td>
+                    <th>Item</th>
+                    <th class="right">Qty</th>
+                    <th class="right">Price</th>
+                    <th class="right">Total</th>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
-            
-            <div class="total-section">
-              <div class="total-row">
-                <span>TOTAL:</span>
-                <span>${saleData.total.toFixed(2)}</span>
+                </thead>
+                <tbody>
+                  ${items.map(item => `
+                    <tr>
+                      <td>${item.name}</td>
+                      <td class="right">${item.qty}</td>
+                      <td class="right">${item.rate}</td>
+                      <td class="right">${item.amount.toFixed(2)}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+              
+              <div class="total-section">
+                <div class="total-row">
+                  <span>TOTAL:</span>
+                  <span>${saleData.total.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                  <span>PAID:</span>
+                  <span>${saleData.paid.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                  <span>CHANGE:</span>
+                  <span>0.00</span>
+                </div>
               </div>
-              <div class="total-row">
-                <span>PAID:</span>
-                <span>${saleData.paid.toFixed(2)}</span>
+              <hr/>
+              <div class="footer">
+                <p>Thank you for your visit!</p>
+                <p>Please come again</p>
+                <br/>
+                <br/>
               </div>
-              <div class="total-row">
-                <span>CHANGE:</span>
-                <span>0.00</span>
-              </div>
-            </div>
-            <hr/>
-            <div class="footer">
-              <p>Thank you for your visit!</p>
-              <p>Please come again</p>
-              <br/>
-              <br/>
-            </div>
-          </body>
-        </html>
-      `)
-      printWindow.document.close()
-      printWindow.focus()
-      printWindow.print()
-      printWindow.close()
+            </body>
+          </html>
+        `)
+        printWindow.document.close()
+        printWindow.focus()
+        printWindow.print()
+        printWindow.close()
+      }
     }
 
     // 4. Save (Simulation) & Reset
     console.log("Saved Sale:", saleData)
+    toast.success(shouldPrint ? 'Saled and Printed successfully!' : 'Saved successfully!')
+    
     setItems([])
     setFormData(prev => ({ 
       ...prev, 
@@ -347,7 +358,7 @@ export default function FoodCounter() {
       totalCrowd: '',
     }))
     setPaidAmount(0)
-    window.location.reload()
+    // window.location.reload()
   }
 
   // Common Print Logic
@@ -446,6 +457,10 @@ export default function FoodCounter() {
 
   // Single Payment Save
   const handleSinglePaymentSave = (shouldPrint) => {
+    if (items.length === 0) {
+      toast.error('Cart is empty!')
+      return
+    }
     const saleData = {
         date: formData.salesdate,
         customer: formData.customerName || 'Walk-in',
@@ -465,6 +480,8 @@ export default function FoodCounter() {
     }
 
     console.log("Saved Single Payment Sale:", saleData)
+    toast.success(shouldPrint ? 'Saled and Printed successfully!' : 'Saved successfully!')
+    
     setItems([])
     setFormData(prev => ({ 
       ...prev, 
@@ -482,6 +499,10 @@ export default function FoodCounter() {
 
   // Multiple Payment Save
   const handleMultiplePaymentSave = (shouldPrint) => {
+    if (items.length === 0) {
+      toast.error('Cart is empty!')
+      return
+    }
     const saleData = {
         date: formData.salesdate,
         customer: formData.customerName || 'Walk-in',
@@ -501,6 +522,8 @@ export default function FoodCounter() {
     }
 
     console.log("Saved Multiple Payment Sale:", saleData)
+    toast.success(shouldPrint ? 'Saled and Printed successfully!' : 'Saved successfully!')
+    
     setItems([])
     setFormData(prev => ({ 
       ...prev, 
@@ -554,6 +577,7 @@ export default function FoodCounter() {
          setPaidAmount={setPaidAmount}
          changeReturn={changeReturn}
          handlePayAll={handlePayAll}
+         setOpenDiscount={setOpenDiscount}
       />
 
      {/* ================= MODALS COMPONENT ================= */}
