@@ -24,7 +24,8 @@ export default function EntryLeftSection({
   couponCode,
   setCouponCode,
   qtyInput,
-  setQtyInput
+  setQtyInput,
+  setOpenCustomer
 }) {
 
   // Quick Add Buttons Handler
@@ -145,57 +146,76 @@ export default function EntryLeftSection({
              </button>
          </div>
 
-         {/* Row 2 */}
-         <div className="col-span-5">
-             <label className="text-xs text-slate-500 block mb-1">Item</label>
-             <HrSelect 
-                className="border p-1 w-full rounded focus:outline-none focus:border-blue-500" 
-                placeholder="Scan / Search"
-             />
+         {/* Row 2: Customer & Item Search (Left) + Visit Info (Right) */}
+         <div className="col-span-9 grid grid-cols-1 gap-2">
+            {/* Customer Selection Row */}
+            <div className="flex items-end gap-2">
+                <div className="flex-1">
+                    <label className="text-xs text-slate-500 block mb-1">Select Customer</label>
+                    <HrSelect 
+                        placeholder="Select Customer"
+                        className="h-8"
+                    />
+                </div>
+                <button 
+                    onClick={() => setOpenCustomer(true)}
+                    className="bg-orange-400 text-white px-4 h-8 rounded font-bold text-xs flex items-center justify-center gap-1 shrink-0">
+                    <Plus size={14}/> Memdership
+                </button>
+            </div>
+
+            {/* Item Search Row */}
+            <div className="grid grid-cols-9 gap-2 items-end">
+                <div className="col-span-5">
+                    <label className="text-xs text-slate-500 block mb-1">Item</label>
+                    <HrSelect 
+                        className="h-8" 
+                        placeholder="Scan / Search"
+                    />
+                </div>
+                <div className="col-span-2">
+                    <label className="text-xs text-slate-500 block mb-1">Qty</label>
+                    <div className="flex h-8">
+                        <input 
+                            type="number"
+                            className="border p-1 w-full rounded-l focus:outline-none focus:border-blue-500 text-center text-sm" 
+                            value={qtyInput}
+                            onChange={(e) => setQtyInput(Number(e.target.value))}
+                        />
+                        <button className="bg-sky-200 px-2 rounded-r font-bold">+</button>
+                    </div>
+                </div>
+                <div className="col-span-2">
+                    <button 
+                        onClick={() => addQuickItem('Day Pass', 1200, 'day_pass')}
+                        className="bg-orange-400 text-white h-8 rounded w-full font-bold text-xs flex items-center justify-center gap-1 uppercase">
+                        <Bell size={12}/> Day Pass
+                    </button>
+                </div>
+            </div>
          </div>
 
-         <div className="col-span-2">
-             <label className="text-xs text-slate-500 block mb-1">Qty</label>
-             <div className="flex">
-                 <input 
-                    type="number"
-                    className="border p-2 w-full rounded-l focus:outline-none focus:border-blue-500 text-center" 
-                    value={qtyInput}
-                    onChange={(e) => setQtyInput(Number(e.target.value))}
-                 />
-                 <button className="bg-sky-200 px-3 rounded-r font-bold">+</button>
-             </div>
-         </div>
-
-         <div className="col-span-2 flex items-end">
-             <button 
-                onClick={() => addQuickItem('Day Pass', 1200, 'day_pass')}
-                className="bg-orange-400 text-white p-2.5 rounded w-full font-bold text-xs flex items-center justify-center gap-1 uppercase">
-                 <Bell size={12}/> Day Pass
-             </button>
-         </div>
-
-         {/* Visit Info Box */}
-         <div className="col-span-3 row-span-2 border rounded bg-gray-50 p-1 flex flex-col justify-between">
-             <div className="flex justify-between border-b pb-1">
+         {/* Visit Info Box (Right) */}
+         <div className="col-span-3 border rounded bg-gray-50 p-2 flex flex-col justify-between h-full">
+             <div className="flex justify-between border-b pb-1 mb-1">
                  <div>
-                     <span className="text-[10px]  block">Last Visit</span>
+                     <span className="text-[10px] text-slate-500 block">Last Visit</span>
                      <span className="text-xs font-bold">-</span>
                  </div>
                  <div>
-                     <span className="text-[10px] block">Visited</span>
+                     <span className="text-[10px] text-slate-500 block">Visited</span>
                      <span className="text-xs font-bold">0</span>
                  </div>
              </div>
-             <div className="flex gap-1 mt-1">
-                  <div className="flex-1 border rounded bg-white p-1 text-center">
+             <div className="flex gap-1">
+                  <div className="flex-1 border rounded bg-white p-1 text-center shadow-sm">
                       <span className="text-[10px] text-blue-600 font-bold flex items-center justify-center gap-1"><Users size={10}/> Referral</span>
                       <span className="text-[9px] text-slate-400 block">Ref. Code</span>
                   </div>
-                  <div className="flex-1 bordjustifyer rounded bg-white p-1 text-center">
+                  <div className="flex-1 border rounded bg-white p-1 text-center shadow-sm">
                        <span className="text-[10px] text-blue-600 font-bold flex items-center justify-center gap-1"><Plus size={10}/> Add</span>
                    </div>
-                   <div className="flex-1 border rounded bg-white p-1 text-center">
+                   <div className="flex-1 border rounded bg-white p-1 text-center shadow-sm">
                        <span className="text-[10px] text-slate-500 block">Credit</span>
                        <span className="text-xs font-bold">0</span>
                    </div>

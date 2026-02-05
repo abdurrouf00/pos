@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import EntryLeftSection from './salesCouter'
 import PriceCalculationSection from '../priceCalculate'
-import SalesReturnModals from '../foodCounter/modals'
+import SalesReturnModals from '../model/index'
 import toast from 'react-hot-toast'
 
 export default function CounterSales  ()  {
@@ -16,6 +16,22 @@ export default function CounterSales  ()  {
   const [childDobs, setChildDobs] = useState([''])
   const [couponCode, setCouponCode] = useState('')
   const [qtyInput, setQtyInput] = useState(1)
+
+  // Customer Modal State
+  const [openCustomer, setOpenCustomer] = useState(false)
+  const [customerForm, setCustomerForm] = useState({
+    name: '',
+    mobile: '',
+    email: '',
+    city: '',
+    state: '',
+    address: ''
+  })
+
+  const handleCustomerChange = (e) => {
+    const { name, value } = e.target
+    setCustomerForm(prev => ({ ...prev, [name]: value }))
+  }
 
   // Add Item Handler
   const handleAddItem = (product, qty = 1) => {
@@ -381,6 +397,8 @@ export default function CounterSales  ()  {
         setCouponCode={setCouponCode}
         qtyInput={qtyInput}
         setQtyInput={setQtyInput}
+        // Customer Modal
+        setOpenCustomer={setOpenCustomer}
       />
       
       {/* Right Section */}
@@ -404,6 +422,11 @@ export default function CounterSales  ()  {
             setDiscountValue={setDiscountValue}
             setDescount={setDescount}
             subtotal={subtotal}
+            // Customer Modal Props
+            openCustomer={openCustomer}
+            setOpenCustomer={setOpenCustomer}
+            customerForm={customerForm}
+            handleCustomerChange={handleCustomerChange}
          />
       </div>
     </div>

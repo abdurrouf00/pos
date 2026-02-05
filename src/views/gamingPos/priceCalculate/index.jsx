@@ -37,7 +37,7 @@ export default function SalesReturnRightSection({
       {/* Method Toggle */}
       <div className=" grid grid-cols-2 gap-2 mt-4 mb-4 ">
         <div className="px-2 p-1 gap-0 grid grid-cols-1 border rounded shadow-sm">
-          <p className="font-bold text-red-600 text-sm">Choose Method</p>
+          <p className="text-sm">Choose Method</p>
 
           <div className="flex flex-col-1 gap-1">
             <label className="flex items-center gap-1 cursor-pointer">

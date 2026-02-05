@@ -131,7 +131,7 @@ export default function SalesReturnModals({
           <div className="bg-white w-[900px] rounded-b-xl ">
             <div className="relative flex items-center border-b">
               <h3 className="w-full text-center font-semibold p-2 bg-amber-100">
-                Add New Customer
+                Add New Membership
               </h3>
               <span
                 onClick={() => setOpenCustomer(false)}
@@ -174,13 +174,6 @@ export default function SalesReturnModals({
                 name="state"
                 label="State"
                 value={customerForm.state}
-                onChange={handleCustomerChange}
-              />
-
-              <HrInput
-                name="zip"
-                label="Zip"
-                value={customerForm.zip}
                 onChange={handleCustomerChange}
               />
 

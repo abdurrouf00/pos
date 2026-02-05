@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import SalesReturnTopSection from './foodCounter'
 import PriceCalculationSection from '../priceCalculate/index'
-import SalesReturnModals from './modals'
+import SalesReturnModals from '../model/index'
 import productsData from './productsData.json'
 import toast from 'react-hot-toast'
 
