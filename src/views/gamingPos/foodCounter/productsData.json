@@ -69,7 +69,7 @@
     "category": "Toy",  
     "price": 120,
     "stock": 9,
-    "image": "/img/images.jpg"
+    "image": "/img/papaya.jpg"
   },
   
   {
@@ -79,6 +79,33 @@
     "category": "Toy",
     "price": 120,
     "stock": 9,
-    "image": "/img/Untitled.jpg"
+     "image": "/img/mango.jpg"
+  },
+  {
+    "id": 9,
+    "code": "IT012",
+    "name": "FRESH WATER 3",
+    "category": "Toy",
+    "price": 120,
+    "stock": 9,
+    "image": "/img/mint-lemon-juice.jpg"
+  },
+  {
+    "id": 100,
+    "code": "IT012",
+    "name": "FRESH WATER 3",
+    "category": "Toy",
+    "price": 120,
+    "stock": 9,
+    "image": "/img/mango-milk.webp"
+  },
+  {
+    "id": 110,
+    "code": "IT012",
+    "name": "FRESH WATER 3",
+    "category": "Toy",
+    "price": 120,
+    "stock": 9,
+     "image": "/img/lemon.jpg"
   }
 ]

@@ -43,7 +43,6 @@ export default function SalesReturnModals({
   setDiscountType,
   discountValue,
   setDiscountValue,
-  setDescount,
   subtotal,
 }) {
   const [localType, setLocalType] = useState(discountType)
@@ -89,9 +88,9 @@ export default function SalesReturnModals({
               <HrInput
                 label={localType === 'fixed' ? 'Discount Amount' : 'Discount Percentage'}
                 type="number"
-                value={localValue}
+                value={localValue || ''}
                 onChange={(e) => setLocalValue(Number(e.target.value))}
-                placeholder="Enter value"
+                placeholder="0"
               />
 
               <div className="bg-gray-100 p-3 rounded text-sm ">               
