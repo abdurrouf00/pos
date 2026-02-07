@@ -1,0 +1,75 @@
+[
+    {
+        "id": 1,
+        "name": "Ticket",
+        "price": 300,
+        "type": "ticket"
+    },
+    {
+        "id": 2,
+        "name": "Single Coin",
+        "price": 50,
+        "type": "coin"
+    },
+    {
+        "id": 3,
+        "name": "Start Pack",
+        "price": 500,
+        "type": "coin"
+    },
+    {
+        "id": 4,
+        "name": "Magic Pack",
+        "price": 800,
+        "type": "coin"
+    },
+    {
+        "id": 5,
+        "name": "Champion Pack",
+        "price": 1000,
+        "type": "coin"
+    },
+     {
+        "id": 12,
+        "name": "Sock",
+        "price": 50,
+        "type": "sock"
+    },
+    {
+        "id": 6,
+        "name": "Happy Hour pack",
+        "price": 350,
+        "type": "ticket"
+    },
+    {
+        "id": 7,
+        "name": "Adventure pack",
+        "price": 400,
+        "type": "ticket"
+    },
+    {
+        "id": 8,
+        "name": "Full day  pack",
+        "price": 500,
+        "type": "ticket"
+    },
+    {
+        "id": 9,
+        "name": "massage chair 10",
+        "price": 149,
+        "type": "massage"
+    },
+    {
+        "id": 10,
+        "name": "massage chair 15",
+        "price": 199,
+        "type": "massage"
+    },
+    {
+        "id": 11,
+        "name": "massage chair 30",
+        "price": 299,
+        "type": "massage"
+    }
+  
+]

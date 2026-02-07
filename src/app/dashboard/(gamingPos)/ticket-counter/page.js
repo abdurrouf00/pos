@@ -1,6 +1,6 @@
 
 
-import CounterSales from '@/views/gamingPos/salesCounter/index'
+import CounterSales from '@/views/gamingPos/ticketCounter/index'
 
 export default function CounterSalesPage() {
   return <CounterSales />

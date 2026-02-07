@@ -15,8 +15,8 @@ export default function SalesReturnTopSection({
   handlePayAll,
 }) {
   // Local state for the new inputs to match UI
-  const [ticketNo, setTicketNo] = useState('985606')
-  const [mobileNo, setMobileNo] = useState('019000000093')
+  const [ticketNo, setTicketNo] = useState('')
+  const [mobileNo, setMobileNo] = useState('')
 
   return (
     <div className="w-full flex flex-col gap-2 h-full font-sans">
@@ -53,6 +53,7 @@ export default function SalesReturnTopSection({
                     className="border p-1 w-full text-sm rounded-l focus:outline-none focus:border-blue-500 border-r-0 h-8" 
                     value={ticketNo}
                     onChange={(e) => setTicketNo(e.target.value)}
+                    placeholder="Enter code.."
                  />
                  <button className="bg-green-600 text-white px-2 rounded-r flex items-center justify-center h-8">
                    Find
@@ -63,12 +64,16 @@ export default function SalesReturnTopSection({
          {/* Mobile No */}
          <div className="">
              <label className="text-xs text-slate-500 block mb-1">Mobile No</label>
-             <div className="flex h-8">
+             <div className="flex relative items-center h-8">
                  <input 
                     className="border p-1 w-full text-sm rounded focus:outline-none focus:border-blue-500 h-full" 
                     value={mobileNo}
                     onChange={(e) => setMobileNo(e.target.value)}
+                    placeholder="01XXXXXXXXX"
                  />
+                 <button className="bg-green-600 text-white px-2 rounded-r flex items-center justify-center h-8">
+                   Find
+                 </button>
              </div>
          </div> 
 

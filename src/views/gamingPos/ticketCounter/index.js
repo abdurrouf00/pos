@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import EntryLeftSection from './salesCouter'
+import EntryLeftSection from './ticketCouter'
 import PriceCalculationSection from '../priceCalculate'
 import SalesReturnModals from '../model/index'
 import toast from 'react-hot-toast'
@@ -11,11 +11,35 @@ export default function CounterSales  ()  {
   const [lastSale, setLastSale] = useState(null)
   
   // Lifted form states
-  const [mobileNo, setMobileNo] = useState('01700000055')
+  const [mobileNo, setMobileNo] = useState('')
   const [token, setToken] = useState('')
   const [childDobs, setChildDobs] = useState([''])
   const [couponCode, setCouponCode] = useState('')
   const [qtyInput, setQtyInput] = useState(1)
+  
+  // Visit History States
+  const [lastVisit, setLastVisit] = useState('-')
+  const [visitCount, setVisitCount] = useState(0)
+
+  // Simulation of finding customer data
+  const handleFindCustomer = () => {
+    if (!mobileNo) return toast.error('Enter mobile number first!')
+    
+    // Mock logic: different data for different numbers
+    if (mobileNo === '01700000055') {
+       setLastVisit('2026-02-01')
+       setVisitCount(5)
+       toast.success('Customer data fetched!')
+    } else if(mobileNo.length >= 11) {
+       setLastVisit('2026-02-05')
+       setVisitCount(2)
+       toast.success('Customer found!')
+    } else {
+       setLastVisit('-')
+       setVisitCount(0)
+       toast.error('Customer not found!')
+    }
+  }
 
   // Customer Modal State
   const [openCustomer, setOpenCustomer] = useState(false)
@@ -44,7 +68,7 @@ export default function CounterSales  ()  {
       newItems[existingIndex].qty = updatedQty
       
       // Special Pricing for Socks: First is free, others 50 each
-      if (product.id === 'sock') {
+      if (product.type === 'sock') {
         newItems[existingIndex].amount = (updatedQty - 1) * 50
       } else {
         newItems[existingIndex].amount = updatedQty * newItems[existingIndex].price
@@ -61,15 +85,16 @@ export default function CounterSales  ()  {
     }
 
     // TRIGGER: If adding ANY product that is NOT a sock, ensure at least 1 free sock exists
-    if (product.id !== 'sock' && !newItems.find(i => i.id === 'sock')) {
+    if (product.type !== 'sock' && !newItems.find(i => i.type === 'sock')) {
         newItems.push({
-            id: 'sock',
+            id: 12, // Using the ID from packege.json
             name: 'Sock',
             price: 50,
             qty: 1,
             tax: 0,
             amount: 0, // First one is free
-            code: 'SOCK'
+            code: 'SOCK-12',
+            type: 'sock'
         })
     }
     
@@ -85,7 +110,7 @@ export default function CounterSales  ()  {
     const updatedItems = [...items]
     updatedItems[index].qty += 1
     
-    if (updatedItems[index].id === 'sock') {
+    if (updatedItems[index].type === 'sock') {
       updatedItems[index].amount = (updatedItems[index].qty - 1) * 50
     } else {
       updatedItems[index].amount = updatedItems[index].qty * updatedItems[index].price
@@ -133,12 +158,16 @@ export default function CounterSales  ()  {
   const total = subtotal + totalTax - descount
   const changeReturn = paidAmount - total > 0 ? (paidAmount - total).toFixed(2) : 0
 
-  // Handle Pay All / Order Save
-  const handlePayAll = (shouldPrint = true) => {
-    if (items.length === 0) {
-      toast.error('Cart is empty!')
-      return
-    }
+   // Handle Pay All / Order Save
+   const handlePayAll = (shouldPrint = true) => {
+     if (!mobileNo || mobileNo.trim() === '') {
+       toast.error('Mobile number is required for sale!')
+       return
+     }
+     if (items.length === 0) {
+       toast.error('Cart is empty!')
+       return
+     }
     // if (paidAmount < total) {
     //   toast.error('Paid amount is less than total!')
     //   return
@@ -280,6 +309,14 @@ export default function CounterSales  ()  {
     setPaidAmount(0)
     setDescount(0)
     setDiscountValue(0)
+    // Clear Input States
+    setMobileNo('')
+    setToken('')
+    setCouponCode('')
+    setChildDobs([''])
+    setQtyInput(1)
+    setLastVisit('-')
+    setVisitCount(0)
   }
 
   const handleReprint = () => {
@@ -397,6 +434,10 @@ export default function CounterSales  ()  {
         setCouponCode={setCouponCode}
         qtyInput={qtyInput}
         setQtyInput={setQtyInput}
+        // Visit states
+        lastVisit={lastVisit}
+        visitCount={visitCount}
+        handleFindCustomer={handleFindCustomer}
         // Customer Modal
         setOpenCustomer={setOpenCustomer}
       />
