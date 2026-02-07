@@ -1,9 +1,7 @@
 'use client'
 import packages from './packege.json'
-import { Bell, Search, Trash2, Plus, Minus, User, Users, Baby, Footprints, Ticket, Coins, Armchair } from 'lucide-react'
-import HrInput from '@/components/common/HrInput'
-import { Button } from '@/components/ui/button'
-import HrSelect from '@/components/common/HrSelect'
+import { Bell, Search, Trash2, Plus, Minus, Footprints, Ticket, Coins, Armchair } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function EntryLeftSection({
   items,
@@ -17,10 +15,6 @@ export default function EntryLeftSection({
   // Form states from props
   mobileNo,
   setMobileNo,
-  token,
-  setToken,
-  childDobs,
-  setChildDobs,
   couponCode,
   setCouponCode,
   qtyInput,
@@ -61,23 +55,6 @@ export default function EntryLeftSection({
       case 'massage': return 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
       case 'sock': return 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
       default: return 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-    }
-  }
-
-  const handleChildDobChange = (index, value) => {
-    const newDobs = [...childDobs]
-    newDobs[index] = value
-    setChildDobs(newDobs)
-  }
-
-  const addChildInput = () => {
-    setChildDobs([...childDobs, ''])
-  }
-
-  const removeChildInput = (index) => {
-    if (childDobs.length > 1) {
-      const newDobs = childDobs.filter((_, i) => i !== index)
-      setChildDobs(newDobs)
     }
   }
 

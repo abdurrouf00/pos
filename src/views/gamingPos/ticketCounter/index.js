@@ -12,8 +12,6 @@ export default function CounterSales  ()  {
   
   // Lifted form states
   const [mobileNo, setMobileNo] = useState('')
-  const [token, setToken] = useState('')
-  const [childDobs, setChildDobs] = useState([''])
   const [couponCode, setCouponCode] = useState('')
   const [qtyInput, setQtyInput] = useState(1)
   
@@ -124,7 +122,7 @@ export default function CounterSales  ()  {
     if (updatedItems[index].qty > 1) {
       updatedItems[index].qty -= 1
       
-      if (updatedItems[index].id === 'sock') {
+      if (updatedItems[index].type === 'sock') {
         updatedItems[index].amount = (updatedItems[index].qty - 1) * 50
       } else {
         updatedItems[index].amount = updatedItems[index].qty * updatedItems[index].price
@@ -178,8 +176,6 @@ export default function CounterSales  ()  {
         time: new Date().toLocaleTimeString(),
         customer: 'Walk-in',
         mobile: mobileNo,
-        token: token,
-        childDobs: childDobs,
         coupon: couponCode,
         items: items,
         total: total,
@@ -234,7 +230,6 @@ export default function CounterSales  ()  {
               <div class="info">
                 <div><b>Date:</b> ${saleData.date}  <b>Time:</b> ${saleData.time}</div>
                 <div><b>Mobile:</b> ${saleData.mobile}</div>
-                ${saleData.token ? `<div><b>Token:</b> ${saleData.token}</div>` : ''}
               </div>
 
               <table>
@@ -311,9 +306,7 @@ export default function CounterSales  ()  {
     setDiscountValue(0)
     // Clear Input States
     setMobileNo('')
-    setToken('')
     setCouponCode('')
-    setChildDobs([''])
     setQtyInput(1)
     setLastVisit('-')
     setVisitCount(0)
@@ -426,10 +419,6 @@ export default function CounterSales  ()  {
         // Form states
         mobileNo={mobileNo}
         setMobileNo={setMobileNo}
-        token={token}
-        setToken={setToken}
-        childDobs={childDobs}
-        setChildDobs={setChildDobs}
         couponCode={couponCode}
         setCouponCode={setCouponCode}
         qtyInput={qtyInput}
