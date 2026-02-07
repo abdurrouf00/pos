@@ -71,6 +71,27 @@ export default function SalesReturnTopSection({
                  />
              </div>
          </div> 
+
+         <div className="flex gap-2">
+           <button 
+             onClick={() => {
+               const p = productsData.find(pd => pd.name === 'Popcorn');
+               if(p) handleAddItem(p);
+             }}
+             className="bg-amber-100 text-amber-700 border border-amber-200 px-4 py-1 rounded font-bold text-sm hover:bg-amber-200 transition-all active:scale-95 h-8 flex items-center"
+           >
+            Popcorn
+           </button>
+           <button 
+             onClick={() => {
+               const p = productsData.find(pd => pd.name === 'FRESH WATER');
+               if(p) handleAddItem(p);
+             }}
+             className="bg-blue-100 text-blue-700 border border-blue-200 px-4 py-1 rounded font-bold text-sm hover:bg-blue-200 transition-all active:scale-95 h-8 flex items-center"
+           >
+            Water
+           </button>
+         </div>
       </div>
 
        {/* ================= CART TABLE ================= */}

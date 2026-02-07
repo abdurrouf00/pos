@@ -107,5 +107,21 @@
     "price": 120,
     "stock": 9,
      "image": "/img/lemon.jpg"
+  },
+  {
+    "id":220,
+    "code": "IT012",
+    "name": "FRESH WATER",
+    "category": "Water",
+    "price": 120,
+    "stock": 90     
+  },
+  {
+    "id": 221,
+    "code": "IT012",
+    "name": "Popcorn",
+    "category": "Food",
+    "price": 120,
+    "stock": 90     
   }
 ]
