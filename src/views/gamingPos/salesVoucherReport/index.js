@@ -1,201 +1,229 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import HrInput from '@/components/common/HrInput'
+import { Button } from '@/components/ui/button'
 
-export default function SalesVoucherPage() {
+const DENOMS = [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1]
+const SECTIONS = ['ENTRY', 'FOOD', 'ELC']
 
-  const denominations = [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1]
+const emptySection = () => ({
+  cash: Object.fromEntries(DENOMS.map(d => [d, 0])),
+  banks: { UCBL: 0, DBBL: 0, CITY: 0, PUBALI: 0, EBL: 0 },
+  card: 0,
+  bkash: 0,
+  nagad: 0,
+  confirm: false,
+  username: '',
+  remarks: '',
+})
 
-  const [cash, setCash] = useState(
-    denominations.reduce((a, d) => ({ ...a, [d]: 0 }), {})
-  )
+export default function VoucherInputPage() {
 
-  const [nonCash, setNonCash] = useState({
-    UCBL: 0,
-    DBBL: 0,
-    CITY: 0,
-    PUBALI: 0,
-    EBL: 0,
-    card: 0,
-    bkash: 0,
-    nagad: 0,
+  const [data, setData] = useState({
+    ENTRY: emptySection(),
+    FOOD: emptySection(),
+    ELC: emptySection(),
   })
 
-  const cashSubtotal = denominations.reduce(
-    (sum, d) => sum + d * (cash[d] || 0),
-    0
-  )
+  /* ---------------- CALCULATIONS ---------------- */
 
-  const nonCashSubtotal = Object.values(nonCash).reduce(
-    (a, b) => a + Number(b || 0),
-    0
-  )
+  const cashTotal = (s) =>
+    DENOMS.reduce((t, d) => t + d * (Number(data[s].cash[d]) || 0), 0)
 
-  const [isConfirmed, setIsConfirmed] = useState(false)
+  const nonCashTotal = (s) =>
+    Object.values(data[s].banks).reduce((a, b) => a + Number(b || 0), 0) +
+    Number(data[s].card || 0) +
+    Number(data[s].bkash || 0) +
+    Number(data[s].nagad || 0)
 
-  const grandTotal = cashSubtotal + nonCashSubtotal
+  const sectionTotal = (s) => cashTotal(s) + nonCashTotal(s)
 
-  const handleUpdate = () => {
-    // Here you would normally save the data to a database or API
-    console.log('Saving settlement data...', { cash, nonCash, grandTotal })
-    alert('Settlement updated successfully!')
-    window.location.reload()
+  const bicTotals = {
+    cash: SECTIONS.reduce((t, s) => t + cashTotal(s), 0),
+    card: SECTIONS.reduce((t, s) => t + Number(data[s].card || 0), 0),
+    bkash: SECTIONS.reduce((t, s) => t + Number(data[s].bkash || 0), 0),
+    nagad: SECTIONS.reduce((t, s) => t + Number(data[s].nagad || 0), 0),
   }
 
+  /* ---------------- UPDATE HELPERS ---------------- */
+
+  const update = (s, key, val) =>
+    setData(prev => ({ ...prev, [s]: { ...prev[s], [key]: val } }))
+
+  const updateCash = (s, d, val) =>
+    setData(prev => ({
+      ...prev,
+      [s]: { ...prev[s], cash: { ...prev[s].cash, [d]: val } }
+    }))
+
+  const updateBank = (s, b, val) =>
+    setData(prev => ({
+      ...prev,
+      [s]: { ...prev[s], banks: { ...prev[s].banks, [b]: val } }
+    }))
+
+  /* ---------------- UI ---------------- */
+
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto bg-white rounded shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">Sales Voucher</h2>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Voucher Input</h1>
+        <Button onClick={() => console.log('Saving...', data)}>Save Voucher</Button>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          {/* CASH */}
-          <div className="border rounded">
-            <div className="bg-teal-600 text-white px-4 py-2 font-semibold">
-              FOOD | Cash
+      {/* ===== SECTIONS ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {SECTIONS.map(s => (
+          <div key={s} className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-cyan-700 text-white px-4 py-2 font-bold uppercase tracking-wider text-sm flex justify-between items-center">
+              <span>{s} SECTION</span>
+              <span className="bg-cyan-800 px-2 py-0.5 rounded text-xs">৳ {sectionTotal(s).toLocaleString()}</span>
             </div>
 
-            <div className="p-4 space-y-2 text-sm">
-              {denominations.map((d) => (
-                <div key={d} className="grid grid-cols-3 gap-2 items-center">
-                  <div className="border p-1 rounded" >{d}  x</div>
+            <div className="p-4 space-y-4">
 
-                  <input
+              {/* CASH SECTION */}
+              <div>
+                <h3 className="text-xs font-bold text-gray-400 uppercase mb-2">Cash Denominations</h3>
+                <div className="space-y-1.5 bg-gray-50 p-3 rounded border border-gray-100">
+                  {DENOMS.map(d => (
+                    <div key={d} className="grid grid-cols-12 gap-2 items-center">
+                      <div className="col-span-3 text-sm font-medium text-gray-600">{d} x</div>
+                      <div className="col-span-4">
+                        <HrInput
+                          type="number"
+                          value={data[s].cash[d]}
+                          onChange={e => updateCash(s, d, e.target.value)}
+                          className="h-8 text-center"
+                          fullWidth={true}
+                        />
+                      </div>
+                      <div className="col-span-5 text-right font-bold text-gray-700 text-sm">
+                        {(Number(data[s].cash[d]) * d).toLocaleString()}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between text-cyan-700 font-bold text-sm">
+                    <span>Cash Sub-Total</span>
+                    <span>৳ {cashTotal(s).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* BANKS SECTION */}
+              <div>
+                <h3 className="text-xs font-bold text-gray-400 uppercase mb-2">Bank Deposits</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.keys(data[s].banks).map(b => (
+                    <HrInput
+                      key={b}
+                      label={b}
+                      type="number"
+                      placeholder="0.00"
+                      value={data[s].banks[b]}
+                      onChange={e => updateBank(s, b, e.target.value)}
+                      className="h-9"
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* OTHERS SECTION */}
+              <div className="space-y-3">
+                <HrInput
+                  label="Card Sales"
+                  placeholder="0.00"
+                  type="number"
+                  value={data[s].card}
+                  onChange={e => update(s, 'card', e.target.value)}
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  <HrInput
+                    label="Bkash"
+                    placeholder="0.00"
                     type="number"
-                    className="border p-1 rounded"
-                    value={cash[d] === 0 ? '' : cash[d]}
-                    placeholder="0"
-                    onFocus={(e) => e.target.select()}
-                    onChange={(e) =>
-                      setCash({ ...cash, [d]: e.target.value === '' ? 0 : Number(e.target.value) })
-                    }
+                    value={data[s].bkash}
+                    onChange={e => update(s, 'bkash', e.target.value)}
                   />
-
-                  <input
-                    className="border p-1 rounded bg-gray-50"
-                    value={d * cash[d]}
-                    readOnly
+                  <HrInput
+                    label="Nagad"
+                    placeholder="0.00"
+                    type="number"
+                    value={data[s].nagad}
+                    onChange={e => update(s, 'nagad', e.target.value)}
                   />
                 </div>
-              ))}
+              </div>
 
-              <div className="text-right font-semibold pt-2">
-                Sub-Total of Cash : {cashSubtotal}
+              {/* CONFIRM & USER INFO */}
+              <div className="bg-gray-50 p-3 rounded space-y-3 border border-gray-100">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`confirm-${s}`}
+                    className="w-4 h-4 rounded text-cyan-600 focus:ring-cyan-500 cursor-pointer"
+                    checked={data[s].confirm}
+                    onChange={e => update(s, 'confirm', e.target.checked)}
+                  />
+                  <label htmlFor={`confirm-${s}`} className="text-xs font-bold text-gray-500 cursor-pointer">
+                    CONFIRM ENTRY
+                  </label>
+                </div>
+
+                <HrInput
+                  label="Username"
+                  placeholder="Entered by"
+                  value={data[s].username}
+                  onChange={e => update(s, 'username', e.target.value)}
+                  className="bg-white"
+                />
+                <HrInput
+                  label="Remarks"
+                  placeholder="Additional notes..."
+                  value={data[s].remarks}
+                  onChange={e => update(s, 'remarks', e.target.value)}
+                  className="bg-white"
+                  type="textarea"
+                  rows={2}
+                />
+              </div>
+
+              {/* SECTION TOTAL FOOTER */}
+              <div className="bg-gray-800 text-white p-3 rounded flex justify-between items-center shadow-md">
+                 <span className="text-xs font-bold uppercase text-gray-400">Section Total</span>
+                 <span className="text-xl font-black">৳ {sectionTotal(s).toLocaleString()}</span>
               </div>
             </div>
           </div>
+        ))}
+      </div>
 
-          {/* NON CASH */}
-          <div className="border rounded">
-            <div className="bg-orange-500 text-white px-4 py-2 font-semibold">
-              FOOD | Non-Cash
-            </div>
-
-            <div className="p-4 space-y-3 text-sm ">
-
-              {[
-                ['UCBL', 'UCBL'],
-                ['DBBL', 'DBBL'],
-                ['CITY', 'CITY'],
-                ['PUBALI', 'PUBALI'],
-                ['EBL', 'EBL'],
-              ].map(([key, label]) => (
-                <div key={key} className="grid grid-cols-2 gap-2">
-                  <div className="border p-1 rounded">{label}</div>
-                  <input
-                    type="number"
-                    className="border p-1 rounded"
-                    value={nonCash[key] === 0 ? '' : nonCash[key]}
-                    placeholder="0"
-                    onFocus={(e) => e.target.select()}
-                    onChange={(e) =>
-                      setNonCash({ ...nonCash, [key]: e.target.value === '' ? 0 : Number(e.target.value) })
-                    }
-                  />
-                </div>
-              ))}
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>Card Sales</div>
-                <input
-                  type="number"
-                  className="border p-1 rounded"
-                  value={nonCash.card === 0 ? '' : nonCash.card}
-                  placeholder="0"
-                  onFocus={(e) => e.target.select()}
-                  onChange={(e) =>
-                    setNonCash({ ...nonCash, card: e.target.value === '' ? 0 : Number(e.target.value) })
-                  }
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>Food Bkash</div>
-                <input
-                  type="number"
-                  className="border p-1 rounded"
-                  value={nonCash.bkash === 0 ? '' : nonCash.bkash}
-                  placeholder="0"
-                  onFocus={(e) => e.target.select()}
-                  onChange={(e) =>
-                    setNonCash({ ...nonCash, bkash: e.target.value === '' ? 0 : Number(e.target.value) })
-                  }
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>Food Nagad</div>
-                <input
-                  type="number"
-                  className="border p-1 rounded"
-                  value={nonCash.nagad === 0 ? '' : nonCash.nagad}
-                  placeholder="0"
-                  onFocus={(e) => e.target.select()}
-                  onChange={(e) =>
-                    setNonCash({ ...nonCash, nagad: e.target.value === '' ? 0 : Number(e.target.value) })
-                  }
-                />
-              </div>
-
-              <div className="font-semibold">
-                Sub Total (B): {nonCashSubtotal}
-              </div>
-
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={isConfirmed}
-                  onChange={(e) => setIsConfirmed(e.target.checked)}
-                />
-                Confirm Settlement?
-              </label>
-
-              <input
-                className="border p-2 rounded w-full"
-                placeholder="Remarks"
-              />
-            </div>
-          </div>
+      {/* ===== BIC TOTAL FOOTER ===== */}
+      <div className="mt-8 bg-white border border-yellow-200 rounded-lg overflow-hidden shadow-sm">
+        <div className="bg-yellow-400 p-2 text-center text-xs font-black uppercase tracking-widest text-yellow-900 leading-none">
+          BIC TOTAL SUMMARY
         </div>
 
-        <div className="flex justify-between mt-6 font-semibold">
-          <div>Total Amount : {grandTotal}</div>
-
-          <div className="space-x-3">
-            <button className="bg-red-500 text-white px-4 py-2 rounded">
-              Close
-            </button>
-            <button 
-              disabled={!isConfirmed}
-              onClick={handleUpdate}
-              className={`px-4 py-2 rounded text-white transition-colors ${
-                isConfirmed ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'
-              }`}
-            >
-              Update
-            </button>
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100 p-4">
+          <div className="text-center p-2">
+            <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Cash</p>
+            <p className="text-xl font-bold text-gray-700">৳ {bicTotals.cash.toLocaleString()}</p>
+          </div>
+          <div className="text-center p-2">
+            <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Card</p>
+            <p className="text-xl font-bold text-gray-700">৳ {bicTotals.card.toLocaleString()}</p>
+          </div>
+          <div className="text-center p-2">
+            <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Bkash</p>
+            <p className="text-xl font-bold text-gray-700">৳ {bicTotals.bkash.toLocaleString()}</p>
+          </div>
+          <div className="text-center p-2">
+            <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Nagad</p>
+            <p className="text-xl font-bold text-gray-700">৳ {bicTotals.nagad.toLocaleString()}</p>
           </div>
         </div>
       </div>
     </div>
   )
 }
+

@@ -870,8 +870,17 @@
         "menu_icon": null,
         "has_child": 0
       },
-      {
+      {   
         "id": 4044,
+        "menu_name": "Sales Closing",
+        "menu_uid": "salesClosing",
+        "parent_id": 4040,
+        "order_no": 10.1,
+        "menu_icon": null,
+        "has_child": 0
+      },
+      {
+        "id": 4046,
         "menu_name": "Count Down",
         "menu_uid": "countDown",
         "parent_id": 4040,

@@ -25,6 +25,10 @@ export default function EntryLeftSection({
   handleFindCustomer
 }) {
 
+  const salesClose = () => {
+    window.location.href = '/dashboard/sales-closing?type=ticket'
+  }
+
   // Quick Add Buttons Handler
   const addQuickItem = (pkg) => {
     handleAddItem({
@@ -73,7 +77,12 @@ export default function EntryLeftSection({
            </div>
 
            <div className="flex gap-2">
-               <button onClick={handleReprint} className="text-blue-600 font-semibold text-sm hover:underline">Reprint</button>
+            <button 
+                  onClick={() => salesClose()}
+                  className="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded text-sm font-semibold"
+                >
+                 Sales Close
+               </button>              
                <button className="bg-black text-white px-3 py-1 rounded text-sm font-bold flex items-center gap-1">
                  <Bell size={14} /> CS Pack
                </button>

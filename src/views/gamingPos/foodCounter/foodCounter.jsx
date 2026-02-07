@@ -18,6 +18,10 @@ export default function SalesReturnTopSection({
   const [ticketNo, setTicketNo] = useState('')
   const [mobileNo, setMobileNo] = useState('')
 
+  const salesClose = () => {
+    window.location.href = '/dashboard/sales-closing?type=food'
+  }
+
   return (
     <div className="w-full flex flex-col gap-2 h-full font-sans">
       
@@ -25,19 +29,25 @@ export default function SalesReturnTopSection({
       <div className="flex justify-between items-center bg-slate-200 p-2 rounded shadow-sm">
            <div className="flex items-center gap-2">
                <span className="font-bold text-lg text-slate-700">Food Counter</span>
-               <span className="bg-red-600 text-white px-2 py-0.5 rounded text-sm font-bold">FF : 169</span>
-               <span className="bg-red-600 text-white px-2 py-0.5 rounded text-sm font-bold">PFR : 436</span>
+               <span className="bg-red-600 text-white px-1 py-0.5 rounded text-sm font-bold">FF : 169</span>
+               <span className="bg-red-600 text-white px-1 py-0.5 rounded text-sm font-bold">PFR : 436</span>
            </div>
            <div className="flex gap-2">
                <button 
+                  onClick={() => salesClose()}
+                  className="bg-green-600 text-white hover:bg-green-700 px-1 py-1 rounded text-sm font-semibold"
+                >
+                 Sales Close
+               </button>
+               <button 
                   onClick={() => window.location.reload()}
-                  className="bg-yellow-400 text-black hover:bg-yellow-500 px-4 py-1 rounded text-sm font-semibold"
+                  className="bg-yellow-400 text-black hover:bg-yellow-500 px-1 py-1 rounded text-sm font-semibold"
                 >
                  Refresh
                </button>
                <button 
                 onClick={handlePayAll}
-                className="bg-red-600 text-white hover:bg-red-700 px-4 py-1 rounded text-sm font-semibold">
+                className="bg-red-600 text-white hover:bg-red-700 px-1 py-1 rounded text-sm font-semibold">
                  Place Order
                </button>
            </div>
