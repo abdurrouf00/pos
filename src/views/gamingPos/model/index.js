@@ -5,10 +5,6 @@ import HrSelect from '@/components/common/HrSelect'
 import { Button } from '@/components/ui/button'
 
 export default function SalesReturnModals({
-  openCustomer,
-  setOpenCustomer,
-  customerForm,
-  handleCustomerChange,
   // payment 
   openPayment,
   setopenPayment,
@@ -119,75 +115,6 @@ export default function SalesReturnModals({
                 className="bg-sky-600 hover:bg-sky-700 text-white"
               >
                 Apply Discount
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* ================= POPUP 1 for Add New Customer ================= */}
-      {openCustomer && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-start z-50">
-          <div className="bg-white w-[900px] rounded-b-xl ">
-            <div className="relative flex items-center border-b">
-              <h3 className="w-full text-center font-semibold p-2 bg-amber-100">
-                Add New Membership
-              </h3>
-              <span
-                onClick={() => setOpenCustomer(false)}
-                className="absolute right-3 cursor-pointer hover:bg-red-500 rounded-full p-1 px-3 hover:text-white"
-              >
-                X
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 p-6">
-              <HrInput
-                name="name"
-                label="Name"
-                value={customerForm.name}
-                onChange={handleCustomerChange}
-              />
-
-              <HrInput
-                name="mobile"
-                label="Mobile"
-                value={customerForm.mobile}
-                onChange={handleCustomerChange}
-              />
-
-              <HrInput
-                name="email"
-                label="Email"
-                value={customerForm.email}
-                onChange={handleCustomerChange}
-              />
-
-              <HrInput
-                name="city"
-                label="City"
-                value={customerForm.city}
-                onChange={handleCustomerChange}
-              />
-
-              <HrInput
-                name="state"
-                label="State"
-                value={customerForm.state}
-                onChange={handleCustomerChange}
-              />
-
-              <HrInput
-                name="address"
-                label="Address"
-                value={customerForm.address}
-                onChange={handleCustomerChange}
-              />
-            </div>
-
-            <div className="flex gap-2 mt-4 p-6">
-              <Button onClick={() => setOpenCustomer(false)}>Save</Button>
-              <Button variant="outline" onClick={() => setOpenCustomer(false)}>
-                Cancel
               </Button>
             </div>
           </div>

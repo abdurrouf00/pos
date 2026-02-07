@@ -861,8 +861,17 @@
         "menu_icon": null,
         "has_child": 0
       },
-      {
+      { 
         "id": 4043,
+        "menu_name": "Membership",
+        "menu_uid": "membership",
+        "parent_id": 4040,
+        "order_no": 10.1,
+        "menu_icon": null,
+        "has_child": 0
+      },
+      {
+        "id": 4044,
         "menu_name": "Count Down",
         "menu_uid": "countDown",
         "parent_id": 4040,
@@ -871,7 +880,7 @@
         "has_child": 0
       },
       {
-        "id": 4044,
+        "id": 4045,
         "menu_name": "sales Voucher Report",
         "menu_uid": "salesVoucherReport",
         "parent_id": 4040,
@@ -881,8 +890,6 @@
       }
   ]
 },
-
-
 
 
 {

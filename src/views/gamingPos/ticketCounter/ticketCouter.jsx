@@ -19,7 +19,6 @@ export default function EntryLeftSection({
   setCouponCode,
   qtyInput,
   setQtyInput,
-  setOpenCustomer,
   // New visit props
   lastVisit,
   visitCount,
@@ -123,12 +122,6 @@ export default function EntryLeftSection({
 
          {/* Action Buttons */}
          <div className="flex gap-2 w-full lg:w-auto h-9">
-            <button 
-                onClick={() => setOpenCustomer(true)}
-                className="flex-1 lg:flex-none px-3 bg-orange-500 hover:bg-orange-600 text-white rounded-md font-bold text-[10px] flex items-center justify-center gap-1 shadow-sm transition-all active:scale-95 whitespace-nowrap"
-            >
-                <Plus size={14}/> MEMBERSHIP
-            </button>
   
             <button 
                 onClick={() => addQuickItem({ id: 'day_pass', name: 'Day Pass', price: 1200, type: 'ticket' })}

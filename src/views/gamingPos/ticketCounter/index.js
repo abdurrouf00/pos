@@ -39,21 +39,6 @@ export default function CounterSales  ()  {
     }
   }
 
-  // Customer Modal State
-  const [openCustomer, setOpenCustomer] = useState(false)
-  const [customerForm, setCustomerForm] = useState({
-    name: '',
-    mobile: '',
-    email: '',
-    city: '',
-    state: '',
-    address: ''
-  })
-
-  const handleCustomerChange = (e) => {
-    const { name, value } = e.target
-    setCustomerForm(prev => ({ ...prev, [name]: value }))
-  }
 
   // Add Item Handler
   const handleAddItem = (product, qty = 1) => {
@@ -427,8 +412,6 @@ export default function CounterSales  ()  {
         lastVisit={lastVisit}
         visitCount={visitCount}
         handleFindCustomer={handleFindCustomer}
-        // Customer Modal
-        setOpenCustomer={setOpenCustomer}
       />
       
       {/* Right Section */}
@@ -452,11 +435,6 @@ export default function CounterSales  ()  {
             setDiscountValue={setDiscountValue}
             setDescount={setDescount}
             subtotal={subtotal}
-            // Customer Modal Props
-            openCustomer={openCustomer}
-            setOpenCustomer={setOpenCustomer}
-            customerForm={customerForm}
-            handleCustomerChange={handleCustomerChange}
          />
       </div>
     </div>
