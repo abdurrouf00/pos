@@ -190,7 +190,7 @@ export default function QuoteForm() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex fixed right-4  bottom-4 items-center    rounded sm:px-4 md:px-6 z-50">
+          <div className="flex fixed bottom-0 w-[82%] items-center shadow-lg h-28 md:h-12 gap-8 bg-gray-200 rounded sm:px-4 md:px-6 z-50">
             <Button type="submit">Save Quote</Button>
           </div>
         </form>
@@ -309,7 +309,7 @@ export default function QuoteForm() {
       </div>
 
       {/* Terms & Conditions */}
-      <div className="grid grid-cols-2  gap-4 mb-8">
+      <div className="grid grid-cols-2  gap-4">
         <textarea placeholder="Customer Notes" className="w-full h-24 border rounded p-2" />
         <textarea
           placeholder="Terms & Conditions"

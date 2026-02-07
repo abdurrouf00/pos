@@ -1,4 +1,5 @@
 import axios from '@/helpers/axios';
+import { getObjectWithValidValues } from '@/lib/utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const initialWorkingShiftData = {
@@ -12,10 +13,12 @@ export const initialWorkingShiftData = {
     after_allowed_minutes: ""
 }
 
-export const getAllWorkingShifts = createAsyncThunk('workingShift/getAllWorkingShifts', async () => {
-    const result = axios.get("workingShift")
+export const getAllWorkingShifts = createAsyncThunk('workingShift/getAllWorkingShifts', async (params) => {
+    const validParams = getObjectWithValidValues(params);
+    const url = new URLSearchParams(validParams);
+    const api = `workingShift?${url.toString()}`;
+    const result = axios.get(api)
         .then((res) => {
-            console.log('working shift data from redux', res.data.data.data)
             return res.data.data.data;
         })
         .catch((err) => console.log(err))
@@ -35,7 +38,6 @@ export const addWorkingShift = createAsyncThunk('workingShift/addWorkingShift', 
 export const updateWorkingShift = createAsyncThunk('workingShift/updateWorkingShift', async (data) => {
     const result = axios.post(`workingShift/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
-            console.log('working shift submitted data from redux', res)
             return res;
         })
         .catch((err) => console.log(err))
@@ -45,7 +47,6 @@ export const updateWorkingShift = createAsyncThunk('workingShift/updateWorkingSh
 export const getWorkingShiftById = createAsyncThunk('workingShift/getWorkingShiftById', async (id) => {
     const result = axios.get(`workingShift/${id}`)
         .then((res) => {
-            console.log(res)
             return res.data.data;
         })
         .catch((err) => console.log(err))
@@ -55,7 +56,6 @@ export const getWorkingShiftById = createAsyncThunk('workingShift/getWorkingShif
 export const deleteWorkingShift = createAsyncThunk('workingShift/deleteWorkingShift', async (id) => {
     const result = axios.delete(`workingShift/${id}`)
         .then((res) => {
-            console.log(res)
             return res.data.data;
         })
         .catch((err) => console.log(err))

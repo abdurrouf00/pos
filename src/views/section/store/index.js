@@ -1,4 +1,5 @@
 import axios from '@/helpers/axios';
+import { getObjectWithValidValues } from '@/lib/utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const initialSectionData = {
@@ -6,8 +7,11 @@ export const initialSectionData = {
     name: ""
 }
 
-export const getAllSections = createAsyncThunk('section/getAllSections', async () => {
-    const result = axios.get("section")
+export const getAllSections = createAsyncThunk('section/getAllSections', async (params) => {
+    const validParams = getObjectWithValidValues(params);
+    const url = new URLSearchParams(validParams);
+    const api = `section?${url.toString()}`;
+    const result = axios.get(api)
         .then((res) => {
             console.log('section data from redux', res.data.data.data)
             return res.data.data.data;

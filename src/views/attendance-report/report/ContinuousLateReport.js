@@ -104,7 +104,7 @@ export default function ContinuousLateReport() {
                     </tbody>
                   </table>
                 </>
-                // ))
+
               )
             }
 
@@ -117,7 +117,9 @@ export default function ContinuousLateReport() {
           </div>
         </div>
       }
-
+      {/* const startWorldX = typeof contractStartWorldX === 'number' && Number.isFinite(contractStartWorldX)
+      ? contractStartWorldX
+      : null; */}
     </UILoading>
   )
 }

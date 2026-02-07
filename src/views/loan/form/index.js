@@ -23,7 +23,9 @@ const LoanForm = (props) => {
   // console.log("User data:", userData);
 
   const { setOpenForm, toggle, editId, setEditId } = props;
-  const { basicLoanData, mutationLoading, fetching } = useSelector(({ loan }) => loan);
+  const { basicLoanData, mutationLoading, fetching } = useSelector(
+    ({ loan }) => loan
+  );
   const { departmentData, designationData, salaryDesignData, employeeData } =
     useSelector(({ department, designation, salaryDesign, employee }) => ({
       departmentData: department.departmentData,
@@ -33,19 +35,22 @@ const LoanForm = (props) => {
     }));
   const dispatch = useDispatch();
 
-
   const getEmployeeData = async () => {
-    dispatch(getAllEmployee());
+    const params = {
+      page: 1,
+      per_page: 1000,
+    };
+    dispatch(getAllEmployee(params));
   };
 
   useEffect(() => {
     if (editId) {
-      dispatch(getLoanById(editId))
+      dispatch(getLoanById(editId));
     }
     return () => {
       dispatch(bindLoanData(initialLoanData));
       setEditId(null);
-    }
+    };
   }, [editId]);
 
   const {
@@ -66,9 +71,11 @@ const LoanForm = (props) => {
     };
     console.log("Form submitted:", submittedData);
     const action = editId ? updateLoan(submittedData) : addLoan(submittedData);
-    const toastMsg = editId ? "Loan Updated successfully" : "Loan Created successfully";
+    const toastMsg = editId
+      ? "Loan Updated successfully"
+      : "Loan Created successfully";
     dispatch(action).then((res) => {
-      console.log('res', res)
+      console.log("res", res);
       if (res.payload.success) {
         setOpenForm(false);
         setEditId(null);
@@ -76,7 +83,6 @@ const LoanForm = (props) => {
         toast.success(toastMsg);
         dispatch(bindLoanData(initialLoanData));
       }
-
     });
   };
 
@@ -84,11 +90,23 @@ const LoanForm = (props) => {
     const { name, value } = e.target;
     if (name === "installment_number") {
       const installmentAmount = Math.round(loan_amount / +value);
-      dispatch(bindLoanData({ ...basicLoanData, [name]: value, installment_amount: installmentAmount }));
-    } else if (name === 'start_date') {
+      dispatch(
+        bindLoanData({
+          ...basicLoanData,
+          [name]: value,
+          installment_amount: installmentAmount,
+        })
+      );
+    } else if (name === "start_date") {
       const endDate = new Date(value);
       endDate.setMonth(endDate.getMonth() + +installment_number);
-      dispatch(bindLoanData({ ...basicLoanData, [name]: value, end_date: endDate.toISOString().split('T')[0] }));
+      dispatch(
+        bindLoanData({
+          ...basicLoanData,
+          [name]: value,
+          end_date: endDate.toISOString().split("T")[0],
+        })
+      );
     } else {
       dispatch(bindLoanData({ ...basicLoanData, [name]: value }));
     }
@@ -166,7 +184,7 @@ const LoanForm = (props) => {
               handleChange(e);
             }}
             disabled={!installment_number}
-            min={new Date().toISOString().split('T')[0]}
+            min={new Date().toISOString().split("T")[0]}
             required
           />
         </div>

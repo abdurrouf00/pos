@@ -9,29 +9,43 @@ import toast from "react-hot-toast";
 
 const WorkingShiftForm = (props) => {
   const { setOpenForm, toggle } = props;
-  const {basicWorkingShiftData} = useSelector(({workingShift}) => workingShift);
+  const [loading, setLoading] = useState(false);
+  const { basicWorkingShiftData } = useSelector(({ workingShift }) => workingShift);
   const dispatch = useDispatch();
-  const {id, name, start_time, end_time, before_allowed_minutes, late_allowed_minutes, early_allowed_minutes, after_allowed_minutes} = basicWorkingShiftData;
+  const { id, name, start_time, end_time, before_allowed_minutes, late_allowed_minutes, early_allowed_minutes, after_allowed_minutes } = basicWorkingShiftData;
+
+
 
   const handleSubmit = (e) => {
-    console.log("Form submitted:", basicWorkingShiftData);
-    const action = id ? updateWorkingShift(basicWorkingShiftData) : addWorkingShift(basicWorkingShiftData);
+    setLoading(true);
+    const { updated_by, created_by, created_at, updated_at, deleted_at, company_id, organization_id, branch_id, ...rest } = basicWorkingShiftData;
+    console.log('update payload', JSON.stringify(rest, null, 2))
+    const action = id ? updateWorkingShift(rest) : addWorkingShift(basicWorkingShiftData);
     dispatch(action).then((res) => {
-      setOpenForm(false);
-      dispatch(getAllWorkingShifts());
-      toast.success("Working Shift Created successfully");
-      dispatch(bindWorkingShiftData(initialWorkingShiftData));
+      setLoading(false);
+      if (res.payload) {
+        setOpenForm(false);
+        dispatch(getAllWorkingShifts());
+        toast.success(id ? "Working Shift Updated successfully" : "Working Shift Created successfully");
+        dispatch(bindWorkingShiftData(initialWorkingShiftData));
+      }
     });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    dispatch(bindWorkingShiftData({...basicWorkingShiftData, [name]: value}));
+    dispatch(bindWorkingShiftData({ ...basicWorkingShiftData, [name]: value }));
   };
+
+  const handleClose = () => {
+    dispatch(bindWorkingShiftData(initialWorkingShiftData));
+    setOpenForm(false);
+  }
 
   return (
     <HrModal
       toggle={toggle}
+      onClose={handleClose}
       setToggle={setOpenForm}
       title={id ? "Update Working Shift" : "Add Working Shift"}
     >
@@ -42,7 +56,7 @@ const WorkingShiftForm = (props) => {
             label="Shift Name"
             placeholder="Enter shift name"
             value={name}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
             required
           />
         </div>
@@ -53,7 +67,8 @@ const WorkingShiftForm = (props) => {
             placeholder="Enter start time"
             type="time"
             value={start_time}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
+            disabled={id}
             required
           />
         </div>
@@ -64,7 +79,8 @@ const WorkingShiftForm = (props) => {
             placeholder="Enter end time"
             type="time"
             value={end_time}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
+            disabled={id}
             required
           />
         </div>
@@ -75,7 +91,7 @@ const WorkingShiftForm = (props) => {
             placeholder="Enter time"
             type="number"
             value={before_allowed_minutes}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
             required
           />
         </div>
@@ -86,7 +102,7 @@ const WorkingShiftForm = (props) => {
             placeholder="Enter time"
             type="number"
             value={after_allowed_minutes}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
             required
           />
         </div>
@@ -97,7 +113,7 @@ const WorkingShiftForm = (props) => {
             placeholder="Enter time"
             type="number"
             value={early_allowed_minutes}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
             required
           />
         </div>
@@ -108,16 +124,16 @@ const WorkingShiftForm = (props) => {
             placeholder="Enter time"
             type="number"
             value={late_allowed_minutes}
-            onChange={(e) => {handleChange(e)}}
+            onChange={(e) => { handleChange(e) }}
             required
           />
         </div>
         <div className="flex justify-end">
-          <Button onClick={() => {handleSubmit()}}>Submit</Button>
+          <Button disabled={loading} onClick={() => { handleSubmit() }}>{loading ? 'Saving...' : "Save"}</Button>
         </div>
       </div>
     </HrModal>
   );
 }
 
-export default WorkingShiftForm; 
+export default WorkingShiftForm;

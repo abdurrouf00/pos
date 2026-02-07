@@ -5,10 +5,10 @@ import { getLocal } from "../utils";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: JSON.parse(getLocal('user_data')) ?? null,
+    user: getLocal('user_data') ?? null,
     company: null,
     branch: null,
-    menus: JSON.parse(getLocal('menus')) ?? []
+    menus: getLocal('menus') ?? []
   },
   reducers: {
     setUser: (state, action) => {

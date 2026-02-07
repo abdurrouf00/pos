@@ -1,18 +1,16 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  distDir: '.next',
-  reactStrictMode: true,
-  // TypeScript errors are strictly enforced; fix them or use 'tsc --noEmit' to check.
-  typescript: {
-     ignoreBuildErrors: true,
-  },
-  // eslint in next.config.js might be deprecated in this version, avoiding it.
-  experimental: {
-    // any experimental features if needed
-    turbopack: {
-      root: '.',
-    },
-  },
-};
+const path = require('path')
 
-module.exports = nextConfig;
+const nextConfig = {
+  /* config options here */
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  webpack: config => {
+    // Add path alias for '@'
+    config.resolve.alias['@'] = path.join(__dirname, 'src')
+    return config
+  },
+}
+
+module.exports = nextConfig

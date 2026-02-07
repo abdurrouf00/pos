@@ -117,7 +117,8 @@ const EmployeeForm = ({ id }) => {
     } else {
       dispatch(bindEmployeeData({ ...basicEmployeeData, [name]: value }));
     }
-  };
+  }
+  console.log('errors', errors)
 
   const onSubmit = async () => {
     setSubmitClicked(true);
@@ -132,9 +133,10 @@ const EmployeeForm = ({ id }) => {
       formData.append('signature', signature);
     }
     if (id) {
-      formData.delete('username');
-      formData.delete('password');
-      formData.delete('role_id');
+      formData.append('_method', 'put')
+      formData.delete('username')
+      formData.delete('password')
+      formData.delete('role_id')
       if (typeof image === 'string') {
         formData.delete('image');
       } else {
@@ -166,7 +168,11 @@ const EmployeeForm = ({ id }) => {
     // console.log('submittedData', JSON.stringify(submittedData, null, 2))
 
     try {
-      const updateData = { data: formData, id: basicEmployeeData.id || id }
+      const updateData = {
+        data: formData,
+        id: basicEmployeeData.id || id,
+      }
+      console.log('update data', JSON.stringify(updateData))
       const action = basicEmployeeData.id || id
         ? updateEmployee(updateData)
         : addEmployee(formData);
@@ -195,19 +201,23 @@ const EmployeeForm = ({ id }) => {
     }
   }, [])
   useEffect(() => {
+    const params = {
+      page: 1,
+      per_page: 1000,
+    }
     const loadAllData = async () => {
       try {
         await Promise.all([
-          dispatch(getAllWorkingShifts()),
-          dispatch(getAllDesignations()),
-          dispatch(getAllDepartment()),
-          dispatch(getAllEmployeeCategories()),
-          dispatch(getAllJobTypes()),
-          dispatch(getAllDivisions()),
-          dispatch(getAllSections()),
-          dispatch(getAllPayScale()),
-          dispatch(getAllPaymentTypes()),
-          dispatch(getAllProjects()),
+          dispatch(getAllWorkingShifts(params)),
+          dispatch(getAllDesignations(params)),
+          dispatch(getAllDepartment(params)),
+          dispatch(getAllEmployeeCategories(params)),
+          dispatch(getAllJobTypes(params)),
+          dispatch(getAllDivisions(params)),
+          dispatch(getAllSections(params)),
+          dispatch(getAllPayScale(params)),
+          dispatch(getAllPaymentTypes(params)),
+          dispatch(getAllProjects(params)),
         ]);
       } finally {
         // setFormLoading( false );

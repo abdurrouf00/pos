@@ -71,9 +71,7 @@ const SalaryDesignForm = (props) => {
 
   useEffect(() => {
     getById()
-    return () => {
-      setEditId(null)
-    }
+
   }, [editId])
   const handleChange = (index, field, value) => {
     const updatedDetails = cloneDeep(head_details);
@@ -85,7 +83,6 @@ const SalaryDesignForm = (props) => {
     })
 
   };
-  console.log("head_details", head_details)
   const handleAddRow = () => {
     const newRow = {
       ...initialHead
@@ -96,16 +93,19 @@ const SalaryDesignForm = (props) => {
     })
 
   };
-  console.log("formData", formData)
 
   const handleRemoveRow = (index) => {
     const updatedDetails = head_details.filter((_, i) => i !== index);
-    dispatch(
-      bindSalaryDesignData({
-        ...basicSalaryDesignData,
-        head_details: updatedDetails,
-      })
-    );
+    // dispatch(
+    //   bindSalaryDesignData({
+    //     ...basicSalaryDesignData,
+    //     head_details: updatedDetails,
+    //   })
+    // );
+    setFormData({
+      ...formData,
+      head_details: updatedDetails,
+    })
   };
 
   const handleSubmit = (e) => {
@@ -128,6 +128,7 @@ const SalaryDesignForm = (props) => {
       name: formData.name,
       head_details: heads
     };
+    console.log('editId', editId)
     console.log('submittedData', submittedData)
     const action = editId
       ? updateSalaryDesign(submittedData)
@@ -171,7 +172,7 @@ const SalaryDesignForm = (props) => {
       title={editId ? "Update Salary Design" : "Add Salary Design"}
       size='max-w-3xl'
     >
-      <UILoading loading={formLoading}>
+      <UILoading loading={formLoading} onClose={() => setEditId(null)}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid md:grid-cols-3 gap-4">
             <HrInput

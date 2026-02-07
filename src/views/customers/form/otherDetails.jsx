@@ -1,51 +1,50 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Link from "next/link";
-import HrInput from "@/components/common/HrInput";
-import HrSelect from "@/components/common/HrSelect";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react'
+import Link from 'next/link'
+import HrInput from '@/components/common/HrInput'
+import HrSelect from '@/components/common/HrSelect'
+import { Button } from '@/components/ui/button'
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
 export default function CompanyInfoForm() {
   const [formData, setFormData] = useState({
-    tax_rate: "",
-    company_id: "",
-    currency: "",
-    opening_balance: "",
-    payment_terms: "",
-    enable_portal: "",
-    portal_language: "",
+    tax_rate: '',
+    company_id: '',
+    currency: '',
+    opening_balance: '',
+    payment_terms: '',
+    enable_portal: '',
+    portal_language: '',
     documents: null,
-    website_url: "",
-    department: "",
-    designation: "",
-    skype: "",
-    facebook: "",
-  });
+    website_url: '',
+    department: '',
+    designation: '',
+    skype: '',
+    facebook: '',
+  })
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const [showMore, setShowMore] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('')
+  const [showMore, setShowMore] = useState(false)
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
+  const handleChange = e => {
+    const { name, value, files } = e.target
     setFormData({
       ...formData,
       [name]: files ? files[0] : value,
-    });
-  };
+    })
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = e => {
+    e.preventDefault()
     if (!formData.company_id || !formData.currency) {
-      setErrorMsg("Please fill required fields.");
-      return;
+      setErrorMsg('Please fill required fields.')
+      return
     }
-    setErrorMsg("");
-    console.log("Submitted Data:", formData);
+    setErrorMsg('')
     // toast.success("Form Submitted Successfully!");
-  };
+  }
 
   return (
     <div>
@@ -105,8 +104,8 @@ export default function CompanyInfoForm() {
                 value={formData.enable_portal}
                 onChange={handleChange}
                 options={[
-                  { value: "yes", label: "Yes" },
-                  { value: "no", label: "No" },
+                  { value: 'yes', label: 'Yes' },
+                  { value: 'no', label: 'No' },
                 ]}
                 placeholder="Select option"
                 label="Enable Portal?"
@@ -120,12 +119,7 @@ export default function CompanyInfoForm() {
                 label="Portal Language"
               />
 
-              <HrInput
-                name="documents"
-                type="file"
-                onChange={handleChange}
-                label="Documents"
-              />
+              <HrInput name="documents" type="file" onChange={handleChange} label="Documents" />
             </div>
 
             {/* Add More Details button (hide after click) */}
@@ -188,5 +182,5 @@ export default function CompanyInfoForm() {
         {/* <ToastContainer position="top-right" autoClose={3000} /> */}
       </div>
     </div>
-  );
+  )
 }

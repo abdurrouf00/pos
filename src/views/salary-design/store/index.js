@@ -18,70 +18,71 @@ export const getAllSalaryDesign = createAsyncThunk(
   "salaryDesign/getAllSalaryDesign",
   async () => {
     const result = axios
-      .get( "salary-design" )
-      .then( ( res ) => {
-        const resData = res.data?.data?.data?.map( ( item ) => ( {
+      .get("salary-design")
+      .then((res) => {
+        const resData = res.data?.data?.data?.map((item) => ({
           ...item,
-        } ) );
+        }));
         return resData;
-      } )
-      .catch( ( err ) => console.log( err ) );
+      })
+      .catch((err) => console.log(err));
     return result;
   }
 );
 
 export const addSalaryDesign = createAsyncThunk(
   "salaryDesign/addSalaryDesign",
-  async ( data ) => {
-    const res = await axios.post( "salary-design", data );
+  async (data) => {
+    const res = await axios.post("salary-design", data);
     return res.data;
   }
 );
 
 export const updateSalaryDesign = createAsyncThunk(
   "salaryDesign/updateSalaryDesign",
-  async ( data, { rejectWithValue } ) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post( `salary-design/${data?.id}`, {
-        ...data,
-        _method: "PUT",
-      } );
+      const res = await axios.put(`salary-design/${data?.id}`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       return res.data;
-    } catch ( err ) {
-      return rejectWithValue( err.response?.data );
+    } catch (err) {
+      return rejectWithValue(err.response?.data);
     }
   }
 );
 
 export const getSalaryDesignById = createAsyncThunk(
   "salaryDesign/getSalaryDesignById",
-  async ( id ) => {
+  async (id) => {
     const result = axios
-      .get( `salary-design/${id}` )
-      .then( ( res ) => {
-        console.log( res );
+      .get(`salary-design/${id}`)
+      .then((res) => {
+        console.log(res);
         return res.data.data;
-      } )
-      .catch( ( err ) => console.log( err ) );
+      })
+      .catch((err) => console.log(err));
     return result;
   }
 );
 
 export const deleteSalaryDesign = createAsyncThunk(
   "salaryDesign/deleteSalaryDesign",
-  async ( id ) => {
+  async (id) => {
     const result = axios
-      .delete( `salary-design/${id}` )
-      .then( ( res ) => {
-        console.log( res );
+      .delete(`salary-design/${id}`)
+      .then((res) => {
+        console.log(res);
         return res.data;
-      } )
-      .catch( ( err ) => console.log( err ) );
+      })
+      .catch((err) => console.log(err));
     return result;
   }
 );
 
-export const salaryDesignSlice = createSlice( {
+export const salaryDesignSlice = createSlice({
   name: "salaryDesign",
   initialState: {
     salaryDesignData: [],
@@ -90,45 +91,45 @@ export const salaryDesignSlice = createSlice( {
     mutationLoading: false,
   },
   reducers: {
-    bindSalaryDesignData: ( state, action ) => {
+    bindSalaryDesignData: (state, action) => {
       state.basicSalaryDesignData = action.payload || initialSalaryDesignData;
     },
   },
-  extraReducers: ( builder ) => {
+  extraReducers: (builder) => {
     builder
-      .addCase( getAllSalaryDesign.pending, ( state ) => {
+      .addCase(getAllSalaryDesign.pending, (state) => {
         state.loading = true;
-      } )
-      .addCase( getAllSalaryDesign.fulfilled, ( state, action ) => {
+      })
+      .addCase(getAllSalaryDesign.fulfilled, (state, action) => {
         state.salaryDesignData = action.payload;
         state.loading = false;
-      } )
-      .addCase( getAllSalaryDesign.rejected, ( state ) => {
+      })
+      .addCase(getAllSalaryDesign.rejected, (state) => {
         state.loading = false;
-      } )
-      .addCase( getSalaryDesignById.fulfilled, ( state, action ) => {
+      })
+      .addCase(getSalaryDesignById.fulfilled, (state, action) => {
         state.basicSalaryDesignData = action.payload;
-      } )
-      .addCase( addSalaryDesign.pending, ( state ) => {
+      })
+      .addCase(addSalaryDesign.pending, (state) => {
         state.mutationLoading = true;
-      } )
-      .addCase( addSalaryDesign.fulfilled, ( state ) => {
+      })
+      .addCase(addSalaryDesign.fulfilled, (state) => {
         state.mutationLoading = false;
-      } )
-      .addCase( addSalaryDesign.rejected, ( state ) => {
+      })
+      .addCase(addSalaryDesign.rejected, (state) => {
         state.mutationLoading = false;
-      } )
-      .addCase( updateSalaryDesign.pending, ( state ) => {
+      })
+      .addCase(updateSalaryDesign.pending, (state) => {
         state.mutationLoading = true;
-      } )
-      .addCase( updateSalaryDesign.fulfilled, ( state ) => {
+      })
+      .addCase(updateSalaryDesign.fulfilled, (state) => {
         state.mutationLoading = false;
-      } )
-      .addCase( updateSalaryDesign.rejected, ( state ) => {
+      })
+      .addCase(updateSalaryDesign.rejected, (state) => {
         state.mutationLoading = false;
-      } );
+      });
   },
-} );
+});
 
 export const { bindSalaryDesignData } = salaryDesignSlice.actions;
 

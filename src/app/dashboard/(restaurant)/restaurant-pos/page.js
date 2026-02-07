@@ -1,10 +1,10 @@
+import React from "react";
+import RestaurantPOSView from "@/views/restaurant-pos/page";
 
-import React from 'react'
-import RestaurantPos from '@/views/restaurant-pos/page'
-
-export default function RestaurantPosPage() {
+export default function RestaurantPOSPage() {
   return (
-    <RestaurantPos />
-  )
+    <div>
+      <RestaurantPOSView />
+    </div>
+  );
 }
-

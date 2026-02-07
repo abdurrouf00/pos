@@ -1,4 +1,5 @@
 import axios from '@/helpers/axios';
+import { getObjectWithValidValues } from '@/lib/utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const initialPayScaleData = {
@@ -8,12 +9,8 @@ export const initialPayScaleData = {
 }
 
 export const getAllPayScale = createAsyncThunk('payScale/getAllPayScale', async (params) => {
-    for (const key in params) {
-        if (params[key] === null || params[key] === '') {
-            delete params[key];
-        }
-    }
-    const url = new URLSearchParams(params);
+    const validParams = getObjectWithValidValues(params);
+    const url = new URLSearchParams(validParams);
     const api = `payScale?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {

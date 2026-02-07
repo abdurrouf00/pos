@@ -101,7 +101,11 @@ export default function EmployeeManagement({ employee }) {
   };
 
   useEffect(() => {
-    dispatch(getAllDepartment());
+    const deptParams = {
+      page: 1,
+      per_page: 100,
+    }
+    dispatch(getAllDepartment(deptParams));
 
   }, [])
 
@@ -109,6 +113,7 @@ export default function EmployeeManagement({ employee }) {
     dispatch(getAllEmployee(params));
   }
   useEffect(() => {
+    console.log("visibleTeam", visibleTeam);
     getEmployees(params);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleTeam]);

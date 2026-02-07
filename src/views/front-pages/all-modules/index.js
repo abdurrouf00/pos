@@ -143,8 +143,8 @@ const ModuleScreen = () => {
     const searchName = (nameMap[name] || name).toLowerCase().trim();
 
     const match = menus.find(m =>
-      m.menu_name.toLowerCase().trim() === searchName ||
-      m.menu_uid.toLowerCase().trim() === searchName
+      m.menu_name?.toLowerCase().trim() === searchName ||
+      m.menu_uid?.toLowerCase().trim() === searchName
     );
     return match?.id;
   };

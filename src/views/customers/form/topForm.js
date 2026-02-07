@@ -1,42 +1,41 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import HrInput from "@/components/common/HrInput";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react'
+import HrInput from '@/components/common/HrInput'
+import { Label } from '@/components/ui/label'
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
 export default function CustomerForm() {
   const [formData, setFormData] = useState({
-    customer_type: "Business",
-    name: "",
-    company_name: "",
-    display_name: "",
-    email: "",
-    phone: "",
-    mobile: "",
-  });
+    customer_type: 'Business',
+    name: '',
+    company_name: '',
+    display_name: '',
+    email: '',
+    phone: '',
+    mobile: '',
+  })
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const handleChange = e => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = e => {
+    e.preventDefault()
 
     // Basic validation
     if (!formData.name || !formData.email) {
-      setErrorMsg("Please fill required fields.");
-      return;
+      setErrorMsg('Please fill required fields.')
+      return
     }
 
-    setErrorMsg("");
-    console.log("Submitted Data:", formData);
+    setErrorMsg('')
     // toast.success("Customer Form Submitted!");
-  };
+  }
 
   return (
     <div className="  ">
@@ -53,7 +52,7 @@ export default function CustomerForm() {
                 type="radio"
                 name="customer_type"
                 value="Business"
-                checked={formData.customer_type === "Business"}
+                checked={formData.customer_type === 'Business'}
                 onChange={handleChange}
               />
               Business
@@ -63,7 +62,7 @@ export default function CustomerForm() {
                 type="radio"
                 name="customer_type"
                 value="Individual"
-                checked={formData.customer_type === "Individual"}
+                checked={formData.customer_type === 'Individual'}
                 onChange={handleChange}
               />
               Individual
@@ -73,28 +72,23 @@ export default function CustomerForm() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Customer Type */}
 
-
-
           <HrInput
             name="full_name"
             label="Primary Contact"
             value={formData.full_name}
             onChange={handleChange}
-
           />
           <HrInput
             name="company_name"
             label="Company Name"
             value={formData.company_name}
             onChange={handleChange}
-
           />
           <HrInput
             name="display_name"
             label="Display Name"
             value={formData.display_name}
             onChange={handleChange}
-
           />
           <HrInput
             name="email"
@@ -102,23 +96,17 @@ export default function CustomerForm() {
             type="email"
             value={formData.email}
             onChange={handleChange}
-
           />
           <HrInput
             name="phone"
             label="Phone / Mobile"
             value={formData.phone}
             onChange={handleChange}
-
           />
-
-
         </div>
-
-
       </div>
 
       {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </div>
-  );
-};
+  )
+}

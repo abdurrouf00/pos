@@ -1,100 +1,150 @@
-"use client";
-import HrInput from "@/components/common/HrInput";
-import HrSelect, { mapOptions } from "@/components/common/HrSelect";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+'use client'
+import HrInput from '@/components/common/HrInput'
+import HrSelect, { mapOptions } from '@/components/common/HrSelect'
+import { useGetAttendanceDevicesQuery } from '@/views/attendance-device/store'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
-  const dispatch = useDispatch();
-  const [formLoading, setFormLoading] = useState(false);
+  const dispatch = useDispatch()
+  const [formLoading, setFormLoading] = useState(false)
+  //attendance device data
+  const { data: attendanceDeviceData, isLoading: isLoadingAttendanceDevice } =
+    useGetAttendanceDevicesQuery()
+  console.log('attendanceDeviceData', attendanceDeviceData)
+  const { workingShiftData } = useSelector(state => state.workingShift)
+  const { designationData } = useSelector(state => state.designation)
+  const { departmentData } = useSelector(state => state.department)
+  const { employeeCategoryData } = useSelector(state => state.employeeCategory)
+  const { jobTypeData } = useSelector(state => state.jobType)
+  const { divisionData } = useSelector(state => state.division)
+  const { sectionData } = useSelector(state => state.section)
+  const { payScaleData } = useSelector(state => state.payScale)
+  const { paymentTypeData } = useSelector(state => state.paymentType)
+  const { projectData } = useSelector(state => state.project)
 
-  const { workingShiftData } = useSelector((state) => state.workingShift);
-  const { designationData } = useSelector((state) => state.designation);
-  const { departmentData } = useSelector((state) => state.department);
-  const { employeeCategoryData } = useSelector(
-    (state) => state.employeeCategory
-  );
-  const { jobTypeData } = useSelector((state) => state.jobType);
-  const { divisionData } = useSelector((state) => state.division);
-  const { sectionData } = useSelector((state) => state.section);
-  const { payScaleData } = useSelector((state) => state.payScale);
-  const { paymentTypeData } = useSelector((state) => state.paymentType);
-  const { projectData } = useSelector((state) => state.project);
-
+  const deviceOptions = mapOptions(attendanceDeviceData?.data?.data || [], 'device_name')
   return (
     <>
       <div className="relative items-center block   rounded-lg  dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-3  gap-4 w-full rounded-md p-2">
           <HrSelect
-            label="Working Shift"
-            name="working_shift"
-            value={basicEmployeeData?.working_shift ?? ""}
+            label="Working Shift 1"
+            name="working_shift_id"
+            value={basicEmployeeData?.working_shift_id ?? ''}
             onChange={handleChange}
             placeholder="Select working shift"
             options={mapOptions(workingShiftData)}
+            error={errors?.working_shift_id && !basicEmployeeData?.working_shift_id}
           />
-          <HrInput
+          <HrSelect
+            label="Working Shift 2"
+            name="working_shift_id_2"
+            value={basicEmployeeData?.working_shift_id_2 ?? ''}
+            onChange={handleChange}
+            placeholder="Select working shift"
+            options={mapOptions(workingShiftData)}
+            error={errors?.working_shift_id_2 && !basicEmployeeData?.working_shift_id_2}
+          />
+          <HrSelect
+            label="Working Shift 3"
+            name="working_shift_id_3"
+            value={basicEmployeeData?.working_shift_id_3 ?? ''}
+            onChange={handleChange}
+            placeholder="Select working shift"
+            options={mapOptions(workingShiftData)}
+            error={errors?.working_shift_id_3 && !basicEmployeeData?.working_shift_id_3}
+          />
+          <HrSelect
+            label="Working Shift 4"
+            name="working_shift_id_4"
+            value={basicEmployeeData?.working_shift_id_4 ?? ''}
+            onChange={handleChange}
+            placeholder="Select working shift"
+            options={mapOptions(workingShiftData)}
+            error={errors?.working_shift_id_4 && !basicEmployeeData?.working_shift_id_4}
+          />
+          <HrSelect
+            label="Working Shift 5"
+            name="working_shift_id_5"
+            value={basicEmployeeData?.working_shift_id_5 ?? ''}
+            onChange={handleChange}
+            placeholder="Select working shift"
+            options={mapOptions(workingShiftData)}
+            error={errors?.working_shift_id_5 && !basicEmployeeData?.working_shift_id_5}
+          />
+          <HrSelect
+            label="Working Shift 6"
+            name="working_shift_id_6"
+            value={basicEmployeeData?.working_shift_id_6 ?? ''}
+            onChange={handleChange}
+            placeholder="Select working shift"
+            options={mapOptions(workingShiftData)}
+            error={errors?.working_shift_id_6 && !basicEmployeeData?.working_shift_id_6}
+          />
+          <HrSelect
             label="Device ID"
             name="device_id"
-            value={basicEmployeeData?.device_id ?? ""}
+            value={basicEmployeeData?.device_id ?? ''}
             onChange={handleChange}
-            type="number"
+            // type="number"
             placeholder="Enter device ID"
+            options={deviceOptions}
+            error={errors?.device_id && !basicEmployeeData?.device_id}
           />
           <HrInput
             label="Device EMP ID"
             name="device_emp_id"
-            value={basicEmployeeData?.device_emp_id ?? ""}
+            value={basicEmployeeData?.device_emp_id ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter device EMP ID"
+            error={errors?.device_emp_id && !basicEmployeeData?.device_emp_id}
           />
           <HrInput
             label="Serial Number"
             name="serial_number"
-            value={basicEmployeeData?.serial_number ?? ""}
+            value={basicEmployeeData?.serial_number ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter serial number"
+            error={errors?.serial_number && !basicEmployeeData?.serial_number}
           />
           <HrSelect
             label="Current Status"
             name="current_status"
-            value={basicEmployeeData?.current_status ?? ""}
+            value={basicEmployeeData?.current_status ?? ''}
             onChange={handleChange}
             placeholder="Select current status"
             options={[
-              { value: "0", label: "Inactive" },
-              { value: "1", label: "Active" },
-              { value: "2", label: "Resigned" },
+              { value: '0', label: 'Inactive' },
+              { value: '1', label: 'Active' },
+              { value: '2', label: 'Resigned' },
             ]}
+            error={errors?.current_status && !basicEmployeeData?.current_status}
           />
           <HrSelect
             label="Designation"
             name="designation_id"
-            value={basicEmployeeData?.designation_id ?? ""}
+            value={basicEmployeeData?.designation_id ?? ''}
             onChange={handleChange}
             placeholder="Select designation"
             options={mapOptions(designationData)}
-            aria-invalid={
-              errors?.designation_id && !basicEmployeeData?.designation_id
-            }
+            aria-invalid={errors?.designation_id && !basicEmployeeData?.designation_id}
           />
           <HrSelect
             label="Department"
             name="department_id"
-            value={basicEmployeeData?.department_id ?? ""}
+            value={basicEmployeeData?.department_id ?? ''}
             onChange={handleChange}
             placeholder="Select department"
             options={mapOptions(departmentData)}
-            aria-invalid={
-              errors?.department_id && !basicEmployeeData?.department_id
-            }
+            aria-invalid={errors?.department_id && !basicEmployeeData?.department_id}
           />
           <HrSelect
             label="Employee Category"
             name="employee_category"
-            value={basicEmployeeData?.employee_category ?? ""}
+            value={basicEmployeeData?.employee_category ?? ''}
             onChange={handleChange}
             placeholder="Select employee category"
             options={mapOptions(employeeCategoryData)}
@@ -102,7 +152,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrSelect
             label="Job Type"
             name="job_type"
-            value={basicEmployeeData?.job_type ?? ""}
+            value={basicEmployeeData?.job_type ?? ''}
             onChange={handleChange}
             placeholder="Select job type"
             options={mapOptions(jobTypeData)}
@@ -110,7 +160,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Proximity Card Number"
             name="proximit_card_number"
-            value={basicEmployeeData?.proximit_card_number ?? ""}
+            value={basicEmployeeData?.proximit_card_number ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter proximit card number"
@@ -118,29 +168,29 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrSelect
             label="Bonous Activation"
             name="bonous_activation"
-            value={basicEmployeeData?.bonous_activation ?? ""}
+            value={basicEmployeeData?.bonous_activation ?? ''}
             onChange={handleChange}
             placeholder="Enter bonnous activation"
             options={[
-              { value: "Yes", label: "Yes" },
-              { value: "No", label: "No" },
+              { value: 'Yes', label: 'Yes' },
+              { value: 'No', label: 'No' },
             ]}
           />
           <HrSelect
             label="PF Status"
             name="pf_status"
-            value={basicEmployeeData?.pf_status ?? ""}
+            value={basicEmployeeData?.pf_status ?? ''}
             onChange={handleChange}
             placeholder="Select pf status"
             options={[
-              { value: 0, label: "Active" },
-              { value: 1, label: "Inactive" },
+              { value: 0, label: 'Active' },
+              { value: 1, label: 'Inactive' },
             ]}
           />
           <HrSelect
             label="Project"
             name="project_id"
-            value={basicEmployeeData?.project_id ?? ""}
+            value={basicEmployeeData?.project_id ?? ''}
             onChange={handleChange}
             placeholder="Select project"
             options={mapOptions(projectData)}
@@ -148,7 +198,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrSelect
             label="Division"
             name="division_id"
-            value={basicEmployeeData?.division_id ?? ""}
+            value={basicEmployeeData?.division_id ?? ''}
             onChange={handleChange}
             placeholder="Select division"
             options={mapOptions(divisionData)}
@@ -156,7 +206,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrSelect
             label="Section"
             name="section"
-            value={basicEmployeeData?.section ?? ""}
+            value={basicEmployeeData?.section ?? ''}
             onChange={handleChange}
             placeholder="Select section"
             options={mapOptions(sectionData)}
@@ -164,7 +214,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Location"
             name="location"
-            value={basicEmployeeData?.location ?? ""}
+            value={basicEmployeeData?.location ?? ''}
             onChange={handleChange}
             placeholder="Enter location"
           />
@@ -172,7 +222,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Cost Center"
             name="cost_center"
-            value={basicEmployeeData?.cost_center ?? ""}
+            value={basicEmployeeData?.cost_center ?? ''}
             onChange={handleChange}
             placeholder="Enter cost center"
             type="number"
@@ -180,14 +230,14 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Previous Company"
             name="previous_company"
-            value={basicEmployeeData?.previous_company ?? ""}
+            value={basicEmployeeData?.previous_company ?? ''}
             onChange={handleChange}
             placeholder="Enter previous company"
           />
           <HrInput
             label="Investment Amount"
             name="investment_amount"
-            value={basicEmployeeData?.investment_amount ?? ""}
+            value={basicEmployeeData?.investment_amount ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter investment amount"
@@ -195,7 +245,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Other TDS"
             name="others_tds"
-            value={basicEmployeeData?.others_tds ?? ""}
+            value={basicEmployeeData?.others_tds ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter other tds"
@@ -203,7 +253,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Ait Car"
             name="ait_car"
-            value={basicEmployeeData?.ait_car ?? ""}
+            value={basicEmployeeData?.ait_car ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter ait card number"
@@ -211,7 +261,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Joinning Date"
             name="joining_date"
-            value={basicEmployeeData?.joining_date ?? ""}
+            value={basicEmployeeData?.joining_date ?? ''}
             onChange={handleChange}
             type="date"
             placeholder="Enter joining date"
@@ -219,11 +269,11 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrSelect
             label="Pay Scale"
             name="pay_scale"
-            value={basicEmployeeData?.pay_scale ?? ""}
+            value={basicEmployeeData?.pay_scale ?? ''}
             onChange={handleChange}
             placeholder="Select pay scale"
           >
-            {payScaleData?.map((item) => (
+            {payScaleData?.map(item => (
               <option key={item.id} value={item.id}>
                 {item.name}
               </option>
@@ -232,18 +282,16 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Basic Salary"
             name="basic_salary"
-            value={basicEmployeeData?.basic_salary ?? ""}
+            value={basicEmployeeData?.basic_salary ?? ''}
             onChange={handleChange}
             placeholder="Enter basic salary"
             type="number"
-            aria-invalid={
-              errors?.basic_salary && !basicEmployeeData?.basic_salary
-            }
+            aria-invalid={errors?.basic_salary && !basicEmployeeData?.basic_salary}
           />
           <HrSelect
             label="Payment Type"
             name="payment_type_id"
-            value={basicEmployeeData?.payment_type_id ?? ""}
+            value={basicEmployeeData?.payment_type_id ?? ''}
             onChange={handleChange}
             placeholder="Select payment type"
             options={mapOptions(paymentTypeData)}
@@ -251,18 +299,18 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrSelect
             label="Over Time Limit"
             name="has_overtime"
-            value={basicEmployeeData?.has_overtime ?? ""}
+            value={basicEmployeeData?.has_overtime ?? ''}
             onChange={handleChange}
             placeholder="Select over time limit"
             options={[
-              { value: "1", label: "Yes" },
-              { value: "0", label: "No" },
+              { value: '1', label: 'Yes' },
+              { value: '0', label: 'No' },
             ]}
           />
           <HrInput
             label="Overtime Rate"
             name="overtime_rate"
-            value={basicEmployeeData?.overtime_rate ?? ""}
+            value={basicEmployeeData?.overtime_rate ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter overtime rate"
@@ -270,7 +318,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
           <HrInput
             label="Minimum Overtime Minutes"
             name="min_overtime_minutes"
-            value={basicEmployeeData?.min_overtime_minutes ?? ""}
+            value={basicEmployeeData?.min_overtime_minutes ?? ''}
             onChange={handleChange}
             type="number"
             placeholder="Enter minimum overtime minutes"
@@ -302,7 +350,7 @@ const OfficialInfo = ({ basicEmployeeData, handleChange, loading, errors }) => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default OfficialInfo;
+export default OfficialInfo

@@ -11,14 +11,14 @@ const ImportBox = (props) => {
 
   useEffect(() => {
     return () => {
-        setFile(null);
+      setFile(null);
     };
   }, []);
 
   const handleOnChange = (e) => {
     const { files } = e.target;
     if (files.length > 0) {
-        setFile(files[0]);
+      setFile(files[0]);
     }
   };
 
@@ -26,13 +26,13 @@ const ImportBox = (props) => {
     const formData = new FormData();
     formData.append(`emp_file`, file);
     dispatch(handleImportFunction(formData))
-    .then((res) => {
-        if(res.error){
-            return;
-        }else{
-            setOpenForm(false);
+      .then((res) => {
+        if (res.error) {
+          return;
+        } else {
+          setOpenForm(false);
         }
-    })
+      })
   };
 
   const download = (filePath) => {
@@ -40,6 +40,7 @@ const ImportBox = (props) => {
     link.href = filePath;
     link.setAttribute('download', filePath.split('/').pop());
     document.body.appendChild(link);
+    link.target = '_blank'
     link.click();
     document.body.removeChild(link);
   };
@@ -60,9 +61,11 @@ const ImportBox = (props) => {
         <div className="grid gap-4">
           <div className="gap-4">
             <Button
-                className="rounded-none bg-slate-500 h-[30px] mb-2"
-                onClick={() => {downloadExample()}}
-            >Download Example</Button>
+              className="rounded-none bg-slate-500 h-[30px] mb-2"
+              onClick={() => { downloadExample() }}
+            >
+              Download Example
+            </Button>
             <HrInput
               name="file"
               label="Upload Files"
@@ -77,7 +80,7 @@ const ImportBox = (props) => {
           <Button
             className="rounded-none h-7"
             // disabled={loading}
-            onClick={() => {handleOnSubmit()}}
+            onClick={() => { handleOnSubmit() }}
           >
             Submit
           </Button>

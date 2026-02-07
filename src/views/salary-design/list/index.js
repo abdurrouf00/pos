@@ -15,44 +15,44 @@ import { salaryDesignColumn } from "./salaryDesignColumn";
 
 
 export default function SalaryDesignList() {
-  const [editId, setEditId] = useState( null );
+  const [editId, setEditId] = useState(null);
   const { salaryDesignData, loading } = useSelector(
-    ( { salaryDesign } ) => salaryDesign
+    ({ salaryDesign }) => salaryDesign
   );
   const dispatch = useDispatch();
-  const [openForm, setOpenForm] = useState( false );
-  const [confirmOpen, setConfirmOpen] = useState( false );
-  const [confirmData, setConfirmData] = useState( {
+  const [openForm, setOpenForm] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmData, setConfirmData] = useState({
     title: "",
     message: "",
     onConfirm: () => { },
-  } );
+  });
 
-  const handleDelete = ( rowData ) => {
-    setConfirmOpen( true );
-    setConfirmData( {
+  const handleDelete = (rowData) => {
+    setConfirmOpen(true);
+    setConfirmData({
       title: "Delete Salary Design",
       message: "Are you sure you want to delete this salary design?",
-      onConfirm: () => handleDeleteConfirm( rowData ),
-    } );
+      onConfirm: () => handleDeleteConfirm(rowData),
+    });
   };
 
-  const handleDeleteConfirm = ( row ) => {
-    confirmDialog( confirmObj ).then( async ( e ) => {
-      if ( e.isConfirmed ) {
-        const toastId = toast.loading( "Deleting..." );
-        const res = await dispatch( deleteSalaryDesign( row.id ) ).unwrap();
-        console.log( "Response from deleteLeaveType:", res );
-        if ( res.success ) {
-          toast.dismiss( toastId );
-          toast.success( "Deleted successfully" );
-          dispatch( getAllSalaryDesign() );
+  const handleDeleteConfirm = (row) => {
+    confirmDialog(confirmObj).then(async (e) => {
+      if (e.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        const res = await dispatch(deleteSalaryDesign(row.id)).unwrap();
+        console.log("Response from deleteLeaveType:", res);
+        if (res.success) {
+          toast.dismiss(toastId);
+          toast.success("Deleted successfully");
+          dispatch(getAllSalaryDesign());
         } else {
-          toast.dismiss( toastId );
-          toast.error( "Failed to delete" );
+          toast.dismiss(toastId);
+          toast.error("Failed to delete");
         }
       }
-    } );
+    });
 
 
     // dispatch( deleteSalaryDesign( rowData?.id ) ).then( ( res ) => {
@@ -61,20 +61,21 @@ export default function SalaryDesignList() {
     // } );
   };
 
-  const handleInfo = ( rowData ) => {
-    setEditId( rowData?.id )
-    setOpenForm( true )
+  const handleInfo = (rowData) => {
+    console.log('rowData', rowData)
+    setEditId(rowData?.id)
+    setOpenForm(true)
   };
 
-  useEffect( () => {
-    dispatch( getAllSalaryDesign() );
-  }, [] );
+  useEffect(() => {
+    dispatch(getAllSalaryDesign());
+  }, []);
 
   const extraField = () => {
     return (
       <div>
         <div
-          onClick={() => setOpenForm( true )}
+          onClick={() => setOpenForm(true)}
           className="border flex items-center gap-2 py-1 px-3 cursor-pointer rounded-sm bg-[#e0ecfe] text-[#227BF6] text-[14px] font-[400]"
         >
           <FaCirclePlus />
@@ -83,7 +84,7 @@ export default function SalaryDesignList() {
       </div>
     );
   };
-  console.log( 'list render' )
+  console.log('list render')
 
   return (
     <>
@@ -92,7 +93,7 @@ export default function SalaryDesignList() {
           <div className="p-2 bg-white shadow-lg w-full">
             <DataTable
               data={salaryDesignData}
-              columns={salaryDesignColumn( handleDeleteConfirm, handleInfo )}
+              columns={salaryDesignColumn(handleDeleteConfirm, handleInfo)}
               globalFilterFields={["name", "design_details", "action"]}
               emptyMessage="No salary designs found."
               rowsPerPageOptions={[5, 10, 25, 50, 100, 500]}
@@ -110,7 +111,7 @@ export default function SalaryDesignList() {
       )}
       <Confirm
         open={confirmOpen}
-        onClose={() => setConfirmOpen( false )}
+        onClose={() => setConfirmOpen(false)}
         onConfirm={confirmData.onConfirm}
         title={confirmData.title}
         message={confirmData.message}

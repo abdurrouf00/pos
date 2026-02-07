@@ -1,13 +1,13 @@
  import React from "react";
- import ChartOfAccountsHeader from "@/views/chartOfAccounts/list/index"
-  import ChartOfAccountsTable from "@/views/chartOfAccounts/list/table"
+ import List from "@/views/chartOfAccounts/list/index"
+
 
  export default function ChartOfAccountsPage(){
     return(
 
         <div>
-            <ChartOfAccountsHeader />
-            <ChartOfAccountsTable/>
+            <List />
+            {/* <ChartOfAccountsTable/> */}
 
         </div>
     )

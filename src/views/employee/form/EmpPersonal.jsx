@@ -15,9 +15,12 @@ const PersonalInfo = ({ basicEmployeeData, handleChange, loading }) => {
     const loadAllData = async () => {
       setFormLoading(true);
       try {
-        await Promise.all([
-          dispatch(getAllEmployee(basicEmployeeData?.department_id)),
-        ]);
+        const params = {
+          page: 1,
+          per_page: 1000,
+          department_id: basicEmployeeData?.department_id,
+        };
+        await Promise.all([dispatch(getAllEmployee(params))]);
       } finally {
         setFormLoading(false);
       }

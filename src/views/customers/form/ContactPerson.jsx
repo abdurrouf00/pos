@@ -1,58 +1,57 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Trash2 } from "lucide-react";
-import HrInput from "@/components/common/HrInput";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import HrInput from '@/components/common/HrInput'
+import { Button } from '@/components/ui/button'
 
 export default function TeamTableForm() {
   const [rows, setRows] = useState([
     {
-      firstName: "",
-      lastName: "",
-      email: "",
-      workPhone: "",
-      mobile: "",
-      skype: "",
-      designation: "",
-      department: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      workPhone: '',
+      mobile: '',
+      skype: '',
+      designation: '',
+      department: '',
     },
-  ]);
+  ])
 
   const handleChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedRows = [...rows];
-    updatedRows[index][name] = value;
-    setRows(updatedRows);
-  };
+    const { name, value } = e.target
+    const updatedRows = [...rows]
+    updatedRows[index][name] = value
+    setRows(updatedRows)
+  }
 
   const addRow = () => {
     setRows([
       ...rows,
       {
-        firstName: "",
-        lastName: "",
-        email: "",
-        workPhone: "",
-        mobile: "",
-        skype: "",
-        designation: "",
-        department: "",
+        firstName: '',
+        lastName: '',
+        email: '',
+        workPhone: '',
+        mobile: '',
+        skype: '',
+        designation: '',
+        department: '',
       },
-    ]);
-  };
+    ])
+  }
 
-  const removeRow = (index) => {
-    const updatedRows = [...rows];
-    updatedRows.splice(index, 1);
-    setRows(updatedRows);
-  };
+  const removeRow = index => {
+    const updatedRows = [...rows]
+    updatedRows.splice(index, 1)
+    setRows(updatedRows)
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Team Members:", rows);
-    alert("Form Submitted!");
-  };
+  const handleSubmit = e => {
+    e.preventDefault()
+    alert('Form Submitted!')
+  }
 
   return (
     <div onSubmit={handleSubmit} className=" bg-white space-y-4">
@@ -79,7 +78,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="firstName"
                   value={row.firstName}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -87,7 +86,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="lastName"
                   value={row.lastName}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -96,7 +95,7 @@ export default function TeamTableForm() {
                   name="email"
                   type="email"
                   value={row.email}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -104,7 +103,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="workPhone"
                   value={row.workPhone}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -112,7 +111,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="mobile"
                   value={row.mobile}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -120,7 +119,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="skype"
                   value={row.skype}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -128,7 +127,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="designation"
                   value={row.designation}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -136,7 +135,7 @@ export default function TeamTableForm() {
                 <HrInput
                   name="department"
                   value={row.department}
-                  onChange={(e) => handleChange(index, e)}
+                  onChange={e => handleChange(index, e)}
                   className="w-full"
                 />
               </td>
@@ -153,5 +152,5 @@ export default function TeamTableForm() {
         </tbody>
       </table>
     </div>
-  );
+  )
 }

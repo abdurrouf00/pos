@@ -1,0 +1,95 @@
+[
+  {
+    "id": 1,
+    "code": "IT001",
+    "name": "massage chair",
+    "category": "massage",
+    "time": "10 minutis",
+    "price": 149,
+    "image": "/img/15.png"
+  },
+  {
+    "id": 2,
+    "code": "IT002",
+    "name": "massage chair",
+    "category": "massage",
+    "time": "15 minutis",
+    "price": 199,
+    "image": "/img/30.png"
+  },
+  {
+    "id": 3,
+    "code": "IT003",
+    "name": "massage chair",
+    "category": "massage",
+    "time": "30 minutis",
+    "price": 299,
+    "image": "/img/60.png"
+  },
+  {
+    "id": 4,
+    "code": "IT004",
+    "name": " Single pack -1 ",
+    "category": "coin",
+    "price": 50,
+    "stock": 9,
+    "image": "/img/coin1.jpg"
+  },
+  {
+    "id": 5,
+    "code": "IT005",
+    "name": "Star pack -12",
+    "category": "coin",
+    "price": 120,
+    "stock": 111,
+    "image": "/img/coin2.webp"
+  },
+  {
+    "id": 6,
+    "code": "IT006",
+    "name": "Magic Pack -20",
+    "category": "coin",
+    "price": 800,
+    "stock": 41,
+    "image": "/img/magic.jpg"
+  },
+  {
+    "id": 7,
+    "code": "IT007",
+    "name": "Champion pack -25",
+    "category": "coin",
+    "price": 1000,
+    "stock": 8,
+    "image": "/img/champion.jpg"
+  },
+  {
+    "id": 8,
+    "code": "IT008",
+    "name": "Happy Hour Pack",
+    "time": "60 minutis",
+    "category": "ticket",
+    "price": 350,
+    "stock": 9,
+    "image": "/img/ticket.jpg"
+  },
+  {
+    "id": 11,
+    "code": "IT009",
+    "name": "adventure Pack",
+    "time": "90 minutis",
+    "category": "ticket",
+    "price": 400,
+    "stock": 9,
+    "image": "/img/ticket2.jpg"
+  },
+  {
+    "id": 12,
+    "code": "IT010",
+    "name": "adventure Pack",
+    "time": "Full Day",
+    "category": "ticket",
+    "price":500,
+    "stock": 9,
+    "image": "/img/ticket3.jpg"
+  }
+]

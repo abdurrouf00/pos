@@ -1,4 +1,5 @@
 import axios from '@/helpers/axios';
+import { getObjectWithValidValues } from '@/lib/utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const initialProjectData = {
@@ -6,8 +7,11 @@ export const initialProjectData = {
     name: ""
 }
 
-export const getAllProjects = createAsyncThunk('project/getAllProjects', async () => {
-    const result = axios.get("project")
+export const getAllProjects = createAsyncThunk('project/getAllProjects', (params) => {
+    const validParams = getObjectWithValidValues(params);
+    const url = new URLSearchParams(validParams);
+    const api = `project?${url.toString()}`;
+    const result = axios.get(api)
         .then((res) => {
             console.log('project data from redux', res.data.data.data)
             return res.data.data.data;
@@ -16,7 +20,7 @@ export const getAllProjects = createAsyncThunk('project/getAllProjects', async (
     return result;
 })
 
-export const addProject = createAsyncThunk('section/addProject', async (data) => {
+export const addProject = createAsyncThunk('section/addProject', (data) => {
     const result = axios.post("project", data)
         .then((res) => {
             console.log('section submitted data from redux', res)
@@ -26,7 +30,7 @@ export const addProject = createAsyncThunk('section/addProject', async (data) =>
     return result;
 })
 
-export const updateProject = createAsyncThunk('section/updateProject', async (data) => {
+export const updateProject = createAsyncThunk('section/updateProject', (data) => {
     const result = axios.post(`project/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             console.log('section submitted data from redux', res)
@@ -36,7 +40,7 @@ export const updateProject = createAsyncThunk('section/updateProject', async (da
     return result;
 })
 
-export const getProjectById = createAsyncThunk('section/getProjectById', async (id) => {
+export const getProjectById = createAsyncThunk('section/getProjectById', (id) => {
     const result = axios.get(`project/${id}`)
         .then((res) => {
             console.log(res)
@@ -46,7 +50,7 @@ export const getProjectById = createAsyncThunk('section/getProjectById', async (
     return result;
 })
 
-export const deleteProject = createAsyncThunk('section/deleteProject', async (id) => {
+export const deleteProject = createAsyncThunk('section/deleteProject', (id) => {
     const result = axios.delete(`project/${id}`)
         .then((res) => {
             console.log(res)

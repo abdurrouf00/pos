@@ -1,37 +1,42 @@
-"use client";
-import { logout } from "@/app/actions/auth";
-import { setMenus, setUser } from "@/lib/redux/userSlice";
-import { clearLocalStorage } from "@/lib/utils";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { MdDashboard } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
-import SecondHeader from "./SecondHeader";
+'use client'
+import { logout } from '@/app/actions/auth'
+import { setMenus, setUser } from '@/lib/redux/userSlice'
+import { clearLocalStorage } from '@/lib/utils'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { MdDashboard } from 'react-icons/md'
+import { useDispatch, useSelector } from 'react-redux'
+import SecondHeader from './SecondHeader'
+import { Settings } from 'lucide-react'
+import { Button } from '../ui/button'
 
 export default function Header({ sidebarOpen, setSidebarOpen }) {
-  const dispatch = useDispatch();
-  const [mounted, setMounted] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch()
+  const [mounted, setMounted] = useState(false)
+  const { user } = useSelector(state => state.user)
   // const [user, setUser] = useState({ name: "N/A", role: { name: "N/A" } });
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const router = useRouter();
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
+  const router = useRouter()
 
   const handleLogout = async () => {
-    await logout();
-    router.push("/auth/login");
-    dispatch(setUser(null));
-    dispatch(setMenus([]));
-    clearLocalStorage();
-  };
+    await logout()
+    router.push('/auth/login')
+    dispatch(setUser(null))
+    dispatch(setMenus([]))
+    clearLocalStorage()
+  }
+  const handleSettings = () => {
+    router.push('/organization/modules')
+  }
 
   useEffect(() => {
-    setMounted(true);
+    setMounted(true)
     // setUser(userData ?? { name: "N/A", role: { name: "N/A" } });
-  }, []);
+  }, [])
 
   if (!mounted) {
-    return null;
+    return null
   }
   return (
     <header className="z-10 sticky top-0">
@@ -65,24 +70,15 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
               <img src="/logo.png" alt="HR360" className="h-14" />
             </div>
             <Link href="/organization/modules" className="relative">
-              <MdDashboard
-                size={30}
-                color="#0E9DF9"
-                className="cursor-pointer"
-              />
+              <MdDashboard size={30} color="#0E9DF9" className="cursor-pointer" />
             </Link>
           </div>
 
           {/* Right side icons */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Search button - hidden on mobile */}
-            <div className="hidden sm:flex p-2 text-gray-500 hover:text-gray-600 rounded-md bg-white border text-sm">
-              <input
-                type="text"
-                className="outline-none  rounded-sm border-[#0e9df9] px-1"
-                placeholder="Search anything..."
-              />
-            </div>
+            <Button variant="outline" size="sm" onClick={handleSettings}>
+              <Settings size={16} /> Settings
+            </Button>
 
             {/* <button className="relative">
               <img src="/comment-icon.png" />
@@ -104,13 +100,13 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
               >
                 <div className="text-end">
                   <span className="hidden md:block ml-2 text-xs  text-black">
-                    {user ? user?.name : "N/A"}
+                    {user ? user?.name : 'N/A'}
                   </span>
                   <span className="hidden md:block ml-2 text-[0.6rem]  text-neutral-500">
-                    {user ? user?.role?.name : "N/A"}
+                    {user?.role?.name || user?.role || 'N/A'}
                   </span>
                 </div>
-                <div className="ml-2 size-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                <div className="ml-2 size-8 rounded-full bg-blue-500 flex items-center justify-center text-white cursor-pointer">
                   {user?.name?.charAt(0)}
                 </div>
                 {/* <svg xmlns="http://www.w3.org/2000/svg" className="hidden md:block h-4 w-4 ml-1 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
@@ -146,5 +142,5 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
       </div>
       <SecondHeader />
     </header>
-  );
+  )
 }

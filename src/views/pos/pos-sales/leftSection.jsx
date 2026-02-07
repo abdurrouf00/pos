@@ -1,0 +1,346 @@
+'use client'
+import { UserPlus } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import HrInput from '@/components/common/HrInput'
+import HrSelect from '@/components/common/HrSelect'
+import { Button } from '@/components/ui/button'
+
+export default function SalesReturnTopSection({
+  formData,
+  handleChange,
+  holdSales,
+  setShowHoldList,
+  setOpenCustomer,
+  productsData,
+  handleAddItem,
+  items,
+  increaseQty,
+  decreaseQty,
+  handleItemChange,
+  removeItem,
+  //Summary Props
+  totalQty,
+  total,
+  subtotal,
+  handleHoldSale,
+  setopenPayment,
+  setopenMulitplePayment,
+  descount,
+  setOpenDiscount,
+  handlePayAll,
+}) {
+  // search
+  const [searchText, setSearchText] = useState('')
+  const [showList, setShowList] = useState(false)
+  const searchRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowList(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  return (
+    <div className="flex-[2] bg-white p-4 border rounded">
+      {/* ====================TOP ====================== */}
+      <div className="flex justify-between items-center gap-4 ">
+        <div className="grid grid-cols-4 gap-3 mb-4">
+          <HrSelect
+            label="Sales Man"
+            name="salesperson"
+            value={formData.salesperson}
+            onChange={handleChange}
+            placeholder="Select Salesman"
+            options={[
+              { value: 'Salesman A', label: 'Salesman A' },
+              { value: 'Salesman B', label: 'Salesman B' },
+            ]}
+          />
+          <div className="flex items-end gap-1">
+            <HrSelect
+              label="Sales Man"
+              name="customer"
+              value={formData.customer}
+              onChange={handleChange}
+              placeholder="Select customer"
+              options={[
+                { value: 'customer A', label: 'customer A' },
+                { value: 'customer customer', label: 'customer B' },
+              ]}
+            />
+
+            
+
+            <button
+              type="button"
+              onClick={() => setOpenCustomer(true)}
+              className="border bg-sky-50 p-2 rounded"
+            >
+              <UserPlus />
+            </button>
+          </div>
+
+          <HrInput
+            label="Sales Date"
+            type="date"
+            name="salesdate"
+            value={formData.salesdate}
+            onChange={handleChange}
+          />
+
+          <HrInput
+          label="Gurdian Name"
+          name="gurdianName"
+          value={formData.gurdianName}
+          onChange={handleChange}
+          placeholder="Enter Gurdian Name"
+          />
+
+          <HrInput
+          label="Contact Number"
+          name="contactNumber"
+          value={formData.contactNumber}
+          onChange={handleChange}
+          placeholder="Enter Contact Number"
+          />
+          <HrInput
+          label="Kids Name"
+          name="kidsName"
+          value={formData.kidsName}
+          onChange={handleChange}
+          placeholder="Enter Kids Name"
+          />
+          <HrInput
+          label="Kids Age"
+          name="kidsAge"
+          value={formData.kidsAge}
+          onChange={handleChange}
+          placeholder="Enter Kids Age"
+          />
+
+          <HrInput 
+          label="Total Crowd"
+          name="totalCrowd"
+          value={formData.totalCrowd}
+          onChange={handleChange}
+          placeholder="Enter Total Crowd"
+          />
+
+
+
+        </div>
+        {/* ==================== hold LoanList=================== */}
+        <button
+          onClick={() => setShowHoldList(true)}
+          className="relative bg-yellow-300 text-white px-3 py-3 w-27 border rounded text-sm"
+        >
+          Hold List
+          {holdSales.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-600 text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {holdSales.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* =======================search bar======================= */}
+      <div className="mb-3 relative" ref={searchRef}>
+        <HrInput
+          placeholder="Scan barcode or search item..."
+          value={searchText}
+          onChange={(e) => {
+            const value = e.target.value
+            setSearchText(value)
+            setShowList(true)
+
+            // Auto-add when exact code match found (for barcode scanner)
+            if (value.trim()) {
+              const exactCodeMatch = productsData.find(
+                (p) => p.code?.toLowerCase() === value.toLowerCase().trim()
+              )
+              if (exactCodeMatch) {
+                handleAddItem(exactCodeMatch)
+                setSearchText('')
+                setShowList(false)
+              }
+            }
+          }}
+          onFocus={() => {
+            if (searchText) {
+              setShowList(true)
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              const searchTerm = searchText.toLowerCase().trim()
+
+              // First try exact code match
+              const exactCodeMatch = productsData.find(
+                (p) => p.code?.toLowerCase() === searchTerm
+              )
+
+              if (exactCodeMatch) {
+                handleAddItem(exactCodeMatch)
+                setSearchText('')
+                setShowList(false)
+                return
+              }
+
+              // Then try name match - add first filtered item
+              const filtered = productsData.filter(
+                (p) =>
+                  p.name.toLowerCase().includes(searchTerm) ||
+                  p.code?.toLowerCase().includes(searchTerm)
+              )
+              if (filtered.length > 0) {
+                handleAddItem(filtered[0])
+                setSearchText('')
+                setShowList(false)
+              }
+            }
+          }}
+        />
+
+        {showList && searchText && (
+          <div className="absolute left-0 top-full w-full bg-white border border-gray-300 shadow-lg z-10 max-h-60 overflow-y-auto">
+            {productsData
+              .filter((p) => {
+                const searchTerm = searchText.toLowerCase().trim()
+                return (
+                  p.name.toLowerCase().includes(searchTerm) ||
+                  p.code?.toLowerCase().includes(searchTerm)
+                )
+              })
+              .map((p) => (
+                <div
+                  key={p.id}
+                  className="p-2 cursor-pointer hover:bg-sky-100 border-b border-gray-100"
+                  onClick={() => {
+                    handleAddItem(p)
+                    setSearchText('')
+                    setShowList(false)
+                  }}
+                >
+                  <span className="text-gray-800">
+                    {p.code} --{p.name}
+                  </span>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+
+      {/* ======================= ITEMS TABLE ======================= */}
+      <div className="border rounded overflow-x-auto h-80">
+        <table className="w-full border text-sm table-fixed">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border p-2 w-36">Item</th>
+              <th className="border p-2 ">Qty</th>
+              <th className="border p-2 ">Rate</th>              
+              <th className="border p-2 ">Amount</th>
+              <th className="border p-2 ">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, idx) => (
+              <tr key={idx}>
+                <td className="border p-1 text-center">
+                  <p>{item.name}</p>
+                </td>
+
+                <td className=" p-3 flex gap-2 justify-center items-center text-center border">
+                  <button
+                    onClick={() => decreaseQty(idx)}
+                    className="border rounded-full px-1.5 bg-sky-100"
+                  >
+                    -
+                  </button>
+
+                  <p>{item.qty}</p>
+
+                  <button
+                    onClick={() => increaseQty(idx)}
+                    className="border rounded-full px-1.5 bg-sky-100"
+                  >
+                    +
+                  </button>
+                </td>
+
+                <td className="border p-1 text-center">
+                  <p>{item.rate}</p>
+                </td>              
+
+                <td className="border p-1 text-center">
+                  {item.amount.toFixed(2)}
+                </td>
+
+                <td className="border p-1 text-center">
+                  <button
+                    onClick={() => removeItem(idx)}
+                    className="bg-red-500 text-white px-2 rounded"
+                  >
+                    ❌
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+        {/* SUMMARY */}
+      <div className="flex flex-col justify-around border-2 p-4 mt-4 rounded">
+      <div className="flex justify-around  p-4 rounded">
+        <div>
+          <p className='border-2 p-2 rounded broder-black '>Quantity: {totalQty}</p>  
+        </div>
+        <div className="cursor-pointer border-2 p-1 rounded transition-colors" onClick={() => setOpenDiscount(true)}>
+          <p>Edit Discount: {descount.toFixed(2)}</p>         
+        </div>
+        <div>
+          <p className='border-2 p-2 rounded  '>Subtotal: {subtotal.toFixed(2)}</p>         
+        </div>
+
+        <div>
+          <p className='border-2 p-2 rounded  '>Grand Total: {total.toFixed(2)} </p>
+          </div>
+      </div>
+
+
+
+
+      <div  className="flex  justify-around   rounded">
+
+
+        <div>
+          {/* <p>Quantity</p>
+          <p>{totalQty}</p> */}
+          <Button onClick={handleHoldSale}>Hold</Button>
+        </div>
+        <div>
+          {/* <p>Total Amount</p>
+          <p>{total.toFixed(2)}</p> */}
+          <Button onClick={() => setopenMulitplePayment(true)}>Multiple</Button>
+        </div>
+
+        <div>
+          {/* <p>Discount</p>
+          <p>{descount.toFixed(2)}</p> */}
+          <Button onClick={() => setopenPayment(true)}>Cash</Button>
+        </div>
+        <div>
+          {/* <p>Grand Total</p>
+          <p> {total.toFixed(2)} </p> */}
+          <Button onClick={handlePayAll}>Pay All</Button>
+        </div>
+              </div>
+              </div>
+    </div>
+  )
+}

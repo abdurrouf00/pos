@@ -1,0 +1,84 @@
+[
+  {
+    "id": 1,
+    "code": "IT001",
+    "name": "Lemon Juice",
+    "category": "Drinks",
+    "price": 120,
+    "stock": 111,
+    "image": "/img/lemon.jpg"
+  },
+  {
+    "id": 2,
+    "code": "IT002",
+    "name": "Mango Juice",
+    "category": "Drinks",
+    "price": 110,
+    "stock": 41,
+    "image": "/img/mango.jpg"
+  },
+  {
+    "id": 3,
+    "code": "IT003",
+    "name": "Mango Milk Shake",
+    "category": "Drinks",
+    "price": 300,
+    "stock": 8,
+    "image": "/img/mango-milk.webp"
+  },
+  {
+    "id": 4,
+    "code": "IT004",
+    "name": "Mint Lemon Juice",
+    "category": "Toy",
+    "price": 120,
+    "stock": 9,
+    "image": "/img/mint-lemon-juice.jpg"
+  },
+  {
+    "id": 5,
+    "code": "IT005",
+    "name": "Orenge Juice",
+    "category": "Drinks",
+    "price": 120,
+    "stock": 111,
+    "image": "/img/orange.webp"
+  },
+  {
+    "id": 6,
+    "code": "IT006",
+    "name": "Papaya Juice",
+    "category": "Drinks",
+    "price": 110,
+    "stock": 41,
+    "image": "/img/papaya.jpg"
+  },
+  {
+    "id": 7,
+    "code": "IT007",
+    "name": "Spicy Lemon Juice",
+    "category": "Drinks",
+    "price": 300,
+    "stock": 8,
+    "image": "/img/spicy-lemon.jpg"
+  },
+    {
+    "id": 8,
+    "code": "IT004",
+    "name": "Toy",
+    "category": "Toy",
+    "price": 120,
+    "stock": 9,
+    "image": "/img/images.jpg"
+  },
+  
+  {
+    "id": 18,
+    "code": "IT012",
+    "name": "FRESH WATER 3",
+    "category": "Toy",
+    "price": 120,
+    "stock": 9,
+    "image": "/img/untitled.jpg"
+  }
+]

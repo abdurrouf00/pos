@@ -43,6 +43,7 @@ export default function OverTime() {
                         <tr className='bg-gray-100 text-sm text-left'>
                           <th className='px-2 py-1 '>Employee </th>
                           <th className='px-2 py-1 '>Type</th>
+                          <th className='px-2 py-1 '>Overtime hours</th>
                           <th className='px-2 py-1 '>Remarks</th>
                         </tr>
                       </thead>
@@ -53,6 +54,7 @@ export default function OverTime() {
                               <tr key={index} className='text-sm border border-gray-50'>
                                 <td className='px-2 py-1 '>{detail?.employee?.name}</td>
                                 <td className='px-2 py-1 '>{detail?.attendance_type?.name}</td>
+                                <td className='px-2 py-1 '>{detail?.overtime_hourly}</td>
                                 <td className='px-2 py-1 '>{detail?.remarks ?? "-"}</td>
                               </tr>
                             )

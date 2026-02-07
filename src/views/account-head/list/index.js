@@ -57,8 +57,6 @@ export default function AccountHeadList() {
   };
   return (
     <div>
-
-      {/* <Button onClick={handleNew}>New</Button> */}
       <div className="flex gap-3">
         <div className="w-full">
           <div className="p-2 bg-white shadow-lg w-full">

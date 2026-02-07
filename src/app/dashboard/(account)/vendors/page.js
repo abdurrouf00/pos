@@ -1,14 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import VendorsHeader from '@/views/vendors/list/index';
-import VendorsTable from '@/views/vendors/list/table';
+import VendorsHeader from '@/views/vendors/list/index'
+import VendorsTable from '@/views/vendors/list/table'
 
 export default function VendorPage() {
-  return(   
+  return (
     <div>
-        <VendorsHeader />
-        <VendorsTable />    
+      <VendorsHeader />
+      {/* <VendorsTable />     */}
     </div>
-
-    )   
+  )
 }

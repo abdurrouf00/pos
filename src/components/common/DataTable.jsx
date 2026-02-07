@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { DataTable as PrimeDataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
-import PropTypes from "prop-types";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
+"use client";
 import { ChevronDown, ChevronRight, Search } from "lucide-react";
+import { Column } from "primereact/column";
+import { DataTable as PrimeDataTable } from "primereact/datatable";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import TableSkeleton from "../ui/TableSkeleton";
 
 const DataTable = ({

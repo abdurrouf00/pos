@@ -1,62 +1,62 @@
-"use client";
+'use client'
 
-import HrInput from "@/components/common/HrInput";
-import React, { useState } from "react";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import HrInput from '@/components/common/HrInput'
+import React, { useState } from 'react'
+import { FaPlus, FaTimes } from 'react-icons/fa'
 
 const allColumns = [
-  "Notes",
-  "Terms and Conditions",
-  "Currency",
-  "Accepted Date",
-  "Declined Date",
-  "Approved By",
-  "Billing Street 2",
-  "Billing City",
-  "Billing State",
-  "Billing Code",
-  "Billing Country",
-  "Billing Fax",
-  "Shipping Address Attention",
-  "Shipping Street 1",
-  "Shipping Street 2",
-  "Shipping State",
-];
+  'Notes',
+  'Terms and Conditions',
+  'Currency',
+  'Accepted Date',
+  'Declined Date',
+  'Approved By',
+  'Billing Street 2',
+  'Billing City',
+  'Billing State',
+  'Billing Code',
+  'Billing Country',
+  'Billing Fax',
+  'Shipping Address Attention',
+  'Shipping Street 1',
+  'Shipping Street 2',
+  'Shipping State',
+]
 
 export default function ColumnSelector() {
-  const [available, setAvailable] = useState(allColumns);
+  const [available, setAvailable] = useState(allColumns)
   const [selected, setSelected] = useState([
-    "Status",
-    "Quote Date",
-    "Expiry Date",
-    "Quote#",
-    "Reference#",
-    "Customer Name",
-    "Shipping Country",
-    "Shipping City",
-    "Shipping Fax",
-    "Shipping Code",
-    "Billing Street 1",
-    "Billing Address Attention",
-  ]);
-  const [search, setSearch] = useState("");
+    'Status',
+    'Quote Date',
+    'Expiry Date',
+    'Quote#',
+    'Reference#',
+    'Customer Name',
+    'Shipping Country',
+    'Shipping City',
+    'Shipping Fax',
+    'Shipping Code',
+    'Billing Street 1',
+    'Billing Address Attention',
+  ])
+  const [search, setSearch] = useState('')
 
   // সার্চ ফিল্টার
-  const filteredAvailable = available.filter((col) =>
-    col.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredAvailable = available.filter(col =>
+    col?.toLowerCase().includes(search?.toLowerCase())
+  )
 
   // Add
-  const addColumn = (col) => {
-    setAvailable(available.filter((c) => c !== col));
-    setSelected([...selected, col]);
-  };
+  const addColumn = col => {
+    setAvailable(available.filter(c => c !== col))
+    setSelected([...selected, col])
+  }
 
   // Remove
-  const removeColumn = (col) => {
-    setSelected(selected.filter((c) => c !== col));
-    setAvailable([...available, col]);
-  };
+  const removeColumn = col => {
+    setSelected(selected.filter(c => c !== col))
+    setAvailable([...available, col])
+  }
 
   return (
     <div className="flex gap-8 p-6 mb-30">
@@ -67,7 +67,7 @@ export default function ColumnSelector() {
           type="text"
           placeholder="Search"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={e => setSearch(e.target.value)}
           className="border rounded px-2 py-1 mb-2 w-full"
         />
         <ul className="h-80 overflow-y-auto text-sm">
@@ -111,5 +111,5 @@ export default function ColumnSelector() {
         </ul>
       </div>
     </div>
-  );
+  )
 }

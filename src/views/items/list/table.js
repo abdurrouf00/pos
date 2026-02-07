@@ -1,17 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import RRR from "./index"; // যদি খালি থাকে দেখাতে চাই
+import RRR, { itemColumn } from "./index"; // যদি খালি থাকে দেখাতে চাই
+import DataTable from "@/components/common/DataTable";
+import Link from "next/link";
+import { FaCirclePlus } from "react-icons/fa6";
+import ProductSalesPurchaseForm from "../form";
+import { useDeleteItemMutation, useGetItemsQuery } from "../store";
+import toast from "react-hot-toast";
+import { confirmDialog, confirmObj } from "@/lib/utils";
 
 export default function ItemsTable() {
-  const [items, setItems] = useState([]);
   const [selected, setSelected] = useState([]);
-
+  const [openForm, setOpenForm] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [deleteItem, { isLoading: isDeletingItem }] = useDeleteItemMutation();
+  const { data: items, isLoading: isLoadingItems } = useGetItemsQuery();
+  console.log('items', items);
   // Load items from localStorage
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("submittedItems") || "[]");
-    setItems(stored);
-  }, []);
+
 
   // Checkbox toggle
   const handleCheckbox = (index) => {
@@ -29,20 +36,50 @@ export default function ItemsTable() {
     }
   };
 
-  // Delete selected rows
-  const handleDelete = () => {
-    if (!confirm("Are you sure you want to delete selected items?")) return;
-    const updated = items.filter((_, index) => !selected.includes(index));
-    setItems(updated);
-    localStorage.setItem("submittedItems", JSON.stringify(updated));
-    setSelected([]);
-  };
+  const handleDelete = (rowData) => {
+    confirmDialog(confirmObj).then(async (e) => {
+      if (e.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        deleteItem(rowData?.id).then(res => {
+          if (res?.data?.success) {
+            toast.dismiss(toastId);
+            toast.success("Deleted successfully");
+          } else {
+            toast.dismiss(toastId);
+            toast.error("Failed to delete");
+          }
+        })
 
+
+      }
+    });
+
+  };
   // Show RRR if no items
   // if (items.length === 0) return <RRR />;
+  const extraField = () => {
+    return (
+      <div className="flex items-center gap-2">
+
+
+        <button onClick={() => setOpenForm(true)} className="border flex items-center gap-2 py-1 px-3 cursor-pointer rounded-sm bg-[#e0ecfe] text-[#227BF6] text-[14px] font-[400]">
+          <FaCirclePlus />
+          New
+        </button>
+
+
+      </div>
+    );
+  };
+
+  const handleDetails = (rowData) => {
+    setOpenForm(true);
+    setEditId(rowData?.id);
+  }
+
 
   return (
-    <div className="p-5 max-w-7xl mx-auto bg-white rounded shadow">
+    <div className="p-5  bg-white rounded shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Items List</h2>
         {selected.length > 0 && (
@@ -55,53 +92,27 @@ export default function ItemsTable() {
         )}
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border text-sm">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="border p-2 w-10 text-center">
-                <input
-                  type="checkbox"
-                  onChange={handleSelectAll}
-                  checked={selected.length === items.length && items.length > 0}
-                />
-              </th>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Purchase Description</th>
-              <th className="border p-2">Purchase Rate</th>
-              <th className="border p-2">Description</th>
-              <th className="border p-2">Selling Price</th>
-              <th className="border p-2">Usage Unit</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {items.map((item, index) => (
-              <tr
-                key={index}
-                className={`text-center hover:bg-gray-50 ${selected.includes(index) ? "bg-blue-50" : ""
-                  }`}
-              >
-                <td className="border p-2">
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(index)}
-                    onChange={() => handleCheckbox(index)}
-                  />
-                </td>
-                <td className="border p-2">{item.product.name}</td>
-                <td className="border p-2">
-                  {item.purchase?.purchaseDescription || "-"}
-                </td>
-                <td className="border p-2">{item.purchase?.costPrice || "-"}</td>
-                <td className="border p-2">{item.sales?.salesDescription || "-"}</td>
-                <td className="border p-2">{item.sales?.sellingPrice || "-"}</td>
-                <td className="border p-2">{item.product.unit}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="overflow-x-auto w-full">
+        <DataTable
+          data={items?.data?.data}
+          columns={itemColumn(handleDetails, handleDelete)}
+          emptyMessage="No items found."
+          rowsPerPageOptions={[5, 10, 25, 50, 100, 500]}
+          showGlobalFilter={true}
+          globalFilterPlaceholder="Type here to search..."
+          extraField={extraField()}
+          className="custom_datatable"
+        // onPage={handlePage}
+        // rows={perPage}
+        // loading={loading}
+        // page={currentPage}
+        // first={firstRow}
+        // totalRecords={totalPages}
+        // lazy
+        // paginator
+        />
       </div>
+      {openForm && <ProductSalesPurchaseForm toggle={openForm} setOpenForm={setOpenForm} editId={editId} setEditId={setEditId} />}
     </div>
   );
 }

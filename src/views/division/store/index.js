@@ -1,4 +1,5 @@
 import axios from '@/helpers/axios';
+import { getObjectWithValidValues } from '@/lib/utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const initialDivisionData = {
@@ -6,8 +7,11 @@ export const initialDivisionData = {
     name: ""
 }
 
-export const getAllDivisions = createAsyncThunk('division/getAllDivisions', async () => {
-    const result = axios.get("division")
+export const getAllDivisions = createAsyncThunk('division/getAllDivisions', async (params) => {
+    const validParams = getObjectWithValidValues(params);
+    const url = new URLSearchParams(validParams);
+    const api = `division?${url.toString()}`;
+    const result = axios.get(api)
         .then((res) => {
             console.log('division data from redux', res.data.data.data)
             return res.data.data.data;

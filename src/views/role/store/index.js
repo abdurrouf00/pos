@@ -117,8 +117,8 @@ export const roleSlice = createSlice({
                 state.isLoadingPermissions = true;
             })
             .addCase(getRoleAccess.fulfilled, (state, action) => {
-                state.permissions = action.payload.data.accesses.accesses_uid;
-                state.menus = action.payload.data.menus;
+                state.permissions = action.payload?.data?.accesses?.accesses_uid || [];
+                state.menus = action.payload?.data?.menus || [];
                 state.isLoadingPermissions = false;
             })
             .addCase(getRoleAccess.rejected, (state, action) => {
