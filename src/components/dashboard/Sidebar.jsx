@@ -11,7 +11,7 @@ import { MdDashboard } from 'react-icons/md'
 import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import Date from '@/data/menus.json'
+
 
 
 const activeClass = 'bg-blue-500/10 text-blue-900 font-bold '
@@ -32,8 +32,7 @@ const MenuSkeleton = () => {
 }
 
 export default function Sidebar({ open, setOpen }) {
-  //const { menus } = useSelector(state => state.user)
-  const [menus, setMenus] = useState(Date);
+  const { menus } = useSelector(state => state.user)
   const pathname = usePathname()
   const [expandedMenus, setExpandedMenus] = useState({})
   const [menuItems, setMenuItems] = useState([])

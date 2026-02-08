@@ -11,7 +11,8 @@ const ModuleScreen = () => {
 
   const modules = [
     {
-      name: "Common Setings",
+      name: "Settings",
+      label: "Common Setings",
       icon: (
         <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="10" y="14" width="44" height="36" rx="6" fill="#282560" />
@@ -88,7 +89,7 @@ const ModuleScreen = () => {
       )
     },
     {
-      name: "HRM",
+      name: "Hrm",
        label: "Employee",
       icon: (
         <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -111,7 +112,7 @@ const ModuleScreen = () => {
       )
     },
     {
-      name: "Gaming POS",      
+      name: "Game Zone Pos",      
       icon: (
         <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="14" y="10" width="36" height="44" rx="6" fill="#282560" />
@@ -129,16 +130,9 @@ const ModuleScreen = () => {
   };
 
   const getMenuId = (name) => {
-    // Hardcode critical module IDs to ensure access even if API/State issues occur
-    if (name === "Restaurant POS") return 420;
-    if (name === "Gaming POS") return 4040;
-    
     if (!menus) return null;
     const nameMap = {
-      "Accounts": "Accounting",
-      "Payroll": "Pay Roll",
-      "HRM": "Employee",
-      "POS": "POS" // Ensure matches standard POS if named differently in JSON
+     
     };
     const searchName = (nameMap[name] || name).toLowerCase().trim();
 
