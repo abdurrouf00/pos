@@ -4,6 +4,7 @@ import EntryLeftSection from './ticketCouter'
 import PriceCalculationSection from '../priceCalculate'
 import SalesReturnModals from '../model/index'
 import toast from 'react-hot-toast'
+import packages from './packege.json'
 
 export default function CounterSales  ()  {
   const [items, setItems] = useState([])
@@ -13,6 +14,7 @@ export default function CounterSales  ()  {
   // Lifted form states
   const [mobileNo, setMobileNo] = useState('')
   const [couponCode, setCouponCode] = useState('')
+  const [kidsName, setKidsName] = useState('')
   const [qtyInput, setQtyInput] = useState(1)
   
   // Visit History States
@@ -40,49 +42,66 @@ export default function CounterSales  ()  {
   }
 
 
-  // Add Item Handler
-  const handleAddItem = (product, qty = 1) => {
-    let newItems = [...items]
-    const existingIndex = newItems.findIndex((item) => item.id === product.id)
-    
-    if (existingIndex >= 0) {
-      // Update existing item
-      const updatedQty = newItems[existingIndex].qty + qty
-      newItems[existingIndex].qty = updatedQty
-      
-      // Special Pricing for Socks: First is free, others 50 each
-      if (product.type === 'sock') {
-        newItems[existingIndex].amount = (updatedQty - 1) * 50
-      } else {
-        newItems[existingIndex].amount = updatedQty * newItems[existingIndex].price
-      }
+const handleAddItem = (product, qty = 1) => {
+  let newItems = [...items]
+
+  // same product + same free/paid sock আলাদা ধরা
+  const existingIndex = newItems.findIndex(
+    item => item.id === product.id && item.isFree === product.isFree
+  )
+
+  // ---------------------------
+  // 1️⃣ ADD / UPDATE PRODUCT
+  // ---------------------------
+  if (existingIndex >= 0) {
+    newItems[existingIndex].qty += qty
+    newItems[existingIndex].amount =
+      newItems[existingIndex].type === 'sock'
+        ? (newItems[existingIndex].isFree ? 0 : newItems[existingIndex].qty * newItems[existingIndex].price)
+        : newItems[existingIndex].qty * newItems[existingIndex].price
+  } else {
+    newItems.push({
+      ...product,
+      qty,
+      tax: 0,
+      amount:
+        product.type === 'sock'
+          ? (product.isFree ? 0 : product.price * qty)
+          : product.price * qty
+    })
+  }
+
+  // ---------------------------
+  // 2️⃣ Ticket / Massage → FREE SOCK
+  // ---------------------------
+  if (product.type === 'ticket' || product.type === 'massage') {
+    const sockIndex = newItems.findIndex(
+      i => i.type === 'sock' && i.isFree === true
+    )
+
+    if (sockIndex >= 0) {
+      newItems[sockIndex].qty += qty
     } else {
-      // Add new item
-      const newItem = {
-        ...product,
+      const sockPkg = packages.find(p => p.type === 'sock') || { id: 12, name: 'Sock', price: 50, type: 'sock' }
+      newItems.push({
+        id: sockPkg.id,
+        name: `${sockPkg.name} (Free)`,
+        price: 0,
+        mrp: sockPkg.price,
         qty: qty,
         tax: 0,
-        amount: product.id === 'sock' ? (qty - 1) * 50 : product.price * qty,
-      }
-      newItems.push(newItem)
+        amount: 0,
+        code: 'FREE-SOCK',
+        type: 'sock',
+        isFree: true
+      })
     }
-
-    // TRIGGER: If adding ANY product that is NOT a sock, ensure at least 1 free sock exists
-    if (product.type !== 'sock' && !newItems.find(i => i.type === 'sock')) {
-        newItems.push({
-            id: 12, // Using the ID from packege.json
-            name: 'Sock',
-            price: 50,
-            qty: 1,
-            tax: 0,
-            amount: 0, // First one is free
-            code: 'SOCK-12',
-            type: 'sock'
-        })
-    }
-    
-    setItems(newItems)
   }
+
+  setItems(newItems)
+}
+
+
 
   const removeItem = (index) => {
     const updatedItems = items.filter((_, i) => i !== index)
@@ -404,6 +423,8 @@ export default function CounterSales  ()  {
         // Form states
         mobileNo={mobileNo}
         setMobileNo={setMobileNo}
+        kidsName={kidsName}
+        setKidsName={setKidsName}
         couponCode={couponCode}
         setCouponCode={setCouponCode}
         qtyInput={qtyInput}
