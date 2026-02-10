@@ -13,12 +13,12 @@ export const initialSalaryDesignData = {
     { ...initialHead }
   ],
 };
-
+const salaryDesignApi = 'payroll/salary-designs'
 export const getAllSalaryDesign = createAsyncThunk(
   "salaryDesign/getAllSalaryDesign",
   async () => {
     const result = axios
-      .get("salary-design")
+      .get(salaryDesignApi)
       .then((res) => {
         const resData = res.data?.data?.data?.map((item) => ({
           ...item,
@@ -33,7 +33,7 @@ export const getAllSalaryDesign = createAsyncThunk(
 export const addSalaryDesign = createAsyncThunk(
   "salaryDesign/addSalaryDesign",
   async (data) => {
-    const res = await axios.post("salary-design", data);
+    const res = await axios.post(salaryDesignApi, data);
     return res.data;
   }
 );
@@ -42,7 +42,7 @@ export const updateSalaryDesign = createAsyncThunk(
   "salaryDesign/updateSalaryDesign",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`salary-design/${data?.id}`, data, {
+      const res = await axios.put(`${salaryDesignApi}/${data?.id}`, data, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -58,7 +58,7 @@ export const getSalaryDesignById = createAsyncThunk(
   "salaryDesign/getSalaryDesignById",
   async (id) => {
     const result = axios
-      .get(`salary-design/${id}`)
+      .get(`${salaryDesignApi}/${id}`)
       .then((res) => {
         console.log(res);
         return res.data.data;
@@ -72,7 +72,7 @@ export const deleteSalaryDesign = createAsyncThunk(
   "salaryDesign/deleteSalaryDesign",
   async (id) => {
     const result = axios
-      .delete(`salary-design/${id}`)
+      .delete(`${salaryDesignApi}/${id}`)
       .then((res) => {
         console.log(res);
         return res.data;

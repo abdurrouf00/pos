@@ -187,7 +187,7 @@ export default function InvoiceForm() {
             />
           </div>
           {/* Submit Button */}
-          <div className="flex fixed bottom-4 right-10 items-center  ">
+          <div className="flex fixed bottom-0 w-[82%] items-center shadow-lg h-28 md:h-12 gap-8 bg-gray-200 rounded sm:px-4 md:px-6 z-50">
             <Button type="submit">Save Invoice</Button>
           </div>
         </form>
@@ -306,12 +306,12 @@ export default function InvoiceForm() {
       </div>
 
       {/* Terms & Conditions */}
-      <div className="grid grid-cols-2  gap-4 mb-10">
+      <div className="grid grid-cols-2  gap-4">
         <textarea placeholder="Customer Notes" className="w-full h-24 border rounded p-2" />
 
         <textarea
           placeholder="Terms & Conditions"
-          className="w-full h-24 border rounded  p-2 "
+          className="w-full h-24 border rounded  p-2"
         />
       </div>
     </div>

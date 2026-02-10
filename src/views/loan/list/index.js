@@ -46,6 +46,7 @@ export default function LoanList() {
 
   const handleInfo = (rowData) => {
     setOpenForm(true);
+    console.log('rowData', rowData)
     setEditId(rowData?.id);
   };
 

@@ -8,10 +8,11 @@ export const initialPayScaleData = {
     salary_to: 0
 }
 
+const payScaleApi = 'settings/pay-scales';
 export const getAllPayScale = createAsyncThunk('payScale/getAllPayScale', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `payScale?${url.toString()}`;
+    const api = `${payScaleApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
             console.log('pay scale data from redux', res.data.data.data)
@@ -22,7 +23,7 @@ export const getAllPayScale = createAsyncThunk('payScale/getAllPayScale', async 
 })
 
 export const addPayScale = createAsyncThunk('payScale/addPayScale', async (data) => {
-    const result = axios.post("payScale", data)
+    const result = axios.post(payScaleApi, data)
         .then((res) => {
             console.log('payScale submitted data from redux', res)
             return res;
@@ -32,7 +33,7 @@ export const addPayScale = createAsyncThunk('payScale/addPayScale', async (data)
 })
 
 export const updatePayScale = createAsyncThunk('payScale/updatePayScale', async (data) => {
-    const result = axios.post(`payScale/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${payScaleApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             console.log('payScale submitted data from redux', res)
             return res;
@@ -42,7 +43,7 @@ export const updatePayScale = createAsyncThunk('payScale/updatePayScale', async 
 })
 
 export const getPayScaleById = createAsyncThunk('payScale/getPayScaleById', async (id) => {
-    const result = axios.get(`payScale/${id}`)
+    const result = axios.get(`${payScaleApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;
@@ -52,7 +53,7 @@ export const getPayScaleById = createAsyncThunk('payScale/getPayScaleById', asyn
 })
 
 export const deletePayScale = createAsyncThunk('payScale/deletePayScale', async (id) => {
-    const result = axios.delete(`payScale/${id}`)
+    const result = axios.delete(`${payScaleApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;

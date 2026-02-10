@@ -12,8 +12,6 @@ import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { useSelector } from 'react-redux'
 
-
-
 const activeClass = 'bg-blue-500/10 text-blue-900 font-bold '
 
 const MenuSkeleton = () => {
@@ -46,11 +44,6 @@ export default function Sidebar({ open, setOpen }) {
     setIsBrowser(true)
   }, [])
 
-  const createLink = menu_name => {
-    const arr = menu_name.split(' ')
-    const link = arr.map(item => item.toLowerCase()).join('-')
-    return `/dashboard/${link}`
-  }
   // Fetch menu data only on client side
   useEffect(() => {
     if (isBrowser) {
@@ -58,7 +51,7 @@ export default function Sidebar({ open, setOpen }) {
         const moduleId = getLocal('moduleId')
         const moduleUid = moduleId ? moduleId : null
         const formattedMenuItems = menus
-          ?.filter(ff => ff.menu_name && ff.menu_name !== 'Dashboard')
+          ?.filter(ff => ff.menu_name !== 'Dashboard')
           ?.filter(mm => mm.id === moduleUid)
           ?.map(dd => {
             return {

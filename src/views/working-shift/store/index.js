@@ -13,10 +13,12 @@ export const initialWorkingShiftData = {
     after_allowed_minutes: ""
 }
 
+const workingShiftApi = 'settings/working-shifts';
+
 export const getAllWorkingShifts = createAsyncThunk('workingShift/getAllWorkingShifts', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `workingShift?${url.toString()}`;
+    const api = `${workingShiftApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
             return res.data.data.data;
@@ -26,7 +28,7 @@ export const getAllWorkingShifts = createAsyncThunk('workingShift/getAllWorkingS
 })
 
 export const addWorkingShift = createAsyncThunk('workingShift/addWorkingShift', async (data) => {
-    const result = axios.post("workingShift", data)
+    const result = axios.post(workingShiftApi, data)
         .then((res) => {
             console.log('working shift submitted data from redux', res)
             return res;
@@ -36,7 +38,7 @@ export const addWorkingShift = createAsyncThunk('workingShift/addWorkingShift', 
 })
 
 export const updateWorkingShift = createAsyncThunk('workingShift/updateWorkingShift', async (data) => {
-    const result = axios.post(`workingShift/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${workingShiftApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             return res;
         })
@@ -45,7 +47,7 @@ export const updateWorkingShift = createAsyncThunk('workingShift/updateWorkingSh
 })
 
 export const getWorkingShiftById = createAsyncThunk('workingShift/getWorkingShiftById', async (id) => {
-    const result = axios.get(`workingShift/${id}`)
+    const result = axios.get(`${workingShiftApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })
@@ -54,7 +56,7 @@ export const getWorkingShiftById = createAsyncThunk('workingShift/getWorkingShif
 })
 
 export const deleteWorkingShift = createAsyncThunk('workingShift/deleteWorkingShift', async (id) => {
-    const result = axios.delete(`workingShift/${id}`)
+    const result = axios.delete(`${workingShiftApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })

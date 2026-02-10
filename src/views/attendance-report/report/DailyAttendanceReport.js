@@ -48,7 +48,6 @@ export default function DailyAttendanceReport() {
                     <th className='px-2 py-1 '>Duration</th>
                     <th className='px-2 py-1 '>In Time</th>
                     <th className='px-2 py-1 '>Out Time</th>
-                    <th>Overtime hours</th>
                     {/* <th className='px-2 '>Total</th> */}
                     <th className='px-2 '>Type</th>
                   </tr>
@@ -67,7 +66,6 @@ export default function DailyAttendanceReport() {
                       </td>
                       <td className='px-2 py-1 '>{detail.in_time}</td>
                       <td className='px-2 py-1 '>{detail.out_time}</td>
-                      <td className='px-2 py-1 '>{detail.overtime_hourly}</td>
                       <td className='px-2 py-1 '>{detail.attendance_type.name}</td>
                     </tr>
                   ))}

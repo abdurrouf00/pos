@@ -1,9 +1,10 @@
-import DashboardLayout from "@/components/layouts/DashboardLayout";
-import ManualAttendanceForm from "@/views/manual-attendance/form";
-import React from "react";
+import DashboardLayout from '@/components/layouts/DashboardLayout'
+import ManualAttendanceForm from '@/views/manual-attendance/form'
+import React from 'react'
 
 function page() {
-  return <ManualAttendanceForm />;
+  //
+  return <ManualAttendanceForm />
 }
 
-export default page;
+export default page

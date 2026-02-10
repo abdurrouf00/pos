@@ -1,13 +1,13 @@
 import axios from "@/helpers/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
+const salarySheetApi = 'payroll/salary-sheets'  
 
 export const getAllSalarySheet = createAsyncThunk(
   "salarySheet/getAllSalarySheet",
   async () => {
     const result = axios
-      .get("salary-sheet")
+      .get(salarySheetApi)
       .then((res) => {
         const resData = res.data?.data?.data?.map((item) => ({
           ...item,
@@ -22,7 +22,7 @@ export const getAllSalarySheet = createAsyncThunk(
 export const updateSalarySheetDetails = createAsyncThunk(
   "salarySheet/updateSalarySheet",
   async (data) => {
-    const res = await axios.post(`salary-sheet/revise`, data);
+    const res = await axios.post(`${salarySheetApi}/revise`, data);
     return res.data;
   }
 );
@@ -30,7 +30,7 @@ export const updateSalarySheetDetails = createAsyncThunk(
 export const addSalarySheet = createAsyncThunk(
   "salaryHead/generate-salary-sheet",
   async (data) => {
-    const res = await axios.post("generate-salary-sheet", data);
+    const res = await axios.post(`${salarySheetApi}/generate`, data);
     return res.data;
   }
 );
@@ -39,7 +39,7 @@ export const updateSalarySheet = createAsyncThunk(
   "salarySheet/updateSalarySheet",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`salary-sheet/${data?.id}`, {
+      const res = await axios.post(`${salarySheetApi}/${data?.id}`, {
         ...data,
         _method: "PUT",
       });
@@ -54,7 +54,7 @@ export const getSalarySheetById = createAsyncThunk(
   "salarySheet/getSalarySheetById",
   async (id) => {
     const result = axios
-      .get(`salary-sheet/${id}`)
+      .get(`${salarySheetApi}/${id}`)
       .then((res) => {
         console.log(res);
         return res.data.data;
@@ -68,7 +68,7 @@ export const deleteSalarySheet = createAsyncThunk(
   "salarySheet/deleteSalarySheet",
   async (id) => {
     const result = axios
-      .delete(`salary-sheet/${id}`)
+      .delete(`${salarySheetApi}/${id}`)
       .then((res) => {
         console.log(res);
         return res.data.data;
@@ -80,7 +80,7 @@ export const deleteSalarySheet = createAsyncThunk(
 export const getPaySlip = createAsyncThunk(
   "salarySheet/getPaySlip",
   async (payload) => {
-    const res = await axios.get(`salary-sheet/pay-slip/${payload.id}/${payload.emp_id}`);
+    const res = await axios.get(`${salarySheetApi}/pay-slip/${payload.id}`);
     return res.data?.data;
   }
 );

@@ -5,9 +5,7 @@ const EmployeeTabs = ({ activeTab, setActiveTab, tabs }) => {
         <button
           key={i}
           className={`px-4 py-2 text-sm font-medium border-b-2  ${
-            activeTab === i
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent"
+            activeTab === i ? 'border-blue-600 text-blue-600' : 'border-transparent'
           } cursor-pointer`}
           onClick={() => setActiveTab(i)}
         >
@@ -15,7 +13,7 @@ const EmployeeTabs = ({ activeTab, setActiveTab, tabs }) => {
         </button>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default EmployeeTabs;
+export default EmployeeTabs

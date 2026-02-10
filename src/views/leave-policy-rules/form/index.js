@@ -49,7 +49,7 @@ export default function FormModal({ open, setOpen, editId, setEditId }) {
     }
   }, [leavePolicyRuleData]);
 
-  console.log('leavePolicyRuleData', leavePolicyRuleData);
+
 
   const [addLeavePolicyRule, { isLoading: addLeavePolicyRuleLoading }] = useAddLeavePolicyRuleMutation();
   const [updateLeavePolicyRule, { isLoading: updateLeavePolicyRuleLoading }] = useUpdateLeavePolicyRuleMutation();
@@ -65,8 +65,8 @@ export default function FormModal({ open, setOpen, editId, setEditId }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const submitData = {
-      leave_policy_group_id: +form.leave_policy_group_id,
-      leave_type_id: +form.leave_type_id,
+      leave_policy_group_id: form.leave_policy_group_id,
+      leave_type_id: form.leave_type_id,
       allocation: +form.allocation,
       is_carry_forward: form.is_carry_forward ? 1 : 0,
       carry_forward_limit: +form.carry_forward_limit,
@@ -78,9 +78,8 @@ export default function FormModal({ open, setOpen, editId, setEditId }) {
       is_active: form.is_active ? 1 : 0,
       ...(editId ? { id: editId } : {}),
     }
-    const action = editId ? updateLeavePolicyRule({ id: editId, ...form }) : addLeavePolicyRule(form);
+    const action = editId ? updateLeavePolicyRule({ id: editId, ...submitData }) : addLeavePolicyRule(submitData);
     action.unwrap().then((res) => {
-      console.log('res', res);
       if (res.success) {
         setOpen(false);
         setEditId(null);
@@ -117,6 +116,7 @@ export default function FormModal({ open, setOpen, editId, setEditId }) {
             name="allocation"
             label="Allocation"
             value={form.allocation}
+            type="number"
             onChange={(e) => setForm({ ...form, allocation: e.target.value })}
           />
           <HrSwitch
@@ -129,6 +129,7 @@ export default function FormModal({ open, setOpen, editId, setEditId }) {
             name="carry_forward_limit"
             label="Carry Forward Limit"
             value={form.carry_forward_limit}
+            type="number"
             onChange={(e) => setForm({ ...form, carry_forward_limit: e.target.value })}
           />
           <HrSwitch
@@ -140,6 +141,7 @@ export default function FormModal({ open, setOpen, editId, setEditId }) {
           <HrInput
             name="encashment_limit"
             label="Encashment Limit"
+            type="number"
             value={form.encashment_limit}
             onChange={(e) => setForm({ ...form, encashment_limit: e.target.value })}
           />

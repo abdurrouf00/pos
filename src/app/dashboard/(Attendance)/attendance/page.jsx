@@ -1,9 +1,10 @@
-import DashboardLayout from "@/components/layouts/DashboardLayout";
-import AttendanceList from "@/views/attendance/list";
-import React from "react";
+import DashboardLayout from '@/components/layouts/DashboardLayout'
+import AttendanceList from '@/views/attendance/list'
+import React from 'react'
 
 function page() {
-  return <AttendanceList />;
+  //
+  return <AttendanceList />
 }
 
-export default page;
+export default page

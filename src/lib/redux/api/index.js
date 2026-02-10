@@ -25,6 +25,7 @@ export const axiosBaseQuery =
 // Define a service using a base URL and expected endpoints
 const api = createApi({
   tagTypes: [
+    'holidays',
     'accountHeads',
     'attendanceDevices',
     'items',

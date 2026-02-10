@@ -42,7 +42,6 @@ export default function SalaryDesignList() {
       if (e.isConfirmed) {
         const toastId = toast.loading("Deleting...");
         const res = await dispatch(deleteSalaryDesign(row.id)).unwrap();
-        console.log("Response from deleteLeaveType:", res);
         if (res.success) {
           toast.dismiss(toastId);
           toast.success("Deleted successfully");
@@ -62,7 +61,6 @@ export default function SalaryDesignList() {
   };
 
   const handleInfo = (rowData) => {
-    console.log('rowData', rowData)
     setEditId(rowData?.id)
     setOpenForm(true)
   };
@@ -84,7 +82,6 @@ export default function SalaryDesignList() {
       </div>
     );
   };
-  console.log('list render')
 
   return (
     <>

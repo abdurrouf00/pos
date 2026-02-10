@@ -7,10 +7,12 @@ export const initialSectionData = {
     name: ""
 }
 
+const sectionApi = 'settings/sections';
+
 export const getAllSections = createAsyncThunk('section/getAllSections', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `section?${url.toString()}`;
+    const api = `${sectionApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
             console.log('section data from redux', res.data.data.data)
@@ -21,7 +23,7 @@ export const getAllSections = createAsyncThunk('section/getAllSections', async (
 })
 
 export const addSection = createAsyncThunk('section/addSection', async (data) => {
-    const result = axios.post("section", data)
+    const result = axios.post(sectionApi, data)
         .then((res) => {
             console.log('section submitted data from redux', res)
             return res;
@@ -31,7 +33,7 @@ export const addSection = createAsyncThunk('section/addSection', async (data) =>
 })
 
 export const updateSection = createAsyncThunk('section/updateSection', async (data) => {
-    const result = axios.post(`section/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${sectionApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             console.log('section submitted data from redux', res)
             return res;
@@ -41,7 +43,7 @@ export const updateSection = createAsyncThunk('section/updateSection', async (da
 })
 
 export const getSectionById = createAsyncThunk('section/getSectionById', async (id) => {
-    const result = axios.get(`section/${id}`)
+    const result = axios.get(`${sectionApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;
@@ -51,7 +53,7 @@ export const getSectionById = createAsyncThunk('section/getSectionById', async (
 })
 
 export const deleteSection = createAsyncThunk('section/deleteSection', async (id) => {
-    const result = axios.delete(`section/${id}`)
+    const result = axios.delete(`${sectionApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;

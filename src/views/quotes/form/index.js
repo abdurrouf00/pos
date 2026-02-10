@@ -199,7 +199,7 @@ export default function QuoteForm() {
       {/* Item Table */}
       <div className="mt-6 bg-white rounded-xl border  overflow-x-auto p-6">
         <h2 className="text-lg font-semibold mb-3">Item Table</h2>
-        <table className="w-full border text-sm table-fixed ">
+        <table className="w-full border text-sm">
           <thead className="bg-gray-100">
             <tr>
               <th className="p-2 border">Item/Details</th>

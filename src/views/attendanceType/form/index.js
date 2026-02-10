@@ -37,10 +37,14 @@ const AttendanceTypeForm = (props) => {
       ? updateAttendanceType(submittedData)
       : addAttendanceType(submittedData);
     dispatch(action).then((res) => {
+     if(res?.payload.success){
       setOpenForm(false);
       dispatch(getAllAttendanceType());
       toast.success("Attendance Type Created successfully");
       dispatch(bindAttendanceTypeData(initialAttendanceTypeData));
+     }else{
+      toast.error(res?.payload.message)
+     }
     });
   };
 

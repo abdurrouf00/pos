@@ -175,7 +175,7 @@ function EmployeeDetails({ id }) {
               </Button>
             </div> */}
             <div>
-              <Link href={`/dashboard/employee/${id}/edit`}>
+              <Link href={`/dashboard/employees/${id}/edit`}>
                 <Button
                   type="button"
                   variant="outline"

@@ -146,7 +146,7 @@ export default function LeavePolicyRulesList() {
           loading={isLoading}
         />
       </div>
-      <FormModal open={openAddModal} setOpen={setOpenAddModal} editId={editId} setEditId={setEditId} />
+      {openAddModal && <FormModal open={openAddModal} setOpen={setOpenAddModal} editId={editId} setEditId={setEditId} />}
     </div>
   )
 }

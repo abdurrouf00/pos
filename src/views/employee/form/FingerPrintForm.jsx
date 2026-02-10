@@ -34,8 +34,9 @@ export default function FingerPrintForm({ open, setOpen, empId }) {
     setOpen(false);
   };
   const getDeviceList = async () => {
-    const res = await axios.get(`device_list`);
-    const options = mapOptions(res.data.data, "device_name");
+    const res = await axios.get(`settings/attendance-devices`);
+    console.log('res', res)
+    const options = mapOptions(res.data.data?.data, "device_name");
     setDeviceList(options);
   };
 

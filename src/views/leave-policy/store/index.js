@@ -1,23 +1,24 @@
 import api from "@/lib/redux/api";
 
+const leavePolicyApi = 'settings/leave-policy-groups';
 const leavePolicyEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
     getLeavePolicies: builder.query({
       query: () => ({
-        url: "leave-policy",
+        url: leavePolicyApi,
         method: "GET",
       }),
       providesTags: ["leavePolicies"],
     }),
     getLeavePolicyById: builder.query({
       query: (id) => ({
-        url: `leave-policy/${id}`,
+        url: `${leavePolicyApi}/${id}`,
         method: "GET",
       }),
     }),
     addLeavePolicy: builder.mutation({
       query: (data) => ({
-        url: "leave-policy",
+        url: leavePolicyApi,
         method: "POST",
         data,
       }),
@@ -25,7 +26,7 @@ const leavePolicyEndpoints = api.injectEndpoints({
     }),
     updateLeavePolicy: builder.mutation({
       query: ({ id, ...data }) => ({
-        url: `leave-policy/${id}`,
+        url: `${leavePolicyApi}/${id}`,
         method: "PUT",
         data,
         headers: {
@@ -37,7 +38,7 @@ const leavePolicyEndpoints = api.injectEndpoints({
     }),
     deleteLeavePolicy: builder.mutation({
       query: (id) => ({
-        url: `leave-policy/${id}`,
+        url: `${leavePolicyApi}/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["leavePolicies"],

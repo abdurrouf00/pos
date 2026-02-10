@@ -93,6 +93,7 @@ export default function Register() {
         } else {
           router.push('/auth/login')
         }
+        // router.push( "/organization/modules" );
       } else {
         setError(response.data.message)
       }
@@ -111,7 +112,7 @@ export default function Register() {
           <img src="/logo.png" alt="logo" className="w-full h-full object-cover" />
         </div>
         {error && <Alert message={error} type="error" />}
-        <div className=''>
+        <div className="">
           <AuthTitle>Register Here</AuthTitle>
           <p className="text-neutral-600 text-sm">
             Already have an account?{' '}
@@ -120,8 +121,8 @@ export default function Register() {
             </Link>
           </p>
         </div>
-        <form onSubmit={handleSubmit} className='space-y-2  w-full mt-3'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+        <form onSubmit={handleSubmit} className="space-y-2  w-full mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <AuthInput
               label="Name"
               name="name"
@@ -154,27 +155,26 @@ export default function Register() {
             <AuthInput
               label="Phone"
               name="phone"
-              type='tel'
+              type="tel"
               value={formData.phone}
               onChange={handleChange}
               required
             />
             <HrSelect
-              label='Package'
+              label="Package"
               required
               name="hrm_package_id"
               value={formData.hrm_package_id}
               onChange={handleChange}
               options={packages}
-              placeholder='Select Package'
+              placeholder="Select Package"
             />
           </div>
-          <div className='space-y-1'>
-
+          <div className="space-y-1">
             <AuthInput
               label="Email"
               name="email"
-              type='email'
+              type="email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -182,7 +182,7 @@ export default function Register() {
             <AuthInput
               label="Password"
               name="password"
-              type='password'
+              type="password"
               value={formData.password}
               onChange={e => {
                 const value = e.target.value
@@ -215,8 +215,13 @@ export default function Register() {
             <AuthButton loading={loading}>{loading ? 'Registering...' : 'Register'}</AuthButton>
           </div>
         </form>
-        <div className='flex justify-end'>
-          <Link className='text-neutral-600 text-sm text-end hover:underline transtion-all duration-500' href="#">Forgot password or account?</Link>
+        <div className="flex justify-end">
+          <Link
+            className="text-neutral-600 text-sm text-end hover:underline transtion-all duration-500"
+            href="#"
+          >
+            Forgot password or account?
+          </Link>
         </div>
         <div className="flex items-center my-10 justify-center gap-3">
           <p className="text-neutral-500 text-sm tracking-tight">Sister Concern By </p>

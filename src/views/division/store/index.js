@@ -7,10 +7,12 @@ export const initialDivisionData = {
     name: ""
 }
 
+const divisionApi = 'settings/divisions';
+
 export const getAllDivisions = createAsyncThunk('division/getAllDivisions', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `division?${url.toString()}`;
+    const api = `${divisionApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
             console.log('division data from redux', res.data.data.data)
@@ -21,7 +23,7 @@ export const getAllDivisions = createAsyncThunk('division/getAllDivisions', asyn
 })
 
 export const addDivision = createAsyncThunk('division/addDivision', async (data) => {
-    const result = axios.post("division", data)
+    const result = axios.post(divisionApi, data)
         .then((res) => {
             console.log('division submitted data from redux', res)
             return res;
@@ -31,7 +33,7 @@ export const addDivision = createAsyncThunk('division/addDivision', async (data)
 })
 
 export const updateDivision = createAsyncThunk('division/updateDivision', async (data) => {
-    const result = axios.post(`division/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${divisionApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             console.log('division submitted data from redux', res)
             return res;
@@ -41,7 +43,7 @@ export const updateDivision = createAsyncThunk('division/updateDivision', async 
 })
 
 export const getDivisionById = createAsyncThunk('division/getDivisionById', async (id) => {
-    const result = axios.get(`division/${id}`)
+    const result = axios.get(`${divisionApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;
@@ -51,7 +53,7 @@ export const getDivisionById = createAsyncThunk('division/getDivisionById', asyn
 })
 
 export const deleteDivision = createAsyncThunk('division/deleteDivision', async (id) => {
-    const result = axios.delete(`division/${id}`)
+    const result = axios.delete(`${divisionApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;

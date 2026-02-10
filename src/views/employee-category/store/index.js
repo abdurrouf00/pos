@@ -10,10 +10,12 @@ export const initialEmployeeCategoryData = {
     status: "active"
 }
 
+const employeeCategoryApi = 'settings/emp-categories';
+
 export const getAllEmployeeCategories = createAsyncThunk('employeeCategory/getAllEmployeeCategories', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `empCategory?${url.toString()}`;
+    const api = `${employeeCategoryApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
 
@@ -24,7 +26,7 @@ export const getAllEmployeeCategories = createAsyncThunk('employeeCategory/getAl
 })
 
 export const addEmployeeCategory = createAsyncThunk('employeeCategory/addEmployeeCategory', async (data) => {
-    const result = axios.post("empCategory", data)
+    const result = axios.post(employeeCategoryApi, data)
         .then((res) => {
 
             return res;
@@ -34,7 +36,7 @@ export const addEmployeeCategory = createAsyncThunk('employeeCategory/addEmploye
 })
 
 export const updateEmployeeCategory = createAsyncThunk('employeeCategory/updateEmployeeCategory', async (data) => {
-    const result = axios.post(`empCategory/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${employeeCategoryApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
 
             return res;
@@ -44,7 +46,7 @@ export const updateEmployeeCategory = createAsyncThunk('employeeCategory/updateE
 })
 
 export const getEmployeeCategoryById = createAsyncThunk('employeeCategory/getEmployeeCategoryById', async (id) => {
-    const result = axios.get(`empCategory/${id}`)
+    const result = axios.get(`${employeeCategoryApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })
@@ -53,7 +55,7 @@ export const getEmployeeCategoryById = createAsyncThunk('employeeCategory/getEmp
 })
 
 export const deleteEmployeeCategory = createAsyncThunk('employeeCategory/deleteEmployeeCategory', async (id) => {
-    const result = axios.delete(`empCategory/${id}`)
+    const result = axios.delete(`${employeeCategoryApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;

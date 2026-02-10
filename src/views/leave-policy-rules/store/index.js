@@ -1,17 +1,18 @@
 import api from "@/lib/redux/api";
 
+const leavePolicyRulesApi = 'settings/leave-policy-group-rules';
 const leavePolicyRulesEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
     getLeavePolicyRules: builder.query({
       query: () => ({
-        url: "leave-policy-rule",
+        url: leavePolicyRulesApi,
         method: "GET",
       }),
       providesTags: ["leavePolicyRules"],
     }),
     addLeavePolicyRule: builder.mutation({
       query: (data) => ({
-        url: "leave-policy-rule",
+        url: leavePolicyRulesApi,
         method: "POST",
         data,
       }),
@@ -19,7 +20,7 @@ const leavePolicyRulesEndpoints = api.injectEndpoints({
     }),
     updateLeavePolicyRule: builder.mutation({
       query: ({ id, ...data }) => ({
-        url: `leave-policy-rule/${id}`,
+        url: `${leavePolicyRulesApi}/${id}`,
         method: "PUT",
         data,
         headers: {
@@ -30,14 +31,14 @@ const leavePolicyRulesEndpoints = api.injectEndpoints({
     }),
     deleteLeavePolicyRule: builder.mutation({
       query: (id) => ({
-        url: `leave-policy-rule/${id}`,
+        url: `${leavePolicyRulesApi}/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["leavePolicyRules"],
     }),
     getLeavePolicyRuleById: builder.query({
       query: (id) => ({
-        url: `leave-policy-rule/${id}`,
+        url: `${leavePolicyRulesApi}/${id}`,
         method: "GET",
       }),
       providesTags: ["leavePolicyRules"],

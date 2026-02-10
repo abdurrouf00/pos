@@ -108,7 +108,7 @@ export default function ManualForm() {
     const res = await dispatch(saveAttendanceManually(submitData)).unwrap();
     if (res.success) {
       toast.success("Attendance saved successfully");
-      router.push("/dashboard/attendance-list");
+      router.push("/dashboard/attendance");
     }
   };
 

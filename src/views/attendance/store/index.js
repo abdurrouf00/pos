@@ -8,7 +8,7 @@ const initialAttendanceData = {
   date: "",
   time: "",
 };
-
+const manualAttendanceAPI=''
 const searchAttendance = createAsyncThunk(
   "attendance/searchAttendance",
   async (data) => {
@@ -19,7 +19,7 @@ const searchAttendance = createAsyncThunk(
 export const saveAttendanceManually = createAsyncThunk(
   "attendance/saveAttendanceManually",
   async (data) => {
-    const res = await axios.post("save-manual-attendance", data, {
+    const res = await axios.post("attendance/attendances/save-manual", data, {
       headers: {
         "Content-Type": "application/json"
       }

@@ -55,7 +55,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'manufacturer',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData?.manufacturer?.name}</h4>
+          <h4 className="text-sm font-bold">{rowData.manufacturer.name}</h4>
         </div>
       ),
     },
@@ -64,7 +64,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'unit_style',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData?.unit_style?.name}</h4>
+          <h4 className="text-sm font-bold">{rowData.unit_style.name}</h4>
         </div>
       ),
     },
@@ -73,7 +73,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'unit_price',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData?.pricing?.unit_price}</h4>
+          <h4 className="text-sm font-bold">{rowData.pricing.unit_price}</h4>
         </div>
       ),
     },
@@ -82,7 +82,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'quantity_in_stock',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData?.stock?.quantity_in_stock}</h4>
+          <h4 className="text-sm font-bold">{rowData.stock.quantity_in_stock}</h4>
         </div>
       ),
     },
@@ -91,7 +91,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'reorder_level',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData?.stock?.reorder_level}</h4>
+          <h4 className="text-sm font-bold">{rowData.stock.reorder_level}</h4>
         </div>
       ),
     },

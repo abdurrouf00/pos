@@ -97,7 +97,7 @@ export default function EmployeeManagement({ employee }) {
   // };
 
   const handleInfo = (rowData) => {
-    router.push(`/dashboard/employee/${rowData.id}`);
+    router.push(`/dashboard/employees/${rowData.id}`);
   };
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export default function EmployeeManagement({ employee }) {
         >
           Import
         </div>
-        <Link href="/dashboard/employee/new">
+        <Link href="/dashboard/employees/new">
           <div className="border flex items-center gap-2 py-1 px-3 cursor-pointer rounded-sm bg-[#e0ecfe] text-[#227BF6] text-[14px] font-[400]">
             <FaCirclePlus />
             New

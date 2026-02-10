@@ -1,49 +1,49 @@
-import { Button } from "@/components/ui/button";
-import { formatBDnumber } from "@/lib/utils";
-import { Edit, Eye, Info, Trash2 } from "lucide-react";
+import { Button } from '@/components/ui/button'
+import { formatBDnumber } from '@/lib/utils'
+import { Edit, Eye, Info, Trash2 } from 'lucide-react'
 
 export const salarySheetColumn = (handleDelete, handleInfo) => {
   const columns = [
     {
-      field: "title",
-      header: "Title",
+      field: 'title',
+      header: 'Title',
       sortable: true,
     },
     {
-      field: "salary_design_id",
-      header: "Salary Design",
+      field: 'salary_design_id',
+      header: 'Salary Design',
       sortable: true,
     },
     {
-      field: "year",
-      header: "Year",
+      field: 'year',
+      header: 'Year',
       sortable: true,
     },
     {
-      field: "month",
-      header: "Month",
+      field: 'month',
+      header: 'Month',
       sortable: true,
     },
     {
-      field: "department_id",
-      header: "Department",
+      field: 'department_id',
+      header: 'Department',
       sortable: true,
     },
     {
-      field: "designation_id",
-      header: "Designation",
+      field: 'designation_id',
+      header: 'Designation',
       sortable: true,
     },
     {
-      field: "total_amount",
-      header: "Total Amount",
+      field: 'total_amount',
+      header: 'Total Amount',
       sortable: true,
-      body: (rowData) => <div className="text-end">{formatBDnumber(rowData.total_amount)}</div>,
+      body: rowData => <div className="text-end">{formatBDnumber(+rowData.total_amount)}</div>,
     },
     {
-      header: "Actions",
+      header: 'Actions',
       sortable: false,
-      body: (rowData) => (
+      body: rowData => (
         <div className="flex gap-2">
           <Button
             className="bg-white hover:bg-white cursor-pointer"
@@ -59,9 +59,9 @@ export const salarySheetColumn = (handleDelete, handleInfo) => {
           </Button> */}
         </div>
       ),
-      style: { width: "100px" },
+      style: { width: '100px' },
     },
-  ];
+  ]
 
-  return columns;
-};
+  return columns
+}

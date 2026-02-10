@@ -9,10 +9,10 @@ export const initialLoanData = {
   start_date: "",
   end_date: "",
 };
-
+const loanApi = 'payroll/loans'
 export const getAllLoan = createAsyncThunk("loan/getAllLoan", async () => {
   const result = axios
-    .get("loan")
+    .get(loanApi)
     .then((res) => {
       const resData = res.data?.data?.data?.map((item) => ({
         ...item,
@@ -24,7 +24,7 @@ export const getAllLoan = createAsyncThunk("loan/getAllLoan", async () => {
 });
 
 export const addLoan = createAsyncThunk("loan/addLoan", async (data) => {
-  const res = await axios.post("loan", data);
+  const res = await axios.post(loanApi, data);
   return res.data;
 });
 
@@ -32,7 +32,7 @@ export const updateLoan = createAsyncThunk(
   "loan/updateLoan",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`loan/${data?.id}`, {
+      const res = await axios.post(`${loanApi}/${data?.id}`, {
         ...data,
         _method: "PUT",
       });
@@ -45,7 +45,7 @@ export const updateLoan = createAsyncThunk(
 
 export const getLoanById = createAsyncThunk("loan/getLoanById", async (id) => {
   const result = axios
-    .get(`loan/${id}`)
+    .get(`${loanApi}/${id}`)
     .then((res) => {
       return res.data.data;
     })
@@ -55,7 +55,7 @@ export const getLoanById = createAsyncThunk("loan/getLoanById", async (id) => {
 
 export const deleteLoan = createAsyncThunk("loan/deleteLoan", async (id) => {
   const result = axios
-    .delete(`loan/${id}`)
+    .delete(`${loanApi}/${id}`)
     .then((res) => {
       return res.data;
     })

@@ -18,12 +18,12 @@ export const initialSalaryHeadData = {
   updated_at: "",
   deleted_at: "",
 };
-
+const salaryHeadApi = 'payroll/salary-heads'
 export const getAllSalaryHead = createAsyncThunk(
   "salaryHead/getAllSalaryHead",
   async () => {
     const result = axios
-      .get("salary-head")
+      .get(salaryHeadApi)
       .then((res) => {
         const resData = res.data?.data?.data?.map((item) => ({
           ...item,
@@ -38,7 +38,7 @@ export const getAllSalaryHead = createAsyncThunk(
 export const addSalaryHead = createAsyncThunk(
   "salaryHead/addSalaryHead",
   async (data) => {
-    const res = await axios.post("salary-head", data);
+    const res = await axios.post(salaryHeadApi, data);
     return res.data?.data;
   }
 );
@@ -47,7 +47,7 @@ export const updateSalaryHead = createAsyncThunk(
   "salaryHead/updateSalaryHead",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`salary-head/${data?.id}`, {
+      const res = await axios.post(`${salaryHeadApi}/${data?.id}`, {
         ...data,
         _method: "PUT",
       });
@@ -62,7 +62,7 @@ export const getSalaryHeadById = createAsyncThunk(
   "salaryHead/getSalaryHeadById",
   async (id) => {
     const result = axios
-      .get(`salary-head/${id}`)
+      .get(`${salaryHeadApi}/${id}`)
       .then((res) => {
         console.log(res);
         return res.data.data;
@@ -76,7 +76,7 @@ export const deleteSalaryHead = createAsyncThunk(
   "salaryHead/deleteSalaryHead",
   async (id) => {
     const result = axios
-      .delete(`salary-head/${id}`)
+      .delete(`${salaryHeadApi}/${id}`)
       .then((res) => {
         console.log(res);
         return res.data.data;

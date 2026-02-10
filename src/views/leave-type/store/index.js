@@ -1,13 +1,13 @@
 import axios from "@/helpers/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
+const leaveTypeApi = 'settings/leave-types';
 
 export const getAllLeaveType = createAsyncThunk(
   "leaveType/getAllLeaveType",
   async () => {
     const result = axios
-      .get("leave-type")
+      .get(leaveTypeApi)
       .then((res) => {
         const resData = res.data?.data
         return resData;
@@ -20,7 +20,7 @@ export const getLeaveType = createAsyncThunk(
   "leaveType/getLeaveType",
   async (id) => {
     const result = axios
-      .get(`leave-type/${id}`)
+      .get(`${leaveTypeApi}/${id}`)
       .then((res) => {
 
         const resData = res.data?.data
@@ -34,21 +34,21 @@ export const getLeaveType = createAsyncThunk(
 export const addLeaveType = createAsyncThunk(
   "leaveType/addLeaveType",
   async (data) => {
-    const res = await axios.post("leave-type", data);
+    const res = await axios.post(leaveTypeApi, data);
     return res.data?.data;
   }
 );
 export const updateLeaveType = createAsyncThunk(
   "leaveType/updateLeaveType",
   async ({ formData, editId }) => {
-    const res = await axios.post(`leave-type/${editId}`, formData);
+    const res = await axios.post(`${leaveTypeApi}/${editId}`, formData);
     return res.data?.data;
   }
 );
 export const deleteLeaveType = createAsyncThunk(
   "leaveType/deleteLeaveType",
   async (id) => {
-    const res = await axios.delete(`leave-type/${id}`);
+    const res = await axios.delete(`${leaveTypeApi}/${id}`);
     return res.data?.data;
   }
 );

@@ -1,82 +1,83 @@
-import axios from "@/helpers/axios";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from '@/helpers/axios'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const initialAttendanceTypeData = {
   id: 0,
-  name: "",
-  short_name: "",
-  color: "",
-  serial_no: "",
-};
+  name: '',
+  short_name: '',
+  color: '',
+  serial_no: '',
+}
 
+const attendanceTypeApi = 'attendance/attendance-types'
 export const getAllAttendanceType = createAsyncThunk(
-  "attendanceType/getAllAttendanceType",
+  'attendanceType/getAllAttendanceType',
   async () => {
     const result = axios
-      .get("attendance-type")
-      .then((res) => {
-        const resData = res.data?.data?.data?.map((item) => ({
+      .get(attendanceTypeApi)
+      .then(res => {
+        const resData = res.data?.data?.data?.map(item => ({
           ...item,
-        }));
-        return resData;
+        }))
+        return resData
       })
-      .catch((err) => console.log(err));
-    return result;
+      .catch(err => console.log(err))
+    return result
   }
-);
+)
 
 export const addAttendanceType = createAsyncThunk(
-  "attendanceType/addAttendanceType",
-  async (data) => {
-    const res = await axios.post("attendance-type", data);
-    return res.data?.data;
+  'attendanceType/addAttendanceType',
+  async data => {
+    const res = await axios.post(attendanceTypeApi, data)
+    return res.data?.data
   }
-);
+)
 
 export const updateAttendanceType = createAsyncThunk(
-  "attendanceType/updateAttendanceType",
+  'attendanceType/updateAttendanceType',
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`attendance-type/${data?.id}`, {
+      const res = await axios.post(`${attendanceTypeApi}/${data?.id}`, {
         ...data,
-        _method: "PUT",
-      });
-      return res.data?.data;
+        _method: 'PUT',
+      })
+      return res.data
     } catch (err) {
-      return rejectWithValue(err.response?.data);
+      return rejectWithValue(err.response?.data)
     }
   }
-);
+)
 
 export const getAttendanceTypeById = createAsyncThunk(
-  "attendanceType/getAttendanceTypeById",
-  async (id) => {
+  'attendanceType/getAttendanceTypeById',
+  async id => {
     const result = axios
-      .get(`attendance-type/${id}`)
-      .then((res) => {
-        return res.data.data;
+      .get(`${attendanceTypeApi}/${id}`)
+      .then(res => {
+        console.log('res', res)
+        return res.data?.data
       })
-      .catch((err) => console.log(err));
-    return result;
+      .catch(err => console.log(err))
+    return result
   }
-);
+)
 
 export const deleteAttendanceType = createAsyncThunk(
-  "attendanceType/deleteAttendanceType",
-  async (id) => {
+  'attendanceType/deleteAttendanceType',
+  async id => {
     const result = axios
       .delete(`attendance-type/${id}`)
-      .then((res) => {
-        return res.data.data;
+      .then(res => {
+        return res.data.data
       })
-      .catch((err) => console.log(err));
-    return result;
+      .catch(err => console.log(err))
+    return result
   }
-);
-
+)
 
 export const attendanceTypeSlice = createSlice({
-  name: "attendanceType",
+  name: 'attendanceType',
   initialState: {
     attendanceTypeData: [],
     loading: false,
@@ -85,40 +86,38 @@ export const attendanceTypeSlice = createSlice({
   },
   reducers: {
     bindAttendanceTypeData: (state, action) => {
-      state.basicAttendanceTypeData =
-        action.payload || initialAttendanceTypeData;
+      state.basicAttendanceTypeData = action.payload || initialAttendanceTypeData
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addCase(getAllAttendanceType.fulfilled, (state, action) => {
-        state.attendanceTypeData = action.payload;
+        state.attendanceTypeData = action.payload
       })
       .addCase(getAttendanceTypeById.fulfilled, (state, action) => {
-        state.basicAttendanceTypeData = action.payload;
+        state.basicAttendanceTypeData = action.payload
       })
-      .addCase(addAttendanceType.pending, (state) => {
-        state.mutationLoading = true;
+      .addCase(addAttendanceType.pending, state => {
+        state.mutationLoading = true
       })
-      .addCase(addAttendanceType.fulfilled, (state) => {
-        state.mutationLoading = false;
+      .addCase(addAttendanceType.fulfilled, state => {
+        state.mutationLoading = false
       })
-      .addCase(addAttendanceType.rejected, (state) => {
-        state.mutationLoading = false;
+      .addCase(addAttendanceType.rejected, state => {
+        state.mutationLoading = false
       })
-      .addCase(updateAttendanceType.pending, (state) => {
-        state.mutationLoading = true;
+      .addCase(updateAttendanceType.pending, state => {
+        state.mutationLoading = true
       })
-      .addCase(updateAttendanceType.fulfilled, (state) => {
-        state.mutationLoading = false;
+      .addCase(updateAttendanceType.fulfilled, state => {
+        state.mutationLoading = false
       })
-      .addCase(updateAttendanceType.rejected, (state) => {
-        state.mutationLoading = false;
+      .addCase(updateAttendanceType.rejected, state => {
+        state.mutationLoading = false
       })
-
   },
-});
+})
 
-export const { bindAttendanceTypeData } = attendanceTypeSlice.actions;
+export const { bindAttendanceTypeData } = attendanceTypeSlice.actions
 
-export default attendanceTypeSlice.reducer;
+export default attendanceTypeSlice.reducer

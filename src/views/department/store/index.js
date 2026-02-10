@@ -10,11 +10,13 @@ export const initialDepartmentData = {
     min_overtime_minutes: ""
 }
 
+const departmentApi = 'settings/departments';
+
 export const getAllDepartment = createAsyncThunk('department/getAllDepartment', async (params) => {
 
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `department?${url.toString()}`;
+    const api = `${departmentApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
             const resData = res.data?.data?.data?.map((item) => ({
@@ -28,7 +30,7 @@ export const getAllDepartment = createAsyncThunk('department/getAllDepartment', 
 })
 
 export const addDepartment = createAsyncThunk('department/addDepartment', async (data) => {
-    const result = axios.post("department", data)
+    const result = axios.post(departmentApi, data)
         .then((res) => {
 
             return res;
@@ -38,7 +40,7 @@ export const addDepartment = createAsyncThunk('department/addDepartment', async 
 })
 
 export const updateDepartment = createAsyncThunk('department/updateDepartment', async (data) => {
-    const result = axios.post(`department/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${departmentApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             return res;
         })
@@ -47,7 +49,7 @@ export const updateDepartment = createAsyncThunk('department/updateDepartment', 
 })
 
 export const getDepartmentById = createAsyncThunk('department/getDepartmentById', async (id) => {
-    const result = axios.get(`department/${id}`)
+    const result = axios.get(`${departmentApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })
@@ -56,7 +58,7 @@ export const getDepartmentById = createAsyncThunk('department/getDepartmentById'
 })
 
 export const deleteDepartment = createAsyncThunk('department/deleteDepartment', async (id) => {
-    const result = axios.delete(`department/${id}`)
+    const result = axios.delete(`${departmentApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })

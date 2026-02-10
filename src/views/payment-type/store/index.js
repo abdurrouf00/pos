@@ -12,13 +12,14 @@ export const initialPaymentTypeData = {
     bankName: ""
 }
 
+const paymentTypeApi = 'settings/payment-types';
 export const getAllPaymentTypes = createAsyncThunk('paymentType/getAllPaymentTypes', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `paymentType?${url.toString()}`;
+    const api = `${paymentTypeApi}?${url.toString()}`;
     const result = axios.get(api)
         .then((res) => {
-            console.log('payment type data from redux', res.data.data.data)
+
             return res.data.data.data;
         })
         .catch((err) => console.log(err))
@@ -26,7 +27,7 @@ export const getAllPaymentTypes = createAsyncThunk('paymentType/getAllPaymentTyp
 })
 
 export const addPaymentType = createAsyncThunk('paymentType/addPaymentType', async (data) => {
-    axios.post("paymentType", data)
+    axios.post(paymentTypeApi, data)
         .then((res) => {
             console.log('payment type submitted data from redux', res)
             return res;
@@ -36,7 +37,7 @@ export const addPaymentType = createAsyncThunk('paymentType/addPaymentType', asy
 })
 
 export const updatePaymentType = createAsyncThunk('paymentType/updatePaymentType', async (data) => {
-    axios.post(`paymentType/${data?.id}`, { ...data, _method: "PUT" })
+    axios.post(`${paymentTypeApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
             console.log('payment type submitted data from redux', res)
             return res;
@@ -46,7 +47,7 @@ export const updatePaymentType = createAsyncThunk('paymentType/updatePaymentType
 })
 
 export const getPaymentTypeById = createAsyncThunk('paymentType/getPaymentTypeById', async (id) => {
-    axios.get(`paymentType/${id}`)
+    axios.get(`${paymentTypeApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;
@@ -56,7 +57,7 @@ export const getPaymentTypeById = createAsyncThunk('paymentType/getPaymentTypeBy
 })
 
 export const deletePaymentType = createAsyncThunk('paymentType/deletePaymentType', async (id) => {
-    axios.delete(`paymentType/${id}`)
+    axios.delete(`${paymentTypeApi}/${id}`)
         .then((res) => {
             console.log(res)
             return res.data.data;

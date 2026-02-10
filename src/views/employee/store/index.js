@@ -1,39 +1,43 @@
-import axios from '@/helpers/axios';
-import { getImageUrl } from '@/lib/utils';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from '@/helpers/axios'
+import { getImageUrl } from '@/lib/utils'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-const errorResponse = (err) => {
-  console.error('API Error:', err?.response?.data?.message || err.message);
-};
+const errorResponse = err => {
+  console.error('API Error:', err?.response?.data?.message || err.message)
+}
 
 export const initialemployeeData = {
-  name: "",
-  emp_id: "",
-  email: "",
-  phone_no: "",
-  nid_no: "",
-  short_name: "",
-  gender: "",
-  father_name: "",
-  mother_name: "",
-  permanent_address: "",
-  present_address: "",
-  image: "",
-  signature: "",
-  dob: "",
-  edu_info: [{
-    degree: "",
-    ins_name: "",
-    passing_year: "",
-    result: "",
-  }],
-  prev_job_info: [{
-    joining_date: "",
-    resign_date: "",
-    position: "",
-    company_name: "",
-  }],
-  current_status: "",
+  name: '',
+  emp_id: '',
+  email: '',
+  phone_no: '',
+  nid_no: '',
+  short_name: '',
+  gender: '',
+  father_name: '',
+  mother_name: '',
+  permanent_address: '',
+  present_address: '',
+  image: '',
+  signature: '',
+  dob: '',
+  edu_info: [
+    {
+      degree: '',
+      ins_name: '',
+      passing_year: '',
+      result: '',
+    },
+  ],
+  prev_job_info: [
+    {
+      joining_date: '',
+      resign_date: '',
+      position: '',
+      company_name: '',
+    },
+  ],
+  current_status: '',
   // team_id: "",
   // team_name: "",
   working_shift_id: '',
@@ -42,145 +46,121 @@ export const initialemployeeData = {
   working_shift_id_4: '',
   working_shift_id_5: '',
   working_shift_id_6: '',
-  device_id: "",
-  device_emp_id: "",
-  designation_id: "",
-  department_id: "",
-  emp_category_id: "",
-  job_type_id: "",
-  proximity_card_no: "",
+  device_id: '',
+  device_emp_id: '',
+  designation_id: '',
+  department_id: '',
+  emp_category_id: '',
+  job_type_id: '',
+  proximity_card_no: '',
   bonus_activation: 0,
   pf_status: 0,
-  division_id: "",
-  section_id: "",
-  location: "",
-  joinning_designation_id: "",
-  cost_center: "",
-  last_company: "",
+  division_id: '',
+  section_id: '',
+  location: '',
+  joinning_designation_id: '',
+  cost_center: '',
+  last_company: '',
   investment: 0,
   others_tds: 0,
-  ait_car: "",
-  basic_salary: "",
-  payment_type_id: "",
-  bank_name: "",
-  account_number: "",
-  branch_name: "",
-  resign_date: "",
-  from_probition_date: "",
-  to_probition_date: "",
-  confirm_date: "",
-  probition_month: "",
-  retirement_date: "",
-  card_in_number: "",
-  tin_no: "",
-  current_salary: "",
-  has_overtime: "",
-  overtime_rate: "",
-  weekend_day: "",
-  report_to: "",
-  recommended_by: "",
-  approved_by: "",
-  others_tds: "",
-  ait_car: "",
+  ait_car: '',
+  basic_salary: '',
+  payment_type_id: '',
+  bank_name: '',
+  account_number: '',
+  branch_name: '',
+  resign_date: '',
+  from_probition_date: '',
+  to_probition_date: '',
+  confirm_date: '',
+  probition_month: '',
+  retirement_date: '',
+  card_in_number: '',
+  tin_no: '',
+  current_salary: '',
+  has_overtime: '',
+  overtime_rate: '',
+  weekend_day: '',
+  report_to: '',
+  recommended_by: '',
+  approved_by: '',
+  others_tds: '',
+  ait_car: '',
   has_overtime: 0,
-  overtime_rate: "",
-  min_overtime_minutes: "",
-  pay_scale_id: "",
-  joinning_date: "",
-  username: "",
-  role_id: "",
-  password: "",
-};
+  overtime_rate: '',
+  min_overtime_minutes: '',
+  pay_scale_id: '',
+  joinning_date: '',
+  username: '',
+  role_id: '',
+  password: '',
+}
 
+const employeeApi = 'hrm/employees'
 // Thunks
-export const getAllEmployee = createAsyncThunk(
-  "employee/getAll",
-  async (params) => {
-    for (const key in params) {
-      if (params[key] === null || params[key] === '') {
-        delete params[key];
-      }
+export const getAllEmployee = createAsyncThunk('employee/getAll', async params => {
+  for (const key in params) {
+    if (params[key] === null || params[key] === '') {
+      delete params[key]
     }
-    const url = new URLSearchParams(params);
-    const api = `employee?${url.toString()}`;
-    const res = await axios.get(api);
-    return res.data.data;
   }
-);
+  const url = new URLSearchParams(params)
+  const api = `${employeeApi}?${url.toString()}`
+  const res = await axios.get(api)
+  return res.data.data
+})
 
+export const getSingleEmployee = createAsyncThunk('employee/getSingle', async id => {
+  const api = `${employeeApi}/${id}`
+  const res = await axios.get(api)
+  return res.data.data
+})
+export const changePassword = createAsyncThunk('employee/changePassword', async data => {
+  const res = await axios.post(`${employeeApi}/change-password`, data)
+  return res.data
+})
 
-export const getSingleEmployee = createAsyncThunk(
-  "employee/getSingle",
-  async (id) => {
-    const api = `employee/${id}`;
-    const res = await axios.get(api);
-    return res.data.data;
-  }
-);
-export const changePassword = createAsyncThunk('employee/changePassword', async (data) => {
-  const res = await axios.post(`employee/change-password`, data);
-  return res.data;
-});
+export const changeStatus = createAsyncThunk('employee/changeStatus', async data => {
+  const res = await axios.post(`${employeeApi}/change-status`, data)
+  return res.data
+})
 
-export const changeStatus = createAsyncThunk('employee/changeStatus', async (data) => {
-  const res = await axios.post(`employee/change-status`, data);
-  return res.data;
-});
+export const addEmployee = createAsyncThunk('employee/add', async data => {
+  const res = await axios.post(employeeApi, data)
+  return res.data
+})
 
-export const addEmployee = createAsyncThunk("employee/add", async (data) => {
-  const res = await axios.post(`employee`, data);
-  return res.data;
-});
+export const updateEmployee = createAsyncThunk('employee/update', async ({ data, id }) => {
+  // data.append('_method', 'put');
+  const res = await axios.post(`${employeeApi}/${id}`, data)
+  return res.data
+})
 
-export const updateEmployee = createAsyncThunk(
-  "employee/update",
-  async ({ data, id }) => {
-    // data.append('_method', 'put');
-    const res = await axios.post(`employee/${id}`, data);
-    return res.data;
-  }
-);
+export const deleteEmployee = createAsyncThunk('employee/delete', async data => {
+  const res = await axios.delete(`${employeeApi}/${data.id}`)
+  return res.data.data
+})
 
-export const deleteEmployee = createAsyncThunk(
-  "employee/delete",
-  async (data) => {
-    const res = await axios.delete(`employee/${data.id}`);
-    return res.data.data;
-  }
-);
+export const importEmployeeData = createAsyncThunk('employee/import', async data => {
+  const res = await axios.post(`employee/saveFromFile`, data)
+  return res.data.data
+})
 
-export const importEmployeeData = createAsyncThunk(
-  "employee/import",
-  async (data) => {
-    const res = await axios.post(`employee/saveFromFile`, data);
-    return res.data.data;
-  }
-);
-
-export const addUserToDevice = createAsyncThunk(
-  "employee/addUserToDevice",
-  async (data) => {
-    const res = await axios.post(`add_user_to_device`, data);
-    return res.data;
-  }
-);
-export const enrollUserToDevice = createAsyncThunk(
-  "employee/enrollUserToDevice",
-  async (data) => {
-    const res = await axios.post(`enrole_to_device`, data);
-    return res.data;
-  }
-);
-export const createUser = createAsyncThunk(
-  "employee/user-update",
-  async (data) => {
-    const res = await axios.post(`user-update`, data);
-    return res.data;
-  }
-);
+export const addUserToDevice = createAsyncThunk('employee/addUserToDevice', async data => {
+  const res = await axios.post(`add_user_to_device`, data)
+  return res.data
+})
+export const enrollUserToDevice = createAsyncThunk('employee/enrollUserToDevice', async data => {
+  const res = await axios.post(`enrole_to_device`, data)
+  return res.data
+})
+export const createUser = createAsyncThunk('employee/user-update', async data => {
+  const res = await axios.post(`user-update`, data)
+  return res.data
+})
 // Slice
 export const employeeSlice = createSlice({
-  name: "employee",
+  name: 'employee',
   initialState: {
     employeeData: [],
     totalPages: 0,
@@ -191,115 +171,111 @@ export const employeeSlice = createSlice({
     loading: false,
     error: null,
     basicEmployeeData: initialemployeeData,
-    profileImage: "",
-    signatureImage: "",
+    profileImage: '',
+    signatureImage: '',
     mutationLoading: false,
-
-
   },
   reducers: {
     bindEmployeeData: (state, action) => {
-      state.basicEmployeeData = { ...initialemployeeData, ...action.payload } || initialemployeeData;
+      state.basicEmployeeData = { ...initialemployeeData, ...action.payload } || initialemployeeData
     },
     setMetaData: (state, action) => {
-      state.currentPage = action.payload.current_page;
-      state.perPage = action.payload.per_page;
+      state.currentPage = action.payload.current_page
+      state.perPage = action.payload.per_page
       // state.totalPages = action.payload.total;
-      state.firstRow = action.payload.firstRow;
+      state.firstRow = action.payload.firstRow
     },
     setImageUrl: (state, action) => {
-      state.profileImage = action.payload;
+      state.profileImage = action.payload
     },
     setSignatureUrl: (state, action) => {
-      state.signatureImage = action.payload;
+      state.signatureImage = action.payload
     },
     bindSingleEmployeeData: (state, action) => {
-      state.singleEmployeeData = action.payload;
+      state.singleEmployeeData = action.payload
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     // Get All
-    builder.addCase(getAllEmployee.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
+    builder.addCase(getAllEmployee.pending, state => {
+      state.loading = true
+      state.error = null
+    })
     builder.addCase(getAllEmployee.fulfilled, (state, action) => {
-      state.employeeData = action.payload.data;
-      state.currentPage = action.payload.current_page;
-      state.perPage = action.payload.per_page;
-      state.totalPages = action.payload.total;
-      state.loading = false;
-    });
+      state.employeeData = action.payload.data
+      state.currentPage = action.payload.current_page
+      state.perPage = action.payload.per_page
+      state.totalPages = action.payload.total
+      state.loading = false
+    })
     builder.addCase(getAllEmployee.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+      state.loading = false
+      state.error = action.error.message
+    })
 
     // Add
-    builder.addCase(addEmployee.pending, (state) => {
-      state.loading = true;
-    });
+    builder.addCase(addEmployee.pending, state => {
+      state.loading = true
+    })
     builder.addCase(addEmployee.fulfilled, (state, action) => {
-      state.employeeData.push(action.payload);
-      state.loading = false;
-    });
+      state.employeeData.push(action.payload)
+      state.loading = false
+    })
     builder.addCase(addEmployee.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+      state.loading = false
+      state.error = action.error.message
+    })
 
     // Update
-    builder.addCase(updateEmployee.pending, (state) => {
-      state.loading = true;
-    });
+    builder.addCase(updateEmployee.pending, state => {
+      state.loading = true
+    })
     builder.addCase(updateEmployee.fulfilled, (state, action) => {
-      state.employeeData = state.employeeData.map((emp) =>
+      state.employeeData = state.employeeData.map(emp =>
         emp.id === action.payload.id ? action.payload : emp
-      );
-      state.loading = false;
-    });
+      )
+      state.loading = false
+    })
     builder.addCase(updateEmployee.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+      state.loading = false
+      state.error = action.error.message
+    })
 
     // Delete
-    builder.addCase(deleteEmployee.pending, (state) => {
-      state.loading = true;
-    });
+    builder.addCase(deleteEmployee.pending, state => {
+      state.loading = true
+    })
     builder.addCase(deleteEmployee.fulfilled, (state, action) => {
-      state.employeeData = state.employeeData.filter(
-        (emp) => emp.id !== action.meta.arg.id
-      );
-      state.loading = false;
-    });
+      state.employeeData = state.employeeData.filter(emp => emp.id !== action.meta.arg.id)
+      state.loading = false
+    })
     builder.addCase(deleteEmployee.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
-    builder.addCase(changePassword.pending, (state) => {
-      state.mutationLoading = true;
-    });
+      state.loading = false
+      state.error = action.error.message
+    })
+    builder.addCase(changePassword.pending, state => {
+      state.mutationLoading = true
+    })
     builder.addCase(changePassword.fulfilled, (state, action) => {
-      state.mutationLoading = false;
-    });
+      state.mutationLoading = false
+    })
     builder.addCase(changePassword.rejected, (state, action) => {
-      state.mutationLoading = false;
-    });
-    builder.addCase(changeStatus.pending, (state) => {
-      state.mutationLoading = true;
-    });
+      state.mutationLoading = false
+    })
+    builder.addCase(changeStatus.pending, state => {
+      state.mutationLoading = true
+    })
     builder.addCase(changeStatus.fulfilled, (state, action) => {
-      state.mutationLoading = false;
-    });
+      state.mutationLoading = false
+    })
     builder.addCase(changeStatus.rejected, (state, action) => {
-      state.mutationLoading = false;
-    });
+      state.mutationLoading = false
+    })
 
     // Get Single
-    builder.addCase(getSingleEmployee.pending, (state) => {
-      state.loading = true;
-    });
+    builder.addCase(getSingleEmployee.pending, state => {
+      state.loading = true
+    })
     builder.addCase(getSingleEmployee.fulfilled, (state, action) => {
       if (action.payload) {
         const {
@@ -451,26 +427,31 @@ export const employeeSlice = createSlice({
       }
     })
     builder.addCase(getSingleEmployee.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+      state.loading = false
+      state.error = action.error.message
+    })
 
     // Import
-    builder.addCase(importEmployeeData.pending, (state) => {
-      state.loading = true;
-    });
+    builder.addCase(importEmployeeData.pending, state => {
+      state.loading = true
+    })
     builder.addCase(importEmployeeData.fulfilled, (state, action) => {
-      state.employeeData = [...state.employeeData, ...action.payload];
-      state.loading = false;
-    });
+      state.employeeData = [...state.employeeData, ...action.payload]
+      state.loading = false
+    })
     builder.addCase(importEmployeeData.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
-
+      state.loading = false
+      state.error = action.error.message
+    })
   },
-});
+})
 
-export const { bindEmployeeData, setMetaData, setImageUrl, setSignatureUrl, bindSingleEmployeeData } = employeeSlice.actions;
+export const {
+  bindEmployeeData,
+  setMetaData,
+  setImageUrl,
+  setSignatureUrl,
+  bindSingleEmployeeData,
+} = employeeSlice.actions
 
-export default employeeSlice.reducer;
+export default employeeSlice.reducer

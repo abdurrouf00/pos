@@ -9,12 +9,12 @@ export const initialJobTypeData = {
     description: "",
     status: "active"
 }
-
+const jobTypeApi = 'settings/job-types';
 export const getAllJobTypes = createAsyncThunk('jobType/getAllJobTypes', async (params) => {
     const validParams = getObjectWithValidValues(params);
     const url = new URLSearchParams(validParams);
-    const api = `jobType?${url.toString()}`;
-    console.log('job type api', api);
+    const api = `${jobTypeApi}?${url.toString()}`;
+
     const result = axios.get(api)
         .then((res) => {
 
@@ -25,7 +25,7 @@ export const getAllJobTypes = createAsyncThunk('jobType/getAllJobTypes', async (
 })
 
 export const addJobType = createAsyncThunk('jobType/addJobType', async (data) => {
-    const result = axios.post("jobType", data)
+    const result = axios.post(jobTypeApi, data)
         .then((res) => {
 
             return res;
@@ -35,7 +35,7 @@ export const addJobType = createAsyncThunk('jobType/addJobType', async (data) =>
 })
 
 export const updateJobType = createAsyncThunk('jobType/updateJobType', async (data) => {
-    const result = axios.post(`jobType/${data?.id}`, { ...data, _method: "PUT" })
+    const result = axios.post(`${jobTypeApi}/${data?.id}`, { ...data, _method: "PUT" })
         .then((res) => {
 
             return res;
@@ -45,7 +45,7 @@ export const updateJobType = createAsyncThunk('jobType/updateJobType', async (da
 })
 
 export const getJobTypeById = createAsyncThunk('jobType/getJobTypeById', async (id) => {
-    const result = axios.get(`jobType/${id}`)
+    const result = axios.get(`${jobTypeApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })
@@ -54,7 +54,7 @@ export const getJobTypeById = createAsyncThunk('jobType/getJobTypeById', async (
 })
 
 export const deleteJobType = createAsyncThunk('jobType/deleteJobType', async (id) => {
-    const result = axios.delete(`jobType/${id}`)
+    const result = axios.delete(`${jobTypeApi}/${id}`)
         .then((res) => {
             return res.data.data;
         })

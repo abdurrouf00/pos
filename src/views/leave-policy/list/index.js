@@ -75,7 +75,7 @@ export default function LeavePolicyList() {
 
   const { data: leavePolicies, isLoading } = useGetLeavePoliciesQuery();
   const [deleteLeavePolicy, { isLoading: deleteLeavePolicyLoading }] = useDeleteLeavePolicyMutation();
-  console.log('leavePolicies', leavePolicies);
+
   const handleOpenAddModal = () => {
     setEditId(null);
     setOpenAddModal(true);
@@ -138,7 +138,7 @@ export default function LeavePolicyList() {
           loading={isLoading}
         />
       </div>
-      <FormModal open={openAddModal} setOpen={setOpenAddModal} editId={editId} setEditId={setEditId} />
+      {openAddModal && <FormModal open={openAddModal} setOpen={setOpenAddModal} editId={editId} setEditId={setEditId} />}
     </div>
   )
 }
