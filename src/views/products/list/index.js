@@ -50,7 +50,7 @@ const ProductsList = () => {
             <DataTable
               data={products?.data?.data || []}
               columns={productsColumn(handleEdit, handleDelete)}
-              globalFilterFields={['name']}
+              globalFilterFields={['product_name']}
               emptyMessage="No account heads found."
               rowsPerPageOptions={[5, 10, 25, 50, 100, 500]}
               showGlobalFilter={true}

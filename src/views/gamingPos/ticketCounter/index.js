@@ -30,6 +30,11 @@ export default function CounterSales  ()  {
        setLastVisit('2026-02-01')
        setVisitCount(5)
        toast.success('Customer data fetched!')
+    } else if (mobileNo === '01700000000') {
+       // Mocking a visit for today
+       setLastVisit(new Date().toISOString().split('T')[0])
+       setVisitCount(1)
+       toast.success('Customer who visited today found!')
     } else if(mobileNo.length >= 11) {
        setLastVisit('2026-02-05')
        setVisitCount(2)

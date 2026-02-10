@@ -9,8 +9,16 @@ const getColumns = () => {
     return [
 
         {
-            header: "Membership Name",
-            field: "membership_name",
+            header: "Mobile",
+            field: "mobile",
+        },
+        {
+            header: "Guardian Name",
+            field: "guardian_name",
+        },
+        {
+            header: "Kids Name",
+            field: "kids_name",
         },
         {
             header: "Membership ",
@@ -42,6 +50,9 @@ const MembershipList = () => {
             data: [
                 {
                     membership_name: "Premium Plan",
+                    mobile: "01700000000",
+                    guardian_name: "John Doe",
+                    kids_name: " Doe",
                     membership: "Gold",
                     start_day: "2024-01-01",
                     end_day: "2024-12-31",
@@ -50,6 +61,9 @@ const MembershipList = () => {
                 },
                 {
                     membership_name: "Basic Plan",
+                    mobile: "01700000001",
+                    guardian_name: "John Doe",
+                    kids_name: "John ",
                     membership: "Silver",
                     start_day: "2024-02-01",
                     end_day: "2024-08-01",
@@ -58,6 +72,9 @@ const MembershipList = () => {
                 },
                 {
                     membership_name: "Standard Plan",
+                    mobile: "01700000002",
+                    guardian_name: "John Doe",
+                    kids_name: "Jony",
                     membership: "Bronze",
                     start_day: "2024-03-15",
                     end_day: "2024-09-15",

@@ -179,11 +179,26 @@ export default function EntryLeftSection({
               </button>
            </div>
 
-           {/* Action Buttons */}
+           {/* Day pass action Buttons */}
            <div className="flex gap-2 w-full lg:w-auto h-9">
     
               <button 
-                  onClick={() => addQuickItem({ id: 'day_pass', name: 'Day Pass', price: 1200, type: 'ticket' })}
+                  onClick={() => {
+                    if (!mobileNo) {
+                      toast.error('Please enter mobile number first!')
+                      return
+                    }
+                    
+                    const today = new Date().toISOString().split('T')[0]
+                    const hasRegularTicket = items.some(item => item.type === 'ticket' && item.id !== 'day_pass')
+                    const alreadyVisitedToday = lastVisit === today
+
+                    if (hasRegularTicket || alreadyVisitedToday) {
+                        addQuickItem({ id: 'day_pass', name: 'Day Pass', price: 1200, type: 'ticket' })
+                    } else {
+                        toast.error('Day Pass only allowed if a ticket is purchased today!')
+                    }
+                  }}
                   className="flex-1 lg:flex-none px-3 bg-slate-800 hover:bg-black text-white rounded-md font-bold text-[10px] flex items-center justify-center gap-1 shadow-sm transition-all active:scale-95 whitespace-nowrap"
               >
                   <Bell size={12}/> DAY PASS
@@ -205,28 +220,8 @@ export default function EntryLeftSection({
       ) : (
         <div className="bg-amber-50/50 p-3 rounded-lg shadow-md border border-amber-100 flex flex-col items-start gap-4 text-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="flex w-full gap-3 items-end">
-             {/* <div className="w-full md:w-1/3 max-w-xs">                   
-                 <div className="flex h-9 shadow-sm rounded-md overflow-hidden border border-amber-200 focus-within:ring-1 focus-within:ring-amber-500 transition-all bg-white text-xs">
-                    <input 
-                        className="flex-1 px-2 focus:outline-none min-w-0" 
-                        placeholder="Member Mobile / ID"
-                        value={memberMobile}
-                        onChange={(e) => setMemberMobile(e.target.value)}
-                    />
-                    <button 
-                        onClick={handleMemberSearch}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 font-bold text-[10px] transition-colors shrink-0 uppercase"
-                    >
-                        Find
-                    </button>
-                 </div>
-             </div> */}
-
-
-
-
-        <div className="  w-full">
-          
+             
+        <div className="  w-full">       
 
           {/* Details Grid */}
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3">
