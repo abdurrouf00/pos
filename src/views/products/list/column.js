@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
-import { Edit, Eye, Trash2 } from 'lucide-react'
+import { Edit, Trash2, Radio } from 'lucide-react'
 
-export const productsColumn = (handleEdit, handleDelete) => {
+export const productsColumn = (handleEdit, handleDelete, handleAssignChannels) => {
   return [
     {
       header: 'Actions',
@@ -11,22 +11,31 @@ export const productsColumn = (handleEdit, handleDelete) => {
         <div className="flex gap-1 justify-center">
           <Popover>
             <PopoverTrigger asChild>
-              <span className="inline-block px-2 py-1">
+              <span className="inline-block px-2 py-1 cursor-pointer">
                 <HiOutlineDotsVertical />
               </span>
             </PopoverTrigger>
-            <PopoverContent className="w-40 px-2">
+            <PopoverContent className="w-44 px-2">
               <h4 className="text-xs text-gray-500 font-medium px-1">Actions</h4>
               <div className="pt-1">
                 <Button
-                  className={'text-xs w-full pl-1 justify-start'}
+                  className="text-xs w-full pl-1 justify-start"
                   variant="ghost"
                   onClick={() => handleEdit(rowData)}
                 >
                   <Edit /> Edit
                 </Button>
+                {handleAssignChannels && (
+                  <Button
+                    className="text-xs w-full pl-1 justify-start"
+                    variant="ghost"
+                    onClick={() => handleAssignChannels(rowData)}
+                  >
+                    <Radio /> Assign channels
+                  </Button>
+                )}
                 <Button
-                  className={'text-xs w-full pl-1 justify-start'}
+                  className="text-xs w-full pl-1 justify-start"
                   variant="ghost"
                   onClick={() => handleDelete(rowData)}
                 >
@@ -55,7 +64,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'manufacturer',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData.manufacturer.name}</h4>
+          <h4 className="text-sm font-bold">{rowData?.manufacturer?.name}</h4>
         </div>
       ),
     },
@@ -64,7 +73,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'unit_style',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData.unit_style.name}</h4>
+          <h4 className="text-sm font-bold">{rowData?.unit_style?.name}</h4>
         </div>
       ),
     },
@@ -73,7 +82,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'unit_price',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData.pricing.unit_price}</h4>
+          <h4 className="text-sm font-bold">{rowData?.pricing?.unit_price}</h4>
         </div>
       ),
     },
@@ -82,7 +91,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'quantity_in_stock',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData.stock.quantity_in_stock}</h4>
+          <h4 className="text-sm font-bold">{rowData?.stock?.quantity_in_stock}</h4>
         </div>
       ),
     },
@@ -91,7 +100,7 @@ export const productsColumn = (handleEdit, handleDelete) => {
       accessorKey: 'reorder_level',
       body: rowData => (
         <div>
-          <h4 className="text-sm font-bold">{rowData.stock.reorder_level}</h4>
+          <h4 className="text-sm font-bold">{rowData?.stock?.reorder_level}</h4>
         </div>
       ),
     },

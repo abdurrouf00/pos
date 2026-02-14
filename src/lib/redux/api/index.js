@@ -25,6 +25,8 @@ export const axiosBaseQuery =
 // Define a service using a base URL and expected endpoints
 const api = createApi({
   tagTypes: [
+    'TaxSettings',
+    'FoodCounter',
     'holidays',
     'accountHeads',
     'attendanceDevices',
@@ -45,6 +47,9 @@ const api = createApi({
     'Products',
     'ProductCategories',
     'Vendors',
+    'channels',
+    'ticketCounter',
+    'Coupons',
   ],
   reducerPath: 'base-api',
   baseQuery: axiosBaseQuery({ baseUrl: baseURL }),

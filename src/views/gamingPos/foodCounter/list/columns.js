@@ -1,12 +1,10 @@
-import { Popover, PopoverContent } from '@/components/ui/popover'
-import { PopoverTrigger } from '@radix-ui/react-popover'
 import { Button } from '@/components/ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
-import { Edit, Trash2 } from 'lucide-react'
-export const getUnitsColumns = (handleEdit, handleDelete) => {
+import { Edit, Eye, Trash2 } from 'lucide-react'
+export const columns = (handleEdit, handleDelete) => {
   return [
     {
-      field: 'actions',
       header: 'Actions',
       body: rowData => (
         <div className="flex gap-1 justify-center">
@@ -38,26 +36,26 @@ export const getUnitsColumns = (handleEdit, handleDelete) => {
           </Popover>
         </div>
       ),
+      sortable: false,
+      filter: false,
+    },
+
+    {
+      header: 'Customer Name',
+      field: 'customer_name',
     },
     {
-      title: 'Name',
-      field: 'name',
+      header: 'Discount',
+      field: 'discount_total',
     },
     {
-      title: 'Quantity',
-      field: 'quantity',
+      header: 'Total Amount',
+      field: 'total',
     },
     {
-      title: 'Unit Style',
-      field: 'unit_style?.name',
+      header: 'Status',
+      field: 'status',
     },
-    {
-      title: 'Has Tech Pack',
-      field: 'has_tech_pack',
-    },
-    {
-      title: 'Is Active',
-      field: 'is_active',
-    },
+   
   ]
 }

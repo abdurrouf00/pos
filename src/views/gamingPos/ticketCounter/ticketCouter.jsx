@@ -1,6 +1,8 @@
 'use client'
-import packages from './packege.json'
-import { Bell, Search, Trash2, Plus, Minus, Footprints, Ticket, Coins, Armchair, User, Baby, Calendar, ShieldCheck, Clock, Timer } from 'lucide-react'
+import { useMemo } from 'react'
+import { useGetTicketCounterQuery, useCheckCouponMutation, useFindCustomerByMobileMutation } from './store'
+import { Bell, Search, Trash2, Plus, Minus, Footprints, Ticket, Coins, Armchair, User, Baby, Calendar, ShieldCheck, Clock, Timer, CheckCircle, XCircle, Loader2 } from 'lucide-react'
+
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import HrInput from '@/components/common/HrInput'
@@ -26,15 +28,116 @@ export default function EntryLeftSection({
   // New visit props
   lastVisit,
   visitCount,
-  handleFindCustomer
+  handleFindCustomer,
+  // Coupon props
+  couponData,
+  setCouponData,
+  // Customer props
+  customerData,
+  setCustomerData,
 }) {
+  const { data: ticketData, isLoading: ticketsLoading } = useGetTicketCounterQuery()
+  const [checkCoupon, { isLoading: couponLoading }] = useCheckCouponMutation()
+  const [findCustomerByMobile, { isLoading: customerLoading }] = useFindCustomerByMobileMutation()
+
+  // Ticket response = POS products API: { data: { data: [ { id, product_name, product_code, pricing: { unit_price }, ... } ] } }
+  const packages = useMemo(() => {
+    const raw = ticketData?.data?.data ?? ticketData?.data ?? []
+    const list = Array.isArray(raw) ? raw : []
+    return list.map((item) => {
+      const typeSource = item.type ?? item.product_type?.name ?? item.product_type?.code ?? item.product_type ?? 'ticket'
+      const type = typeof typeSource === 'string' ? typeSource.toLowerCase() : 'ticket'
+      return {
+        id: item.id,
+        name: item.product_name ?? item.name ?? '',
+        price: Number(item.pricing?.unit_price ?? item.price ?? item.unit_price ?? 0),
+        type,
+        code: item.product_code ?? item.code ?? `${type.toUpperCase()}-${item.id}`,
+      }
+    })
+  }, [ticketData])
   const [activeTab, setActiveTab] = useState('ticket')
   const [memberMobile, setMemberMobile] = useState('')
   const [memberData, setMemberData] = useState(null)
 
-  const handleMemberSearch = () => {
-    // Mock search logic - replace with actual API call
+  // Handle Coupon Code Check using real API
+  const handleCouponCheck = async () => {
+    if (!couponCode || couponCode.trim() === '') {
+      toast.error('Please enter a coupon code!')
+      return
+    }
+
+    try {
+      const res = await checkCoupon(couponCode.trim())
+      
+      if (res?.data?.success) {
+        const coupon = res.data.data
+        setCouponData && setCouponData(coupon)
+        toast.success(res.data.message || 'Coupon is valid!')
+      } else {
+        setCouponData && setCouponData(null)
+        toast.error(res?.data?.message || 'Invalid coupon code')
+      }
+    } catch (error) {
+      setCouponData && setCouponData(null)
+      toast.error('Error checking coupon')
+    }
+  }
+
+  // Handle Customer/Member Search by Mobile
+  const handleCustomerSearch = async () => {
+    if (!mobileNo || mobileNo.trim().length < 11) {
+      toast.error('Please enter a valid mobile number (11 digits)!')
+      return
+    }
+
+    try {
+      const res = await findCustomerByMobile(mobileNo.trim())
+      
+      if (res?.data?.success) {
+        const customer = res.data.data
+        setCustomerData && setCustomerData(customer)
+        // Also trigger the parent's handleFindCustomer if needed
+        handleFindCustomer && handleFindCustomer()
+        toast.success(res.data.message || 'Customer found!')
+      } else {
+        // API not ready yet - fall back to mock/parent handler
+        setCustomerData && setCustomerData(null)
+        // Use parent handler for now (mock data)
+        handleFindCustomer && handleFindCustomer()
+      }
+    } catch (error) {
+      // API not ready - fall back to parent handler (mock)
+      handleFindCustomer && handleFindCustomer()
+    }
+  }
+
+  const handleMemberSearch = async () => {
+    // Try API first, fall back to mock if not ready
     if (memberMobile.length >= 10) {
+      try {
+        const res = await findCustomerByMobile(memberMobile.trim())
+        
+        if (res?.data?.success) {
+          const member = res.data.data
+          setMemberData({
+            guardian: member.guardian_name || member.name || '-',
+            kidName: member.kid_name || '-',
+            age: member.age || '-',
+            packageType: member.package_type || member.membership?.package_name || '-',
+            duration: member.duration || member.membership?.duration || '-',
+            startDay: member.start_date || member.membership?.start_date || '-',
+            endDay: member.end_date || member.membership?.end_date || '-',
+            daysLeft: member.days_left || member.membership?.days_left || 0
+          })
+          toast.success('Member Found!')
+          return
+        }
+      } catch (error) {
+        // API not ready - use mock
+      }
+      
+      // Mock fallback
       setMemberData({
         guardian: 'Simulated Guardian',
         kidName: 'Simulated Kid',
@@ -140,10 +243,11 @@ export default function EntryLeftSection({
                 />
               </div>
               <button 
-                  onClick={handleFindCustomer}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 h-9 font-bold text-[10px]    uppercase rounded-md  "
+                  onClick={handleCustomerSearch}
+                  disabled={customerLoading}
+                  className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-3 h-9 font-bold text-[10px] uppercase rounded-md flex items-center justify-center gap-1"
               >
-                  Find
+                  {customerLoading ? <Loader2 size={12} className="animate-spin" /> : 'Find'}
               </button>
            </div>
            
@@ -162,22 +266,48 @@ export default function EntryLeftSection({
 
            
            {/* Coupon Code */}
-           <div className="flex items-end w-full max-w-[200px] gap-1">
-              <div className="flex-1">
+           <div className="flex items-end w-full max-w-[240px] gap-1">
+              <div className="flex-1 relative">
                 <HrInput 
                     label="Coupon Code"
                     placeholder="Enter Code..."
                     value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    
+                    onChange={(e) => {
+                      setCouponCode(e.target.value)
+                      // Clear coupon data when code changes
+                      setCouponData && setCouponData(null)
+                    }}
                 />
+                {/* Coupon validation indicator */}
+                {couponData && (
+                  <span className="absolute right-2 top-7 text-green-500">
+                    <CheckCircle size={16} />
+                  </span>
+                )}
               </div>
               <button 
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 h-9 font-bold text-[10px]    uppercase rounded-md  "
+                  onClick={handleCouponCheck}
+                  disabled={couponLoading}
+                  className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-3 h-9 font-bold text-[10px] uppercase rounded-md flex items-center justify-center gap-1"
               >
-                  Find
+                  {couponLoading ? <Loader2 size={12} className="animate-spin" /> : 'Check'}
               </button>
            </div>
+
+           {/* Coupon Info Display */}
+           {couponData && (
+             <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-md px-3 py-1.5">
+               <CheckCircle size={14} className="text-green-600" />
+               <div className="text-xs">
+                 <span className="font-bold text-green-700">{couponData.coupon_name || couponData.coupon_code}</span>
+                 <span className="text-green-600 ml-2">
+                   {couponData.discount_type === 1 
+                     ? `৳${parseFloat(couponData.discount_amount).toFixed(0)} off` 
+                     : `${parseFloat(couponData.discount_amount).toFixed(0)}% off`}
+                 </span>
+               </div>
+             </div>
+           )}
 
            {/* Day pass action Buttons */}
            <div className="flex gap-2 w-full lg:w-auto h-9">
@@ -266,9 +396,9 @@ export default function EntryLeftSection({
                   <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Age</span>
                   <span className="font-bold text-slate-800 text-xs block">{memberData?.age || '-'}</span>
                 </div>
-             </div>
+             </div> 
 
-             {/* Package Info */}
+             {/*  Package Info */}
              <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3">
                 <div className="p-2 bg-green-50 text-green-600 rounded-lg">
                   <ShieldCheck size={18} />
@@ -310,6 +440,7 @@ export default function EntryLeftSection({
                   <span className="font-bold text-red-600 text-xs block">{memberData ? `${memberData.daysLeft} Days` : '-'}</span>
                 </div>
              </div>
+            
              
               <button 
                   onClick={handleMemberSearch}
@@ -326,17 +457,23 @@ export default function EntryLeftSection({
 
        {/* ================= BUTTONS ROW ================= */}
        <div className="grid grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-2">
-           {packages.map((pkg) => (
-             <button 
-                  key={pkg.id}
-                  onClick={() => addQuickItem(pkg)}
-                  className={`flex flex-col items-center justify-center gap-1 p-1 rounded border transition-all active:scale-95 shadow-sm h-16 ${getColorClass(pkg.type)}`}
-              >
+           {ticketsLoading ? (
+             <div className="col-span-full p-4 text-center text-slate-500 text-sm">Loading tickets...</div>
+           ) : packages.length === 0 ? (
+             <div className="col-span-full p-4 text-center text-slate-500 text-sm">No ticket products found.</div>
+           ) : (
+             packages.map((pkg) => (
+               <button
+                 key={pkg.id}
+                 onClick={() => addQuickItem(pkg)}
+                 className={`flex flex-col items-center justify-center gap-1 p-1 rounded border transition-all active:scale-95 shadow-sm h-16 ${getColorClass(pkg.type)}`}
+               >
                  {getIcon(pkg.type)}
                  <span className="font-bold text-[9px] text-center uppercase leading-tight">{pkg.name}</span>
                  <span className="text-[9px] font-bold opacity-80">৳{pkg.price}</span>
-             </button>
-           ))}
+               </button>
+             ))
+           )}
        </div>
 
 

@@ -1,10 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import EntryLeftSection from './ticketCouter'
+import EntryLeftSection from '../ticketCouter'
 import PriceCalculationSection from '../priceCalculate'
 import SalesReturnModals from '../model/index'
 import toast from 'react-hot-toast'
-import packages from './packege.json'
 
 export default function CounterSales  ()  {
   const [items, setItems] = useState([])
@@ -14,105 +13,76 @@ export default function CounterSales  ()  {
   // Lifted form states
   const [mobileNo, setMobileNo] = useState('')
   const [couponCode, setCouponCode] = useState('')
-  const [kidsName, setKidsName] = useState('')
   const [qtyInput, setQtyInput] = useState(1)
   
   // Visit History States
   const [lastVisit, setLastVisit] = useState('-')
   const [visitCount, setVisitCount] = useState(0)
 
-  // Coupon Data State
-  const [couponData, setCouponData] = useState(null)
-  
-  // Customer Data State
-  const [customerData, setCustomerData] = useState(null)
-
   // Simulation of finding customer data
   const handleFindCustomer = () => {
     if (!mobileNo) return toast.error('Enter mobile number first!')
     
     // Mock logic: different data for different numbers
-    if (mobileNo === '01700000055') {
-       setLastVisit('2026-02-01')
-       setVisitCount(5)
-       toast.success('Customer data fetched!')
-    } else if (mobileNo === '01700000000') {
-       // Mocking a visit for today
-       setLastVisit(new Date().toISOString().split('T')[0])
-       setVisitCount(1)
-       toast.success('Customer who visited today found!')
-    } else if(mobileNo.length >= 11) {
-       setLastVisit('2026-02-05')
-       setVisitCount(2)
-       toast.success('Customer found!')
-    } else {
-       setLastVisit('-')
-       setVisitCount(0)
-       toast.error('Customer not found!')
-    }
+    // if (mobileNo === '01700000055') {
+    //    setLastVisit('2026-02-01')
+    //    setVisitCount(5)
+    //    toast.success('Customer data fetched!')
+    // } else if(mobileNo.length >= 11) {
+    //    setLastVisit('2026-02-05')
+    //    setVisitCount(2)
+    //    toast.success('Customer found!')
+    // } else {
+    //    setLastVisit('-')
+    //    setVisitCount(0)
+    //    toast.error('Customer not found!')
+    // }
   }
 
 
-const handleAddItem = (product, qty = 1) => {
-  let newItems = [...items]
-
-  // same product + same free/paid sock আলাদা ধরা
-  const existingIndex = newItems.findIndex(
-    item => item.id === product.id && item.isFree === product.isFree
-  )
-
-  // ---------------------------
-  // 1️⃣ ADD / UPDATE PRODUCT
-  // ---------------------------
-  if (existingIndex >= 0) {
-    newItems[existingIndex].qty += qty
-    newItems[existingIndex].amount =
-      newItems[existingIndex].type === 'sock'
-        ? (newItems[existingIndex].isFree ? 0 : newItems[existingIndex].qty * newItems[existingIndex].price)
-        : newItems[existingIndex].qty * newItems[existingIndex].price
-  } else {
-    newItems.push({
-      ...product,
-      qty,
-      tax: 0,
-      amount:
-        product.type === 'sock'
-          ? (product.isFree ? 0 : product.price * qty)
-          : product.price * qty
-    })
-  }
-
-  // ---------------------------
-  // 2️⃣ Ticket / Massage → FREE SOCK
-  // ---------------------------
-  if (product.type === 'ticket' || product.type === 'massage') {
-    const sockIndex = newItems.findIndex(
-      i => i.type === 'sock' && i.isFree === true
-    )
-
-    if (sockIndex >= 0) {
-      newItems[sockIndex].qty += qty
+  // Add Item Handler
+  const handleAddItem = (product, qty = 1) => {
+    let newItems = [...items]
+    const existingIndex = newItems.findIndex((item) => item.id === product.id)
+    
+    if (existingIndex >= 0) {
+      // Update existing item
+      const updatedQty = newItems[existingIndex].qty + qty
+      newItems[existingIndex].qty = updatedQty
+      
+      // Special Pricing for Socks: First is free, others 50 each
+      if (product.type === 'sock') {
+        newItems[existingIndex].amount = (updatedQty - 1) * 50
+      } else {
+        newItems[existingIndex].amount = updatedQty * newItems[existingIndex].price
+      }
     } else {
-      const sockPkg = packages.find(p => p.type === 'sock') || { id: 12, name: 'Sock', price: 50, type: 'sock' }
-      newItems.push({
-        id: sockPkg.id,
-        name: `${sockPkg.name} (Free)`,
-        price: 0,
-        mrp: sockPkg.price,
+      // Add new item
+      const newItem = {
+        ...product,
         qty: qty,
         tax: 0,
-        amount: 0,
-        code: 'FREE-SOCK',
-        type: 'sock',
-        isFree: true
-      })
+        amount: product.id === 'sock' ? (qty - 1) * 50 : product.price * qty,
+      }
+      newItems.push(newItem)
     }
+
+    // TRIGGER: If adding ANY product that is NOT a sock, ensure at least 1 free sock exists
+    // if (product.type !== 'sock' && !newItems.find(i => i.type === 'sock')) {
+    //     newItems.push({
+    //         id: 12, // Using the ID from packege.json
+    //         name: 'Sock',
+    //         price: 50,
+    //         qty: 1,
+    //         tax: 0,
+    //         amount: 0, // First one is free
+    //         code: 'SOCK-12',
+    //         type: 'sock'
+    //     })
+    // }
+    
+    setItems(newItems)
   }
-
-  setItems(newItems)
-}
-
-
 
   const removeItem = (index) => {
     const updatedItems = items.filter((_, i) => i !== index)
@@ -158,31 +128,15 @@ const handleAddItem = (product, qty = 1) => {
   const subtotal = items.reduce((acc, item) => acc + item.amount, 0)
   const totalTax = items.reduce((acc, item) => acc + (item.amount * (item.tax || 0)) / 100, 0)
 
-  // Recalculate discount (including coupon discount)
+  // Recalculate discount
   useEffect(() => {
-    let manualDiscount = 0
-    
-    // Calculate manual discount
     if (discountType === 'percent') {
-      manualDiscount = (subtotal * Number(discountValue)) / 100
+      const calculated = (subtotal * Number(discountValue)) / 100
+      setDescount(calculated)
     } else {
-      manualDiscount = Number(discountValue)
+      setDescount(Number(discountValue))
     }
-    
-    // Add coupon discount if valid coupon applied
-    let couponDiscount = 0
-    if (couponData) {
-      if (couponData.discount_type === 2) {
-        // Percentage discount
-        couponDiscount = (subtotal * parseFloat(couponData.discount_amount)) / 100
-      } else {
-        // Fixed discount
-        couponDiscount = parseFloat(couponData.discount_amount)
-      }
-    }
-    
-    setDescount(manualDiscount + couponDiscount)
-  }, [subtotal, discountType, discountValue, couponData])
+  }, [subtotal, discountType, discountValue])
 
   const total = subtotal + totalTax - descount
   const changeReturn = paidAmount - total > 0 ? (paidAmount - total).toFixed(2) : 0
@@ -341,9 +295,6 @@ const handleAddItem = (product, qty = 1) => {
     setQtyInput(1)
     setLastVisit('-')
     setVisitCount(0)
-    // Clear coupon and customer data
-    setCouponData(null)
-    setCustomerData(null)
   }
 
   const handleReprint = () => {
@@ -453,8 +404,6 @@ const handleAddItem = (product, qty = 1) => {
         // Form states
         mobileNo={mobileNo}
         setMobileNo={setMobileNo}
-        kidsName={kidsName}
-        setKidsName={setKidsName}
         couponCode={couponCode}
         setCouponCode={setCouponCode}
         qtyInput={qtyInput}
@@ -463,12 +412,6 @@ const handleAddItem = (product, qty = 1) => {
         lastVisit={lastVisit}
         visitCount={visitCount}
         handleFindCustomer={handleFindCustomer}
-        // Coupon states
-        couponData={couponData}
-        setCouponData={setCouponData}
-        // Customer states
-        customerData={customerData}
-        setCustomerData={setCustomerData}
       />
       
       {/* Right Section */}

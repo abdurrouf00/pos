@@ -1,5 +1,9 @@
 import api from '@/lib/redux/api'
+
 const productsAPI = 'inventory/products'
+// GET/POST {{base}}/api/inventory/products/:productId/channels
+const productChannelsAPI = productId => `${productsAPI}/${productId}/channels`
+
 const productsApi = api.injectEndpoints({
   endpoints: builder => ({
     getAllProducts: builder.query({
@@ -8,7 +12,7 @@ const productsApi = api.injectEndpoints({
       overrideExisting: true,
     }),
     createProduct: builder.mutation({
-      query: data => ({ url: productsAPI, method: 'POST', data: data }),
+      query: data => ({ url: productsAPI, method: 'POST', data }),
       invalidatesTags: ['Products'],
     }),
     updateProduct: builder.mutation({
@@ -26,6 +30,25 @@ const productsApi = api.injectEndpoints({
     getProductById: builder.query({
       query: id => ({ url: `${productsAPI}/${id}`, method: 'GET' }),
     }),
+    getProductChannels: builder.query({
+      query: productId => ({ url: productChannelsAPI(productId), method: 'GET' }),
+      providesTags: (result, err, productId) => [{ type: 'Products', id: `${productId}-channels` }],
+    }),
+    saveProductChannels: builder.mutation({
+      query: ({ productId, channels }) => ({
+        url: productChannelsAPI(productId),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+          product_id: productId,
+          channels,
+        },
+      }),
+      invalidatesTags: (result, err, { productId }) => [
+        'Products',
+        { type: 'Products', id: `${productId}-channels` },
+      ],
+    }),
   }),
 })
 
@@ -35,4 +58,6 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
   useGetProductByIdQuery,
+  useGetProductChannelsQuery,
+  useSaveProductChannelsMutation,
 } = productsApi
