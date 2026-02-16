@@ -5,20 +5,20 @@ const accountHeadEndpoints = api.injectEndpoints({
     getAccountHeadsByQuery: builder.query({
       providesTags: ["accountHeads"],
       query: () => ({
-        url: "acc-head",
+        url: "accounts/account-heads",
         method: "GET",
       }),
     }),
     getAccountHeadById: builder.query({
       query: (id) => ({
-        url: `acc-head/${id}`,
+        url: `accounts/account-heads/${id}`,
         method: "GET",
       }),
 
     }),
     addAccountHead: builder.mutation({
       query: ({ data }) => ({
-        url: "acc-head",
+        url: "accounts/account-heads",
         method: "POST",
         data,
       }),
@@ -26,7 +26,7 @@ const accountHeadEndpoints = api.injectEndpoints({
     }),
     updateAccountHead: builder.mutation({
       query: ({ data }) => ({
-        url: `acc-head/${data.id}`,
+        url: `accounts/account-heads/${data.id}`,
         method: "PUT",
         data,
         headers: {
@@ -37,13 +37,13 @@ const accountHeadEndpoints = api.injectEndpoints({
     }),
     getAccountTypes: builder.query({
       query: () => ({
-        url: "acc-type",
+        url: "accounts/account-heads/account-type",
         method: "GET",
       }),
     }),
     deleteAccountHead: builder.mutation({
       query: (id) => ({
-        url: `acc-head/${id}`,
+        url: `accounts/account-heads/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["accountHeads"],
@@ -51,4 +51,6 @@ const accountHeadEndpoints = api.injectEndpoints({
   }),
 });
 
-export const { useGetAccountHeadByIdQuery, useAddAccountHeadMutation, useUpdateAccountHeadMutation, useDeleteAccountHeadMutation, useGetAccountTypesQuery, useGetAccountHeadsByQueryQuery } = accountHeadEndpoints;
+export const { useGetAccountHeadByIdQuery, useAddAccountHeadMutation, 
+  useUpdateAccountHeadMutation, useDeleteAccountHeadMutation, 
+  useGetAccountTypesQuery, useGetAccountHeadsByQueryQuery } = accountHeadEndpoints;

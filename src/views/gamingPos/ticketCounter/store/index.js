@@ -2,7 +2,7 @@ import api from "@/lib/redux/api";
 
 const productsPosApi = 'inventory/products/pos/products';
 const couponApi = 'inventory/coupons';
-const customerApi = 'contacts'; // Placeholder - update when API is ready
+const gamezoneApi = 'gamezone-pos';
 
 const productsPosEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -45,20 +45,40 @@ const productsPosEndpoints = api.injectEndpoints({
       }),
       invalidatesTags: ["productsPos"],
     }),
-    // Check coupon validity
+    // Check coupon validity (optional - buy with or without)
     checkCoupon: builder.mutation({
       query: (couponCode) => ({
         url: `${couponApi}/${couponCode}/find`,
         method: "POST",
       }),
     }),
-    // Find customer by mobile number (placeholder - update endpoint when API is ready)
-    findCustomerByMobile: builder.mutation({
-      query: (mobileNo) => ({
-        url: `${customerApi}/find-by-mobile`,
-        method: "POST",
-        data: { mobile: mobileNo },
+    // Find member/customer by mobile - gamezone-pos
+    searchMemberByMobile: builder.query({
+      query: (mobile) => ({
+        url: `${gamezoneApi}/membership-search-by-mobile?mobile=${encodeURIComponent(mobile || '')}`,
+        method: "GET",
       }),
+      providesTags: ["membership"],
+    }),
+    // Store package purchase - buy membership package
+    storePackagePurchase: builder.mutation({
+      query: ({ membershipId, ...data }) => ({
+        url: `${gamezoneApi}/membership/${membershipId}/store-package-purchase`,
+        method: "POST",
+        data,
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["membership", "ticketCounter"],
+    }),
+    // Create ticket counter sale (tickets/products)
+    createTicketCounterSale: builder.mutation({
+      query: (data) => ({
+        url: `${gamezoneApi}/ticket-counter`,
+        method: "POST",
+        data,
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["ticketCounter"],
     }),
   }),
 });
@@ -70,5 +90,8 @@ export const {
   useDeleteProductPosMutation, 
   useGetProductPosByIdQuery,
   useCheckCouponMutation,
-  useFindCustomerByMobileMutation,
+  useSearchMemberByMobileQuery,
+  useLazySearchMemberByMobileQuery,
+  useStorePackagePurchaseMutation,
+  useCreateTicketCounterSaleMutation,
 } = productsPosEndpoints;

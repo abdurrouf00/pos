@@ -1,5 +1,5 @@
 'use client'
-import { UserPlus, Bell, Search, Trash2, Plus, Minus, RefreshCw, Printer } from 'lucide-react'
+import { UserPlus, Bell, Search, Trash2, Plus, Minus, RefreshCw, Printer, Popcorn } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import HrSelect from '@/components/common/HrSelect'
 import { Button } from '@/components/ui/button'
@@ -65,31 +65,34 @@ export default function SalesReturnTopSection({
           </span>
         </div>
         <div className="flex gap-2">
-          <button
+          <Button
             onClick={() => salesClose()}
-            className="bg-green-600 text-white hover:bg-green-700 px-1 py-1 rounded text-sm font-semibold"
+            className="bg-green-600 text-white hover:bg-green-700 "
+            size="sm"
           >
             Sales Close
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => window.location.reload()}
-            className="bg-yellow-400 text-black hover:bg-yellow-500 px-1 py-1 rounded text-sm font-semibold"
+            className="bg-yellow-400 text-black hover:bg-yellow-500 "
+            size="sm"
           >
             Refresh
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handlePayAll}
-            className="bg-red-600 text-white hover:bg-red-700 px-1 py-1 rounded text-sm font-semibold"
+            className="bg-red-700 text-white hover:bg-red-700 "
+            size="sm"
           >
             Place Order
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* ================= INPUTS ROW 1 ================= */}
       <div className="bg-white p-2 rounded shadow-sm flex gap-2 items-end border">
         {/* Ticket No */}
-        <div className="">
+        {/* <div className="">
           <label className="text-xs text-slate-500 block mb-1">Entry Ticket Number</label>
           <div className="flex relative items-center">
             <input
@@ -102,10 +105,24 @@ export default function SalesReturnTopSection({
               Find
             </button>
           </div>
-        </div>
+        </div> */}
+             <div className="w-1/2 ">
+             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Entry Ticket Number</label>
+             <div className="flex h-9 shadow-sm rounded-md overflow-hidden border border-slate-200 focus-within:ring-1 focus-within:ring-blue-500 transition-all bg-white text-xs">
+                <input 
+                    className="flex-1 px-2 focus:outline-none min-w-0" 
+                    placeholder="Enter Code..."
+                    value={ticketNo}
+                    onChange={e => setTicketNo(e.target.value)}
+                />
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 font-bold text-[10px] transition-colors shrink-0 uppercase">
+                    Find
+                </button>
+             </div>
+         </div>
 
         {/* Mobile No */}
-        <div className="">
+        {/* <div className="">
           <label className="text-xs text-slate-500 block mb-1">Mobile No</label>
           <div className="flex relative items-center h-8">
             <input
@@ -118,37 +135,61 @@ export default function SalesReturnTopSection({
               Find
             </button>
           </div>
-        </div>
+        </div> */}
+              <div className="w-1/2 ">
+             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                 Mobile Number <span className="text-red-500">*</span>
+             </label>
+             <div className="flex h-9 shadow-sm rounded-md overflow-hidden border border-slate-200 focus-within:ring-1 focus-within:ring-blue-500 transition-all bg-white text-xs">
+                <input 
+                    className="flex-1 px-2 focus:outline-none bg-blue-50/20 min-w-0" 
+                    placeholder="01XXXXXXXXX"
+                    value={mobileNo}
+                    onChange={(e) => setMobileNo(e.target.value)}
+                />
+                <button 
+                    
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 font-bold text-[10px] transition-colors shrink-0 uppercase"
+                >
+                    Find
+                </button>
+             </div>
+         </div>
 
         <div className="flex gap-2">
-          <button
+          <Button
             onClick={() => {
               const p = productsData.find(pd => pd.name === 'Popcorn')
               if (p) handleAddItem(p)
             }}
-            className="bg-amber-100 text-amber-700 border border-amber-200 px-4 py-1 rounded font-bold text-sm hover:bg-amber-200 transition-all active:scale-95 h-8 flex items-center"
+          size="sm"
+           className=" bg-slate-800 hover:bg-black text-xs"
           >
-            Popcorn
-          </button>
-          <button
+            <Popcorn
+            size={12}/>
+            POPCORN
+          </Button>
+          <Button
             onClick={() => {
               const p = productsData.find(pd => pd.name === 'FRESH WATER')
               if (p) handleAddItem(p)
             }}
-            className="bg-blue-100 text-blue-700 border border-blue-200 px-4 py-1 rounded font-bold text-sm hover:bg-blue-200 transition-all active:scale-95 h-8 flex items-center"
+            size="sm"
+            className=" bg-green-600 hover:bg-green-900 text-xs"
           >
+          
             Water
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* ================= CART TABLE ================= */}
-      <div className="border rounded bg-white flex-1 overflow-auto shadow-sm relative min-h-[400px]">
+      <div className="border rounded bg-white flex-1 overflow-auto shadow-sm min-h-[300px]">
         <table className="w-full text-xs table-fixed">
-          <thead className=" border bg-gray-100 sticky top-0 z-10">
+          <thead className=" bg-gray-100">
             <tr>
-              <th className="px-2 py-1 text-left font-bold border-r w-[20%] text-nowrap">
-                Item Name
+              <th className="p-2 text-center font-bold border-r w-12">
+                ITEM
               </th>
               <th className="px-2 py-1 text-center font-bold border-r text-nowrap">M.R.P</th>
               <th className="px-2 py-1 text-center font-bold border-r w-42">QTY</th>

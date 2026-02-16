@@ -81,7 +81,7 @@ export default function CustomSelect({
             {selectedOption ? (
               <span className="truncate">{selectedOption.label}</span>
             ) : (
-              <span className="text-muted-foreground">{placeholder}</span>
+              <span className="text-muted-foreground">{placeholder || 'Select an option...'}</span>
             )}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -103,6 +103,7 @@ export default function CustomSelect({
                     <CommandItem
                       key={option.value}
                       value={option.value}
+                      className={'text-xs'}
                       onSelect={value => handleSelect(value, option)}
                     >
                       <Check

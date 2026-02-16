@@ -1,11 +1,12 @@
 'use client'
-import { useMemo } from 'react'
-import { useGetTicketCounterQuery, useCheckCouponMutation, useFindCustomerByMobileMutation } from './store'
-import { Bell, Search, Trash2, Plus, Minus, Footprints, Ticket, Coins, Armchair, User, Baby, Calendar, ShieldCheck, Clock, Timer, CheckCircle, XCircle, Loader2 } from 'lucide-react'
-
+import { useMemo, useEffect } from 'react'
+import { useGetTicketCounterQuery, useLazySearchMemberByMobileQuery } from './store'
+import { Bell, Search, Trash2, Plus, Minus, Footprints, Ticket, Coins, Armchair, User, Baby, ShieldCheck, Timer, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import HrInput from '@/components/common/HrInput'
+import MembershipFormModal from './MembershipFormModal'
+
 
 export default function EntryLeftSection({
   items,
@@ -21,138 +22,177 @@ export default function EntryLeftSection({
   setMobileNo,
   kidsName,
   setKidsName,
-  couponCode,
-  setCouponCode,
   qtyInput,
   setQtyInput,
   // New visit props
   lastVisit,
   visitCount,
   handleFindCustomer,
-  // Coupon props
-  couponData,
-  setCouponData,
   // Customer props
   customerData,
   setCustomerData,
+  formResetTrigger,
 }) {
   const { data: ticketData, isLoading: ticketsLoading } = useGetTicketCounterQuery()
-  const [checkCoupon, { isLoading: couponLoading }] = useCheckCouponMutation()
-  const [findCustomerByMobile, { isLoading: customerLoading }] = useFindCustomerByMobileMutation()
+  const [searchMemberByMobile, { isLoading: customerLoading }] = useLazySearchMemberByMobileQuery()
 
-  // Ticket response = POS products API: { data: { data: [ { id, product_name, product_code, pricing: { unit_price }, ... } ] } }
+  // Ticket response = POS products API: { data: { data: { data: [...], current_page } } } (paginated) or { data: { data: [...] } }
   const packages = useMemo(() => {
-    const raw = ticketData?.data?.data ?? ticketData?.data ?? []
-    const list = Array.isArray(raw) ? raw : []
+    const res = ticketData?.data?.data
+    const list = Array.isArray(res) ? res : (res?.data ?? [])
     return list.map((item) => {
       const typeSource = item.type ?? item.product_type?.name ?? item.product_type?.code ?? item.product_type ?? 'ticket'
       const type = typeof typeSource === 'string' ? typeSource.toLowerCase() : 'ticket'
+      const posChannel = item.product_channels?.find?.(
+        pc => pc.channel?.code === 'pos' || pc.channel?.name?.toLowerCase() === 'pos'
+      )
+      const unitPrice = posChannel?.custom_price != null
+        ? parseFloat(posChannel.custom_price)
+        : parseFloat(item.pricing?.unit_price ?? item.price ?? item.unit_price ?? 0)
       return {
         id: item.id,
         name: item.product_name ?? item.name ?? '',
-        price: Number(item.pricing?.unit_price ?? item.price ?? item.unit_price ?? 0),
+        price: Number(unitPrice) || 0,
+        mrp: Number(item.pricing?.unit_price ?? item.price ?? 0) || unitPrice,
         type,
         code: item.product_code ?? item.code ?? `${type.toUpperCase()}-${item.id}`,
+        stock: item.stock?.quantity_in_stock != null ? parseFloat(item.stock.quantity_in_stock) : null,
       }
     })
   }, [ticketData])
   const [activeTab, setActiveTab] = useState('ticket')
   const [memberMobile, setMemberMobile] = useState('')
   const [memberData, setMemberData] = useState(null)
+  const [memberFound, setMemberFound] = useState(null)
+  const [searchedNotFound, setSearchedNotFound] = useState(false)
+  const [membershipModalOpen, setMembershipModalOpen] = useState(false)
 
-  // Handle Coupon Code Check using real API
-  const handleCouponCheck = async () => {
-    if (!couponCode || couponCode.trim() === '') {
-      toast.error('Please enter a coupon code!')
-      return
-    }
-
-    try {
-      const res = await checkCoupon(couponCode.trim())
-      
-      if (res?.data?.success) {
-        const coupon = res.data.data
-        setCouponData && setCouponData(coupon)
-        toast.success(res.data.message || 'Coupon is valid!')
-      } else {
-        setCouponData && setCouponData(null)
-        toast.error(res?.data?.message || 'Invalid coupon code')
-      }
-    } catch (error) {
-      setCouponData && setCouponData(null)
-      toast.error('Error checking coupon')
-    }
-  }
-
-  // Handle Customer/Member Search by Mobile
-  const handleCustomerSearch = async () => {
-    if (!mobileNo || mobileNo.trim().length < 11) {
-      toast.error('Please enter a valid mobile number (11 digits)!')
-      return
-    }
-
-    try {
-      const res = await findCustomerByMobile(mobileNo.trim())
-      
-      if (res?.data?.success) {
-        const customer = res.data.data
-        setCustomerData && setCustomerData(customer)
-        // Also trigger the parent's handleFindCustomer if needed
-        handleFindCustomer && handleFindCustomer()
-        toast.success(res.data.message || 'Customer found!')
-      } else {
-        // API not ready yet - fall back to mock/parent handler
-        setCustomerData && setCustomerData(null)
-        // Use parent handler for now (mock data)
-        handleFindCustomer && handleFindCustomer()
-      }
-    } catch (error) {
-      // API not ready - fall back to parent handler (mock)
-      handleFindCustomer && handleFindCustomer()
-    }
-  }
-
-  const handleMemberSearch = async () => {
-    // Try API first, fall back to mock if not ready
-    if (memberMobile.length >= 10) {
-      try {
-        const res = await findCustomerByMobile(memberMobile.trim())
-        
-        if (res?.data?.success) {
-          const member = res.data.data
-          setMemberData({
-            guardian: member.guardian_name || member.name || '-',
-            kidName: member.kid_name || '-',
-            age: member.age || '-',
-            packageType: member.package_type || member.membership?.package_name || '-',
-            duration: member.duration || member.membership?.duration || '-',
-            startDay: member.start_date || member.membership?.start_date || '-',
-            endDay: member.end_date || member.membership?.end_date || '-',
-            daysLeft: member.days_left || member.membership?.days_left || 0
-          })
-          toast.success('Member Found!')
-          return
-        }
-      } catch (error) {
-        // API not ready - use mock
-      }
-      
-      // Mock fallback
-      setMemberData({
-        guardian: 'Simulated Guardian',
-        kidName: 'Simulated Kid',
-        age: '5 Years',
-        packageType: 'Gold Pack',
-        duration: '12 Months',
-        startDay: '2025-01-01',
-        endDay: '2025-12-31',
-        daysLeft: 320
-      })
-      toast.success('Member Found!')
-    } else {
-      toast.error('Member not found (Enter 10+ digits)')
+  useEffect(() => {
+    if (formResetTrigger > 0) {
+      setMemberMobile('')
       setMemberData(null)
+      setMemberFound(null)
+      setSearchedNotFound(false)
+      setMembershipModalOpen(false)
     }
+  }, [formResetTrigger])
+
+  // Handle Customer/Member Search by Mobile - gamezone-pos API
+  const handleCustomerSearch = async () => {
+    if (!mobileNo || mobileNo.trim().length < 10) {
+      toast.error('Please enter a valid mobile number (min 10 digits)!')
+      return
+    }
+
+    try {
+      const res = await searchMemberByMobile(mobileNo.trim())
+      
+      const memberships = res?.data?.data
+      const first = Array.isArray(memberships) ? memberships[0] : memberships
+      if (res?.data?.success && first) {
+        const customer = {
+          id: first.id,
+          membership_id: first.id,
+          guardian_name: first.guardian_name || first.client?.name || '-',
+          guardian_phone: first.guardian_phone || first.client?.contact,
+          child_name: first.child_name,
+          dob: first.dob ? String(first.dob).split('T')[0] : '',
+          package_name: first.membership_package?.package_name,
+          activation_date: first.activation_date,
+          expiry_date: first.expiry_date,
+          remaining_days: first.remaining_days,
+        }
+        setCustomerData && setCustomerData(customer)
+        handleFindCustomer && handleFindCustomer(Array.isArray(memberships) ? memberships : [first])
+        toast.success(res.data.message || 'Member found!')
+      } else {
+        setCustomerData && setCustomerData(null)
+        handleFindCustomer && handleFindCustomer(null)
+        toast.info(res?.data?.message || 'No member found - will add as new')
+      }
+    } catch (error) {
+      setCustomerData && setCustomerData(null)
+      handleFindCustomer && handleFindCustomer(null)
+      toast.error(error?.data?.message || 'Error searching member')
+    }
+  }
+
+  const handleMemberSearch = async (phoneOverride) => {
+    const phone = (phoneOverride ?? memberMobile)?.trim?.()
+    if (!phone || phone.length < 10) {
+      if (!phoneOverride) {
+        toast.error('Please enter a valid mobile number (min 10 digits)')
+        setMemberData(null)
+        setMemberFound(null)
+      }
+      return
+    }
+    if (phoneOverride) setMemberMobile(phone)
+    try {
+      const res = await searchMemberByMobile(phone)
+      const m = res?.data?.data
+
+      if (res?.data?.success && m && typeof m === 'object') {
+        setSearchedNotFound(false)
+        setMemberFound(m)
+        setMemberData({
+          id: m.id,
+          guardian: m.guardian_name || m.client?.name || '-',
+          kidName: m.child_name || '-',
+          age: m.dob ? new Date().getFullYear() - new Date(m.dob).getFullYear() + ' Years' : '-',
+          packageType: m.membership_package?.package_name || '-',
+          duration: m.membership_package?.package_days ? `${m.membership_package.package_days} Days` : '-',
+          startDay: m.activation_date || '-',
+          endDay: m.expiry_date || '-',
+          daysLeft: m.remaining_days ?? '-'
+        })
+        setCustomerData && setCustomerData({
+          id: m.id,
+          membership_id: m.id,
+          guardian_name: m.guardian_name || m.client?.name || '-',
+          guardian_phone: m.guardian_phone || m.client?.contact || phone,
+          child_name: m.child_name,
+          dob: m.dob ? String(m.dob).split('T')[0] : '',
+          package_name: m.membership_package?.package_name,
+          activation_date: m.activation_date,
+          expiry_date: m.expiry_date,
+          remaining_days: m.remaining_days,
+        })
+        setMobileNo && setMobileNo(phone)
+        toast.success('Member found!')
+      } else {
+        setSearchedNotFound(true)
+        setMemberFound(null)
+        setMemberData(null)
+        setCustomerData && setCustomerData(null)
+        toast.error('No member found for this phone no')
+      }
+    } catch (error) {
+      setSearchedNotFound(true)
+      setMemberFound(null)
+      setMemberData(null)
+      setCustomerData && setCustomerData(null)
+      toast.error(error?.data?.message || 'Error searching member')
+    }
+  }
+
+  const getMembershipModalInitialData = () => {
+    if (memberFound) {
+      return {
+        id: memberFound.id,
+        guardian_phone: memberFound.guardian_phone || memberFound.client?.contact || memberMobile,
+        guardian_name: memberFound.guardian_name || memberFound.client?.name || '',
+        guardian_phone_secondary: memberFound.guardian_phone_secondary || memberFound.client?.alt_contact || '',
+        guardian_email: memberFound.guardian_email || memberFound.client?.mail || '',
+        child_name: memberFound.child_name || '',
+        dob: memberFound.dob ? String(memberFound.dob).split('T')[0] : '',
+        address: memberFound.address || memberFound.client?.present_address || '',
+        child_class: memberFound.child_class || '',
+        school_name: memberFound.school_name || '',
+        package_for: memberFound.package_for || '',
+      }
+    }
+    return { guardian_phone: memberMobile.trim() }
   }
 
   const salesClose = () => {
@@ -165,9 +205,9 @@ export default function EntryLeftSection({
       id: pkg.id,
       name: pkg.name,
       price: activeTab === 'membership' ? 0 : pkg.price,
-      mrp: pkg.price, // Store original price for display
+      mrp: pkg.mrp ?? pkg.price,
       type: pkg.type,
-      stock: 999,
+      stock: pkg.stock ?? 999,
       code: (pkg.type || 'ITEM').toUpperCase() + "-" + pkg.id
     }, qtyInput)
   }
@@ -264,51 +304,6 @@ export default function EntryLeftSection({
               
            
 
-           
-           {/* Coupon Code */}
-           <div className="flex items-end w-full max-w-[240px] gap-1">
-              <div className="flex-1 relative">
-                <HrInput 
-                    label="Coupon Code"
-                    placeholder="Enter Code..."
-                    value={couponCode}
-                    onChange={(e) => {
-                      setCouponCode(e.target.value)
-                      // Clear coupon data when code changes
-                      setCouponData && setCouponData(null)
-                    }}
-                />
-                {/* Coupon validation indicator */}
-                {couponData && (
-                  <span className="absolute right-2 top-7 text-green-500">
-                    <CheckCircle size={16} />
-                  </span>
-                )}
-              </div>
-              <button 
-                  onClick={handleCouponCheck}
-                  disabled={couponLoading}
-                  className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-3 h-9 font-bold text-[10px] uppercase rounded-md flex items-center justify-center gap-1"
-              >
-                  {couponLoading ? <Loader2 size={12} className="animate-spin" /> : 'Check'}
-              </button>
-           </div>
-
-           {/* Coupon Info Display */}
-           {couponData && (
-             <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-md px-3 py-1.5">
-               <CheckCircle size={14} className="text-green-600" />
-               <div className="text-xs">
-                 <span className="font-bold text-green-700">{couponData.coupon_name || couponData.coupon_code}</span>
-                 <span className="text-green-600 ml-2">
-                   {couponData.discount_type === 1 
-                     ? `৳${parseFloat(couponData.discount_amount).toFixed(0)} off` 
-                     : `${parseFloat(couponData.discount_amount).toFixed(0)}% off`}
-                 </span>
-               </div>
-             </div>
-           )}
-
            {/* Day pass action Buttons */}
            <div className="flex gap-2 w-full lg:w-auto h-9">
     
@@ -348,110 +343,90 @@ export default function EntryLeftSection({
            </div>
         </div>
       ) : (
-        <div className="bg-amber-50/50 p-3 rounded-lg shadow-md border border-amber-100 flex flex-col items-start gap-4 text-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <div className="flex w-full gap-3 items-end">
-             
-        <div className="  w-full">       
-
-          {/* Details Grid */}
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3">
-            <div className="w-full max-w-[240px] ">
-                <HrInput 
-                    label="Member Mobile / ID"
-                    required
-                    placeholder="01XXXXXXXXX"
-                    value={memberMobile}
-                    onChange={(e) => setMemberMobile(e.target.value)}
-                    className="h-10 bg-white"
-                />
-             </div>
-            
-
-             {/* Personal Info */}
-             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3">
-                <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                  <User size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Guardian</span>
-                  <span className="font-bold text-slate-800 text-xs block truncate">{memberData?.guardian || '-'}</span>
-                </div>
-             </div>
-
-             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3">
-                <div className="p-2 bg-pink-50 text-pink-600 rounded-lg">
-                  <Baby size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Kid Name</span>
-                  <span className="font-bold text-slate-800 text-xs block truncate">{memberData?.kidName || '-'}</span>
-                </div>
-             </div>
-
-             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3">
-                <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
-                  <Calendar size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Age</span>
-                  <span className="font-bold text-slate-800 text-xs block">{memberData?.age || '-'}</span>
-                </div>
-             </div> 
-
-             {/*  Package Info */}
-             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3">
-                <div className="p-2 bg-green-50 text-green-600 rounded-lg">
-                  <ShieldCheck size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Package</span>
-                  <span className="font-bold text-green-700 text-xs block truncate">{memberData?.packageType || '-'}</span>
-                </div>
-             </div>
-
-             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3">
-                <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
-                  <Clock size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Duration</span>
-                  <span className="font-bold text-amber-700 text-xs block">{memberData?.duration || '-'}</span>
-                </div>
-             </div>
-
-             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center gap-3 col-span-1 md:col-span-1">
-                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-                  <Calendar size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase font-bold leading-none mb-1">Validity</span>
-                  <span className="font-bold text-indigo-800 text-[10px] block font-mono">
-                    {memberData ? `${memberData.startDay} to ${memberData.endDay}` : '-'}
-                  </span>
-                </div>
-             </div>
-
-             <div className="bg-red-50 p-2 rounded-lg border border-red-100 shadow-sm flex items-center gap-3">
-                <div className="p-2 bg-white text-red-600 rounded-lg shadow-sm">
-                  <Timer size={18} />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-red-400 uppercase font-bold leading-none mb-1">Remaining</span>
-                  <span className="font-bold text-red-600 text-xs block">{memberData ? `${memberData.daysLeft} Days` : '-'}</span>
-                </div>
-             </div>
-            
-             
-              <button 
-                  onClick={handleMemberSearch}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 h-10 font-bold text-xs uppercase rounded-lg shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2"
-              >
-                  <Search size={14} /> Find Member
-              </button>
-             
+        <div className="bg-amber-50/50 p-3 rounded-lg shadow-md border border-amber-100 flex flex-col gap-4 text-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {/* Mobile + Search */}
+          <div className="flex items-end gap-2">
+            <div className="flex-1 max-w-[220px]">
+              <HrInput
+                label="Member Mobile"
+                required
+                placeholder="01XXXXXXXXX"
+                value={memberMobile}
+                onChange={(e) => setMemberMobile(e.target.value)}
+                className="h-10 bg-white"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleMemberSearch(); }}
+              disabled={customerLoading}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white p-2.5 h-10 rounded-lg flex items-center justify-center"
+              title="Search member"
+            >
+              {customerLoading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMembershipModalOpen(true)}
+              className="bg-green-600 hover:bg-green-700 text-white p-2.5 h-10 rounded-lg flex items-center justify-center gap-1.5 font-medium text-sm"
+              title={memberFound ? 'Edit member' : 'Add membership'}
+            >
+              {memberFound ? 'Edit' : 'Add'}
+            </button>
           </div>
-        </div>
-          </div>
+
+          {searchedNotFound && !memberFound && (
+            <p className="text-amber-700 text-xs font-medium bg-amber-100 px-3 py-2 rounded">
+              No member found for this phone no
+            </p>
+          )}
+
+          {/* Member Info (when found) */}
+          {memberData && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="bg-white p-2 rounded-lg border flex items-center gap-2">
+                <User size={16} className="text-blue-600" />
+                <div>
+                  <span className="text-[9px] text-slate-400 block">Guardian</span>
+                  <span className="font-bold text-xs truncate">{memberData.guardian || '-'}</span>
+                </div>
+              </div>
+              <div className="bg-white p-2 rounded-lg border flex items-center gap-2">
+                <Baby size={16} className="text-pink-600" />
+                <div>
+                  <span className="text-[9px] text-slate-400 block">Child</span>
+                  <span className="font-bold text-xs truncate">{memberData.kidName || '-'}</span>
+                </div>
+              </div>
+              <div className="bg-white p-2 rounded-lg border flex items-center gap-2">
+                <ShieldCheck size={16} className="text-green-600" />
+                <div>
+                  <span className="text-[9px] text-slate-400 block">Package</span>
+                  <span className="font-bold text-xs truncate">{memberData.packageType || '-'}</span>
+                </div>
+              </div>
+              <div className="bg-white p-2 rounded-lg border flex items-center gap-2">
+                <Timer size={16} className="text-red-600" />
+                <div>
+                  <span className="text-[9px] text-slate-400 block">Remaining</span>
+                  <span className="font-bold text-xs">{memberData.daysLeft ?? '-'}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {membershipModalOpen && (
+            <MembershipFormModal
+              open={membershipModalOpen}
+              onClose={() => setMembershipModalOpen(false)}
+              mode={memberFound ? 'edit' : 'add'}
+              initialData={getMembershipModalInitialData()}
+              onSuccess={(savedData) => {
+                const phone = savedData?.guardian_phone || memberMobile?.trim()
+                handleMemberSearch(phone || undefined)
+              }}
+            />
+          )}
         </div>
       )}
 
@@ -510,7 +485,7 @@ export default function EntryLeftSection({
                     </div>
                  </td>              
                  <td className="p-2 text-center font-bold border-r bg-gray-100">
-                   {item.amount.toFixed(0)}
+                   {((item.mrp ?? item.price ?? 0) * (item.qty ?? 1)).toFixed(0)}
                  </td>
                  <td className="p-2 text-center bg-gray-100">
                    <button

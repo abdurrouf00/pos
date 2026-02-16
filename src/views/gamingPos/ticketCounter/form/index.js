@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react'
 import EntryLeftSection from '../ticketCouter'
 import PriceCalculationSection from '../priceCalculate'
 import SalesReturnModals from '../model/index'
+import HrInput from '@/components/common/HrInput'
+import { useCheckCouponMutation } from '../store'
+import { CheckCircle, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function CounterSales  ()  {
@@ -13,11 +16,35 @@ export default function CounterSales  ()  {
   // Lifted form states
   const [mobileNo, setMobileNo] = useState('')
   const [couponCode, setCouponCode] = useState('')
+  const [couponData, setCouponData] = useState(null)
   const [qtyInput, setQtyInput] = useState(1)
   
+  const [checkCoupon, { isLoading: couponLoading }] = useCheckCouponMutation()
+
+  const handleCouponCheck = async () => {
+    if (!couponCode || couponCode.trim() === '') {
+      toast.error('Please enter a coupon code!')
+      return
+    }
+    try {
+      const res = await checkCoupon(couponCode.trim())
+      if (res?.data?.success) {
+        setCouponData(res.data.data)
+        toast.success(res.data.message || 'Coupon is valid!')
+      } else {
+        setCouponData(null)
+        toast.error(res?.data?.message || 'Invalid coupon code')
+      }
+    } catch (error) {
+      setCouponData(null)
+      toast.error('Error checking coupon')
+    }
+  }
+
   // Visit History States
   const [lastVisit, setLastVisit] = useState('-')
   const [visitCount, setVisitCount] = useState(0)
+  const [formResetTrigger, setFormResetTrigger] = useState(0)
 
   // Simulation of finding customer data
   const handleFindCustomer = () => {
@@ -124,21 +151,31 @@ export default function CounterSales  ()  {
   const [discountValue, setDiscountValue] = useState(0)
   const [openDiscount, setOpenDiscount] = useState(false)
 
-  // Calculations
-  const subtotal = items.reduce((acc, item) => acc + item.amount, 0)
-  const totalTax = items.reduce((acc, item) => acc + (item.amount * (item.tax || 0)) / 100, 0)
+  // Calculations - use mrp/price * qty per line for subtotal
+  const getLineAmount = (item) => (item.mrp ?? item.price ?? 0) * (item.qty ?? 1)
+  const subtotal = items.reduce((acc, item) => acc + getLineAmount(item), 0)
+  const totalTax = items.reduce((acc, item) => acc + (getLineAmount(item) * (item.tax || 0)) / 100, 0)
 
-  // Recalculate discount
+  // Recalculate discount (manual + coupon)
   useEffect(() => {
+    let manualDiscount = 0
     if (discountType === 'percent') {
-      const calculated = (subtotal * Number(discountValue)) / 100
-      setDescount(calculated)
+      manualDiscount = (subtotal * Number(discountValue)) / 100
     } else {
-      setDescount(Number(discountValue))
+      manualDiscount = Number(discountValue)
     }
-  }, [subtotal, discountType, discountValue])
+    let couponDiscount = 0
+    if (couponData) {
+      if (couponData.discount_type === 2) {
+        couponDiscount = (subtotal * parseFloat(couponData.discount_amount)) / 100
+      } else {
+        couponDiscount = parseFloat(couponData.discount_amount)
+      }
+    }
+    setDescount(manualDiscount + couponDiscount)
+  }, [subtotal, discountType, discountValue, couponData])
 
-  const total = subtotal + totalTax - descount
+  const total = Math.max(0, subtotal + totalTax - descount)
   const changeReturn = paidAmount - total > 0 ? (paidAmount - total).toFixed(2) : 0
 
    // Handle Pay All / Order Save
@@ -289,12 +326,14 @@ export default function CounterSales  ()  {
     setPaidAmount(0)
     setDescount(0)
     setDiscountValue(0)
-    // Clear Input States
+    setOpenDiscount(false)
     setMobileNo('')
     setCouponCode('')
+    setCouponData(null)
     setQtyInput(1)
     setLastVisit('-')
     setVisitCount(0)
+    setFormResetTrigger((t) => t + 1)
   }
 
   const handleReprint = () => {
@@ -404,18 +443,60 @@ export default function CounterSales  ()  {
         // Form states
         mobileNo={mobileNo}
         setMobileNo={setMobileNo}
-        couponCode={couponCode}
-        setCouponCode={setCouponCode}
         qtyInput={qtyInput}
         setQtyInput={setQtyInput}
         // Visit states
         lastVisit={lastVisit}
         visitCount={visitCount}
         handleFindCustomer={handleFindCustomer}
+        formResetTrigger={formResetTrigger}
       />
       
       {/* Right Section */}
-      <div className="w-full md:w-[320px] lg:w-[350px]">
+      <div className="w-full md:w-[320px] lg:w-[350px] flex flex-col gap-4">
+         {/* Coupon Section */}
+         <div className="bg-white p-3 rounded-lg shadow-md border border-slate-100">
+           <div className="flex items-end gap-2">
+             <div className="flex-1 relative">
+               <HrInput
+                 label="Coupon Code"
+                 placeholder="Enter Code..."
+                 value={couponCode}
+                 onChange={(e) => {
+                   setCouponCode(e.target.value)
+                   setCouponData(null)
+                 }}
+               />
+               {couponData && (
+                 <span className="absolute right-2 top-7 text-green-500">
+                   <CheckCircle size={16} />
+                 </span>
+               )}
+             </div>
+             <button
+               type="button"
+               onClick={handleCouponCheck}
+               disabled={couponLoading}
+               className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-3 h-9 font-bold text-[10px] uppercase rounded-md flex items-center justify-center gap-1"
+             >
+               {couponLoading ? <Loader2 size={12} className="animate-spin" /> : 'Check'}
+             </button>
+           </div>
+           {couponData && (
+             <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-md px-3 py-1.5 mt-2">
+               <CheckCircle size={14} className="text-green-600" />
+               <div className="text-xs">
+                 <span className="font-bold text-green-700">{couponData.coupon_name || couponData.coupon_code}</span>
+                 <span className="text-green-600 ml-2">
+                   {couponData.discount_type === 1
+                     ? `৳${parseFloat(couponData.discount_amount).toFixed(0)} off`
+                     : `${parseFloat(couponData.discount_amount).toFixed(0)}% off`}
+                 </span>
+               </div>
+             </div>
+           )}
+         </div>
+
          <PriceCalculationSection 
             total={total}
             subtotal={subtotal}

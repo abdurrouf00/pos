@@ -1,9 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { ArrowRight } from 'lucide-react'
 import HrInput from '@/components/common/HrInput'
 import HrSelect from '@/components/common/HrSelect'
 import { Button } from '@/components/ui/button'
+import { useGetAllPaymentMethodQuery } from '@/views/payment-method/store'
 
 export default function SalesReturnRightSection({
   total,
@@ -12,19 +13,25 @@ export default function SalesReturnRightSection({
   paidAmount,
   setPaidAmount,
   changeReturn,
+  handlePayAll,
   setOrderSaveModal,
   setOpenDiscount,
   setIsDraft,
+  isSubmitting,
 }) {
   const [method, setMethod] = useState('cash')
   const [paidRef, setPaidRef] = useState('')
-  const [bankType, setBankType] = useState('Bank');
-  
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState('')
 
-  const handleSaveAsDraft = () => {
-    setIsDraft(true);
-    setOrderSaveModal(true);
-  }
+  const { data: paymentMethodsRes } = useGetAllPaymentMethodQuery(undefined, { skip: method !== 'non-cash' })
+  const bankOptions = useMemo(() => {
+    const res = paymentMethodsRes?.data?.data ?? paymentMethodsRes?.data
+    const list = Array.isArray(res) ? res : res?.data ?? []
+    return list.map((pm) => ({
+      value: pm.id,
+      label: pm.method_name || pm.account_head?.account_name || 'Bank',
+    }))
+  }, [paymentMethodsRes])
 
   return (
     <div className="flex-1  p-2 rounded bg-white h-full flex flex-col gap-2 font-sans">
@@ -73,12 +80,12 @@ export default function SalesReturnRightSection({
           {method === 'non-cash' && (
             <div className="text-sm text-gray-600 ">
               <HrSelect
-                options={[
-                  { value: 'Bank', label: 'Bank' },
-                  { value: 'EBL', label: 'EBL' },
-                ]}
-                value={bankType}
-                onChange={e => setBankType(e.target.value)}
+                label="Select Bank"
+                name="payment_method"
+                options={bankOptions.length ? bankOptions : [{ value: '', label: 'No banks found' }]}
+                value={selectedPaymentMethodId}
+                onChange={(e) => setSelectedPaymentMethodId(e.target?.value ?? '')}
+                placeholder="Select bank"
               />
             </div>
           )}
@@ -93,12 +100,7 @@ export default function SalesReturnRightSection({
           )}
         </div>
       </div>
-      {/* Discount / Coupon Button */}
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <Button onClick={() => setOpenDiscount?.(true)} variant="outline">
-          <p className="flex items-center gap-1">Apply Discount</p>
-        </Button>
-
+      <div className="mb-4">
         <HrInput
           type="text"
           placeholder="Paid Reference No"
@@ -166,19 +168,23 @@ export default function SalesReturnRightSection({
         </div>
 
         {/* Order Proceed */}
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setOrderSaveModal(true)}
-            className="flex-1 bg-green-600 hover:bg-green-700"
-          >
-            Order Save
+        <div className="flex gap-2 flex-wrap">
+          {typeof setOrderSaveModal === 'function' && (
+            <Button
+              onClick={() => setOrderSaveModal(true)}
+              className="flex-1 bg-green-600 hover:bg-green-700"
+            >
+              Order Save
+            </Button>
+          )}
+          <Button onClick={() => handlePayAll?.(true)} disabled={isSubmitting} className="flex-1">
+            {isSubmitting ? 'Saving...' : 'Order & Print'}
           </Button>
-          <Button onClick={() => handlePayAll(true)} className="flex-1">
-            Order & Print
-          </Button>
-            <Button onClick={handleSaveAsDraft}>Save as draft</Button>
-          </div>
+          {typeof setOrderSaveModal === 'function' && typeof setIsDraft === 'function' && (
+            <Button onClick={() => { setIsDraft(true); setOrderSaveModal(true) }}>Save as draft</Button>
+          )}
         </div>
       </div>
+    </div>
     )
   }

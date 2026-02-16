@@ -41,7 +41,7 @@ export default function JournalTable() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto mt-8 bg-white p-6 rounded shadow items-center justify-center">
+    <div className=" mt-8 bg-white p-6 rounded shadow items-center justify-center">
       {/* যদি data খালি থাকে তাহলে শুধু <RRR /> দেখাবে */}
       {data.length === 0 ? (
         <RRR />

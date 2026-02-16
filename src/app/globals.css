@@ -118,6 +118,9 @@
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
 }
+body{
+  font-size: 0.8rem;
+}
 /* app/globals.css or your main CSS file */
 #nprogress {
   position: fixed;

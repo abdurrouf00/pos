@@ -62,11 +62,13 @@ export default function AccountHeadForm({ setOpenForm, toggle, currentId, setCur
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
   const accountTypeOptions = mapOptions(accountTypes?.data || [])
-  const accountHeadOptions = mapOptions(accountHeads?.data || [])
+  const accountHeadOptions = mapOptions(accountHeads?.data?.data || [], 'account_name', 'id')
+
   const handleSubmit = e => {
     e.preventDefault()
     const data = {
       ...formData,
+      account_name: formData.name,
       parent_head_id: formData.parent_head_id ? formData.parent_head_id : null,
       ...(currentId ? { id: currentId } : {}),
     }
@@ -86,6 +88,7 @@ export default function AccountHeadForm({ setOpenForm, toggle, currentId, setCur
   const handleModalClose = () => {
     setCurrentId(null)
   }
+
   return (
     <HrModal
       toggle={toggle}

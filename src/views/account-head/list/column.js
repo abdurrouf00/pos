@@ -4,14 +4,26 @@ import { Info, Trash2 } from "lucide-react";
 export const accountHeadColumn = (handleDelete, handleInfo) => {
   const columns = [
     {
-      field: 'name',
+      field: 'account_name',
       header: 'Name',
       sortable: true,
+      body: (rowData) => (
+        <div>
+          {/* <Link href={`/dashboard/account-heads/details?id=${rowData.id}`}> */}
+            {rowData.account_name}
+          {/* </Link> */}
+        </div>
+      ),
     },
     {
       field: 'acc_type.name',
       header: 'Account Type',
       sortable: true,
+      body: (rowData) => (
+        <div>
+          {rowData?.account_type?.name}
+        </div>
+      ),
     },
     {
       field: 'parent_head.name',
@@ -22,6 +34,11 @@ export const accountHeadColumn = (handleDelete, handleInfo) => {
       field: 'code',
       header: 'Code',
       sortable: true,
+      body: (rowData) => (
+        <div>
+          {rowData.code}
+        </div>
+      ),
     },
 
     {

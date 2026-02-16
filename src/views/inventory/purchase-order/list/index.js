@@ -1,75 +1,80 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useRouter } from "next/navigation";
 import DataTable from "@/components/common/DataTable";
 import { poColumns } from "./poColumn";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
-
-const mockPOData = [
-    {
-        id: "1",
-        source: "REQUISITION",
-        challan_no: "CH-8821",
-        po_date: "2026-02-14",
-        receive_date: "2026-02-15",
-        vendor: "Global Traders",
-        department: "Sweet Factory 1",
-        warehouse: "Main Warehouse",
-       
-        purchase_by: "Admin User",
-        grand_total: 12500.50,
-        items_count: 5,
-    },
-    {
-        id: "2",
-        source: "DIRECT",
-        challan_no: "CH-8825",
-        po_date: "2026-02-14",
-        receive_date: "2026-02-14",
-        vendor: "local Supplier",
-        department: "Sweet Factory 1",
-        warehouse: "Main Warehouse",
-       
-        purchase_by: "Admin User",
-        grand_total: 3420.00,
-        items_count: 2,
-    }
-];
+import { confirmDialog, confirmObj } from "@/lib/utils";
+import {
+  useGetAllPurchaseOrdersQuery,
+  useDeletePurchaseOrderMutation,
+} from "../store";
 
 export default function PurchaseOrderList() {
-    const [poData, setPoData] = useState(mockPOData);
-    const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { data, isLoading } = useGetAllPurchaseOrdersQuery();
+  const [deletePurchaseOrder] = useDeletePurchaseOrderMutation();
 
-    const handleDelete = (rowData) => {
-        setPoData(prev => prev.filter(item => item.id !== rowData.id));
-        toast.error('PO Deleted Successfully');
-    };
+  const listData = data?.data?.data ?? data?.data ?? [];
+  const poData = Array.isArray(listData) ? listData : [];
 
-    const handleEdit = (rowData) => {
-        console.log("Edit PO:", rowData);
-        toast.success(`Editing PO: ${rowData.id}`);
-    };
+  const handleDelete = (rowData) => {
+    confirmDialog(confirmObj).then(async (e) => {
+      if (e?.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          const res = await deletePurchaseOrder(rowData?.id);
+          if (res?.data?.success) {
+            toast.dismiss(toastId);
+            toast.success(res?.data?.message ?? "Deleted successfully");
+          } else {
+            toast.dismiss(toastId);
+            toast.error(res?.data?.message ?? "Failed to delete");
+          }
+        } catch (err) {
+          toast.dismiss(toastId);
+          toast.error(err?.data?.message ?? "Failed to delete");
+        }
+      }
+    });
+  };
 
-    const handleView = (rowData) => {
-        console.log("View PO:", rowData);
-    };
+  const handleEdit = (rowData) => {
+    router.push(`/dashboard/purchase-order/${rowData.id}/edit`);
+  };
 
-    return (
-    <div className="bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden mt-5 ">
-        <DataTable
-            data={poData}
-            columns={poColumns(handleDelete, handleEdit, handleView)}
-            globalFilterFields={['id', 'challan_no', 'vendor', 'department']}
-            emptyMessage="No purchase orders found."
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            showGlobalFilter={true}
-            globalFilterPlaceholder="Search by ID, Vendor, or Challan..."
-            className="custom_datatable h-full"
-            loading={loading}
-        />
+  const handleView = (rowData) => {
+    router.push(`/dashboard/purchase-order/${rowData.id}`);
+  };
+
+  const extraField = () => (
+    <Button
+      onClick={() => router.push("/dashboard/purchase-order/new-purchase-order")}
+      className="border flex items-center gap-2 py-1 px-3 cursor-pointer rounded-sm bg-[#e0ecfe] text-[#227BF6] text-[14px] font-[400]"
+    >
+      <Plus className="h-4 w-4" />
+      New
+    </Button>
+  );
+
+  return (
+    <div className="bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden mt-5">
+      <DataTable
+        data={poData}
+        columns={poColumns(handleDelete, handleEdit, handleView)}
+        globalFilterFields={["id", "challan_no", "po_no", "vendor", "department"]}
+        emptyMessage="No purchase orders found."
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        showGlobalFilter={true}
+        globalFilterPlaceholder="Search by ID, Vendor, or Challan..."
+        className="custom_datatable h-full"
+        loading={isLoading}
+        extraField={extraField()}
+        paginator
+      />
     </div>
-      
-    );
+  );
 }

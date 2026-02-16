@@ -33,7 +33,7 @@ const HrInput = forwardRef(({
   return (
     <div
       className={cn(
-        "flex flex-col space-y-1.5",
+        "flex flex-col space-y-1.5 text-xs",
         fullWidth ? "w-full" : "",
         wrapperClassName
       )}
@@ -42,7 +42,7 @@ const HrInput = forwardRef(({
         <Label
           htmlFor={inputId}
           className={cn(
-            "text-xs font-medium text-gray-700",
+            "text-xs font-medium text-gray-700 ",
             required &&
             "after:content-['*'] after:ml-[-0.4rem] after:text-red-500",
             error && "text-red-500",

@@ -3,6 +3,7 @@ import api from '@/lib/redux/api'
 const productsAPI = 'inventory/products'
 // GET/POST {{base}}/api/inventory/products/:productId/channels
 const productChannelsAPI = productId => `${productsAPI}/${productId}/channels`
+const productUnitsAPI = productId => `${productsAPI}/${productId}/units`
 
 const productsApi = api.injectEndpoints({
   endpoints: builder => ({
@@ -34,6 +35,10 @@ const productsApi = api.injectEndpoints({
       query: productId => ({ url: productChannelsAPI(productId), method: 'GET' }),
       providesTags: (result, err, productId) => [{ type: 'Products', id: `${productId}-channels` }],
     }),
+    getProductUnits: builder.query({
+      query: productId => ({ url: productUnitsAPI(productId), method: 'GET' }),
+      providesTags: (result, err, productId) => [{ type: 'Products', id: `${productId}-units` }],
+    }),
     saveProductChannels: builder.mutation({
       query: ({ productId, channels }) => ({
         url: productChannelsAPI(productId),
@@ -60,4 +65,5 @@ export const {
   useGetProductByIdQuery,
   useGetProductChannelsQuery,
   useSaveProductChannelsMutation,
+  useGetProductUnitsQuery,
 } = productsApi

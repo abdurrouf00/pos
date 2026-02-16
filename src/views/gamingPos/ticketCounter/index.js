@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react'
 import EntryLeftSection from './ticketCouter'
 import PriceCalculationSection from '../priceCalculate'
 import SalesReturnModals from '../model/index'
+import HrInput from '@/components/common/HrInput'
 import toast from 'react-hot-toast'
 import packages from './packege.json'
+import { useCreateTicketCounterSaleMutation, useCheckCouponMutation } from './store'
+import { CheckCircle, Loader2 } from 'lucide-react'
 
 export default function CounterSales  ()  {
   const [items, setItems] = useState([])
@@ -27,29 +30,41 @@ export default function CounterSales  ()  {
   // Customer Data State
   const [customerData, setCustomerData] = useState(null)
 
-  // Simulation of finding customer data
-  const handleFindCustomer = () => {
-    if (!mobileNo) return toast.error('Enter mobile number first!')
-    
-    // Mock logic: different data for different numbers
-    if (mobileNo === '01700000055') {
-       setLastVisit('2026-02-01')
-       setVisitCount(5)
-       toast.success('Customer data fetched!')
-    } else if (mobileNo === '01700000000') {
-       // Mocking a visit for today
-       setLastVisit(new Date().toISOString().split('T')[0])
-       setVisitCount(1)
-       toast.success('Customer who visited today found!')
-    } else if(mobileNo.length >= 11) {
-       setLastVisit('2026-02-05')
-       setVisitCount(2)
-       toast.success('Customer found!')
-    } else {
-       setLastVisit('-')
-       setVisitCount(0)
-       toast.error('Customer not found!')
+  const [formResetTrigger, setFormResetTrigger] = useState(0)
+
+  const [createTicketCounterSale, { isLoading: saleSubmitting }] = useCreateTicketCounterSaleMutation()
+  const [checkCoupon, { isLoading: couponLoading }] = useCheckCouponMutation()
+
+  const handleCouponCheck = async () => {
+    if (!couponCode || couponCode.trim() === '') {
+      toast.error('Please enter a coupon code!')
+      return
     }
+    try {
+      const res = await checkCoupon(couponCode.trim())
+      if (res?.data?.success) {
+        setCouponData(res.data.data)
+        toast.success(res.data.message || 'Coupon is valid!')
+      } else {
+        setCouponData(null)
+        toast.error(res?.data?.message || 'Invalid coupon code')
+      }
+    } catch (error) {
+      setCouponData(null)
+      toast.error('Error checking coupon')
+    }
+  }
+
+  // Update visit info from membership search result
+  const handleFindCustomer = (memberships) => {
+    if (!memberships || memberships.length === 0) {
+      setLastVisit('-')
+      setVisitCount(0)
+      return
+    }
+    const first = memberships[0]
+    setLastVisit(first.activation_date || '-')
+    setVisitCount(memberships.length)
   }
 
 
@@ -154,9 +169,10 @@ const handleAddItem = (product, qty = 1) => {
   const [discountValue, setDiscountValue] = useState(0)
   const [openDiscount, setOpenDiscount] = useState(false)
 
-  // Calculations
-  const subtotal = items.reduce((acc, item) => acc + item.amount, 0)
-  const totalTax = items.reduce((acc, item) => acc + (item.amount * (item.tax || 0)) / 100, 0)
+  // Calculations - use mrp/price * qty per line for subtotal
+  const getLineAmount = (item) => (item.mrp ?? item.price ?? 0) * (item.qty ?? 1)
+  const subtotal = items.reduce((acc, item) => acc + getLineAmount(item), 0)
+  const totalTax = items.reduce((acc, item) => acc + (getLineAmount(item) * (item.tax || 0)) / 100, 0)
 
   // Recalculate discount (including coupon discount)
   useEffect(() => {
@@ -184,35 +200,83 @@ const handleAddItem = (product, qty = 1) => {
     setDescount(manualDiscount + couponDiscount)
   }, [subtotal, discountType, discountValue, couponData])
 
-  const total = subtotal + totalTax - descount
+  const total = Math.max(0, subtotal + totalTax - descount)
   const changeReturn = paidAmount - total > 0 ? (paidAmount - total).toFixed(2) : 0
 
-   // Handle Pay All / Order Save
-   const handlePayAll = (shouldPrint = true) => {
-     if (!mobileNo || mobileNo.trim() === '') {
-       toast.error('Mobile number is required for sale!')
+   // Handle Pay All / Order Save - with or without coupon
+   const handlePayAll = async (shouldPrint = true) => {
+     const saleMobile = (mobileNo?.trim() || customerData?.guardian_phone || '').trim()
+     if (!saleMobile || saleMobile.length < 10) {
+       toast.error('Mobile number is required for sale! (Enter on Ticket tab or search member on Membership tab)')
        return
      }
      if (items.length === 0) {
        toast.error('Cart is empty!')
        return
      }
-    // if (paidAmount < total) {
-    //   toast.error('Paid amount is less than total!')
-    //   return
-    // }
 
-    const saleData = {
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toLocaleTimeString(),
-        customer: 'Walk-in',
-        mobile: mobileNo,
-        coupon: couponCode,
-        items: items,
-        total: total,
-        paid: Number(paidAmount || total),
-        change: changeReturn
-    }
+     // Build ticket counter items - only items with valid product_id (uuid)
+     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+     const ticketItems = items
+       .filter((item) => typeof item.id === 'string' && uuidRegex.test(item.id))
+       .map((item) => ({
+         product_id: item.id,
+         qty: item.qty ?? 1,
+         rate: item.isFree ? 0 : Number(item.mrp ?? item.price ?? 0),
+         item_type: item.type || 'ticket',
+         is_free: !!item.isFree,
+         tax_percent: item.tax ?? 0,
+         discount_type: 0, // 0 = fixed, 1 = percent
+         discount_value: 0,
+       }))
+
+     if (ticketItems.length === 0) {
+       toast.error('No valid ticket products in cart. Add products from the list.')
+       return
+     }
+
+     const salePayload = {
+       sale_date: new Date().toISOString().split('T')[0],
+       sale_time: new Date().toTimeString().slice(0, 5),
+       membership_id: customerData?.membership_id ?? customerData?.id ?? '',
+       mobile: saleMobile,
+       coupon_code: couponCode?.trim() || null,
+       kids_name: kidsName?.trim() || null,
+       kids_age: '',
+       dob: customerData?.dob ?? '',
+       customer_name: customerData?.guardian_name ?? 'Walk-in Customer',
+       status: 'completed',
+       note: '',
+       items: ticketItems,
+       paid_total: Number(paidAmount || total),
+       discount_type: discountType === 'percent' ? 1 : 0,
+       discount_value: Number(discountValue) || 0,
+       discount_amount: Number(descount) || 0,
+       vat_amount: Number(totalTax) || 0,
+     }
+
+     const saleData = {
+       date: salePayload.sale_date,
+       time: salePayload.sale_time,
+       customer: salePayload.customer_name,
+       mobile: saleMobile,
+       coupon: couponCode,
+       items: items,
+       total: total,
+       paid: Number(paidAmount || total),
+       change: changeReturn,
+     }
+
+     try {
+       const res = await createTicketCounterSale(salePayload)
+       if (!res?.data?.success) {
+         toast.error(res?.data?.msg || 'Failed to save sale')
+         return
+       }
+     } catch (err) {
+       toast.error(err?.data?.message || err?.message || 'Failed to save sale')
+       return
+     }
 
     // PRINTING LOGIC
     if (shouldPrint) {
@@ -276,9 +340,9 @@ const handleAddItem = (product, qty = 1) => {
                   ${items.map(item => `
                     <tr>
                       <td style="font-weight:bold;">${item.name}</td>
-                      <td class="right">${item.qty}</td>
-                      <td class="right">${(item.price || item.rate).toFixed(0)}</td>
-                      <td class="right">${item.amount.toFixed(0)}</td>
+                      <td class="right">${item.qty ?? 1}</td>
+                      <td class="right">${Number(item.mrp ?? item.price ?? item.rate ?? 0).toFixed(0)}</td>
+                      <td class="right">${((item.mrp ?? item.price ?? 0) * (item.qty ?? 1)).toFixed(0)}</td>
                     </tr>
                   `).join('')}
                 </tbody>
@@ -325,25 +389,24 @@ const handleAddItem = (product, qty = 1) => {
       }
     }
 
-    // 4. Save (Simulation) & Reset
-    console.log("Saved Sale:", saleData)
-    setLastSale(saleData) // Save for reprint
-    toast.success('Order Submitted Successfully!')
-    
     // Reset Form
+    setLastSale(saleData)
+    toast.success('Order Submitted Successfully!')
     setItems([])
     setPaidAmount(0)
     setDescount(0)
     setDiscountValue(0)
-    // Clear Input States
+    setDiscountType('fixed')
+    setOpenDiscount(false)
     setMobileNo('')
     setCouponCode('')
+    setKidsName('')
     setQtyInput(1)
     setLastVisit('-')
     setVisitCount(0)
-    // Clear coupon and customer data
     setCouponData(null)
     setCustomerData(null)
+    setFormResetTrigger((t) => t + 1)
   }
 
   const handleReprint = () => {
@@ -455,24 +518,63 @@ const handleAddItem = (product, qty = 1) => {
         setMobileNo={setMobileNo}
         kidsName={kidsName}
         setKidsName={setKidsName}
-        couponCode={couponCode}
-        setCouponCode={setCouponCode}
         qtyInput={qtyInput}
         setQtyInput={setQtyInput}
         // Visit states
         lastVisit={lastVisit}
         visitCount={visitCount}
         handleFindCustomer={handleFindCustomer}
-        // Coupon states
-        couponData={couponData}
-        setCouponData={setCouponData}
         // Customer states
         customerData={customerData}
         setCustomerData={setCustomerData}
+        formResetTrigger={formResetTrigger}
       />
       
       {/* Right Section */}
-      <div className="w-full md:w-[320px] lg:w-[350px]">
+      <div className="w-full md:w-[320px] lg:w-[350px] flex flex-col gap-4">
+         {/* Coupon Section */}
+         <div className="bg-white p-3 rounded-lg shadow-md border border-slate-100">
+           <div className="flex items-end gap-2">
+             <div className="flex-1 relative">
+               <HrInput
+                 label="Coupon Code"
+                 placeholder="Enter Code..."
+                 value={couponCode}
+                 onChange={(e) => {
+                   setCouponCode(e.target.value)
+                   setCouponData(null)
+                 }}
+               />
+               {couponData && (
+                 <span className="absolute right-2 top-7 text-green-500">
+                   <CheckCircle size={16} />
+                 </span>
+               )}
+             </div>
+             <button
+               type="button"
+               onClick={handleCouponCheck}
+               disabled={couponLoading}
+               className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-3 h-9 font-bold text-[10px] uppercase rounded-md flex items-center justify-center gap-1"
+             >
+               {couponLoading ? <Loader2 size={12} className="animate-spin" /> : 'Check'}
+             </button>
+           </div>
+           {couponData && (
+             <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-md px-3 py-1.5 mt-2">
+               <CheckCircle size={14} className="text-green-600" />
+               <div className="text-xs">
+                 <span className="font-bold text-green-700">{couponData.coupon_name || couponData.coupon_code}</span>
+                 <span className="text-green-600 ml-2">
+                   {couponData.discount_type === 1
+                     ? `৳${parseFloat(couponData.discount_amount).toFixed(0)} off`
+                     : `${parseFloat(couponData.discount_amount).toFixed(0)}% off`}
+                 </span>
+               </div>
+             </div>
+           )}
+         </div>
+
          <PriceCalculationSection 
             total={total}
             subtotal={subtotal}
@@ -482,6 +584,7 @@ const handleAddItem = (product, qty = 1) => {
             handlePayAll={handlePayAll}
             descount={descount}
             setOpenDiscount={setOpenDiscount}
+            isSubmitting={saleSubmitting}
          />
          <SalesReturnModals 
             openDiscount={openDiscount}

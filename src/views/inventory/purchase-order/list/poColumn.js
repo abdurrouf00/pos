@@ -4,66 +4,74 @@ import { Trash2, Edit, Eye } from "lucide-react";
 export const poColumns = (handleDelete, handleEdit, handleView) => {
     return [
         {
-            field: 'id',
-            header: 'ID',
+            field: 'po_no',
+            header: 'PO NO',
             sortable: false,
+            body: (rowData) => (
+                <span className="font-medium">{rowData.po_no ?? rowData.id ?? '—'}</span>
+            ),
         },
         {
             field: 'source',
             header: 'SOURCE',
             sortable: false,
-            body: (rowData) => (
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                    rowData.source === 'REQUISITION' 
-                        ? 'bg-blue-50 text-blue-600 border-blue-200' 
-                        : 'bg-green-50 text-green-600 border-green-200'
-                }`}>
-                    {rowData.source === 'REQUISITION' ? 'REQUISITION' : 'DIRECT'}
-                </span>
-            ),
-        },
-        {
-            field: 'challan_no',
-            header: 'CHALAN NO',
-            sortable: false,
-            className: "font-medium",
+            body: (rowData) => {
+                const fromRequisition = Array.isArray(rowData.requisition_ids) && rowData.requisition_ids.length > 0;
+                return (
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                        fromRequisition ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-green-50 text-green-600 border-green-200'
+                    }`}>
+                        {fromRequisition ? 'REQUISITION' : 'DIRECT'}
+                    </span>
+                );
+            },
         },
         {
             field: 'po_date',
             header: 'PO DATE',
             sortable: true,
+            body: (rowData) => (
+                <span>{rowData.po_date ? new Date(rowData.po_date).toLocaleDateString() : '—'}</span>
+            ),
         },
         {
-            field: 'receive_date',
-            header: 'RECEIVE DATE',
+            field: 'delivery_date',
+            header: 'DELIVERY DATE',
             sortable: true,
+            body: (rowData) => (
+                <span>{rowData.delivery_date ? new Date(rowData.delivery_date).toLocaleDateString() : '—'}</span>
+            ),
         },
         {
-            field: 'vendor',
+            field: 'supplier',
             header: 'VENDOR',
             sortable: true,
-            className: "font-bold text-gray-900",
-        },
-        {
-            field: 'purchase_by',
-            header: 'PURCHASE BY',
-            sortable: false,
-        },
-        {
-            field: 'grand_total',
-            header: 'GRAND TOTAL',
-            sortable: false,
             body: (rowData) => (
-                <span className="font-black text-blue-600">
-                    {rowData.grand_total?.toFixed(2)}
+                <span className="font-medium text-gray-900">
+                    {rowData.supplier?.display_name ?? rowData.supplier?.company_name ?? rowData.supplier_id ?? '—'}
                 </span>
             ),
+        },
+        {
+            field: 'total',
+            header: 'TOTAL',
+            sortable: false,
+            body: (rowData) => {
+                const amount = rowData.total ?? rowData.grand_total;
+                return (
+                    <span className="font-semibold text-blue-600">
+                        {amount != null ? Number(amount).toFixed(2) : '—'}
+                    </span>
+                );
+            },
         },
         {
             field: 'items_count',
             header: 'ITEMS',
             sortable: false,
-            className: "text-center",
+            body: (rowData) => (
+                <span className="text-center">{rowData.items?.length ?? rowData.items_count ?? '—'}</span>
+            ),
         },
         {
             header: 'ACTIONS',

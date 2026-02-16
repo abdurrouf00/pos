@@ -1,4 +1,4 @@
-import RequisitionView from "@/views/inventory/requisition/list/index";
+import RequisitionView from "@/views/inventory/requisition/list";
 import RequisitionCreate from "@/views/inventory/requisition/form/index";
 
 export const metadata = {
@@ -6,10 +6,10 @@ export const metadata = {
 };
 
 export default function RequisitionPage() {
-  return(
+  return (
     <>
-    <RequisitionCreate />
-    <RequisitionView />
+      <RequisitionCreate />
+      <RequisitionView />
     </>
   );
 }

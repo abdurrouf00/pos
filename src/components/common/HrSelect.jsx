@@ -73,6 +73,7 @@ class HrSelect extends Component {
           className={className}
           name={name}
           error={ariaInvalid}
+          {...props}
         />
       </div>
     )

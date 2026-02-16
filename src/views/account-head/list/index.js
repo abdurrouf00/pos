@@ -43,6 +43,7 @@ export default function AccountHeadList() {
     });
 
   };
+  console.log('data', data)
   const extraField = () => {
     return (
       <div>
@@ -61,7 +62,7 @@ export default function AccountHeadList() {
         <div className="w-full">
           <div className="p-2 bg-white shadow-lg w-full">
             <DataTable
-              data={data?.data || []}
+              data={data?.data?.data || []}
               columns={accountHeadColumn(handleDelete, handleInfo)}
               globalFilterFields={['name',]}
               emptyMessage="No account heads found."

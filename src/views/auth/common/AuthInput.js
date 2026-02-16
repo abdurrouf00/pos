@@ -24,7 +24,7 @@ export default function AuthInput({
           type={type === 'password' && showPassword ? 'text' : type}
           onChange={onChange}
           placeholder={placeholder ?? label}
-          className="w-full border border-neutral-200  px-3 py-1.5 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400 focus:px-4 transition-all duration-300 focus:shadow-md shadow-blue-300 text-sm"
+          className="w-full text-xs border border-neutral-200  px-3 py-1.5 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400 focus:px-4 transition-all duration-300 focus:shadow-md shadow-blue-300 "
           {...props}
         />
         {type === 'password' && (

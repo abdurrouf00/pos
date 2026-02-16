@@ -1,9 +1,16 @@
+"use client";
+
 import React from "react";
-import NewPurchaseOrder from "@/views/inventory/purchase-order/form/form"
+import { useSearchParams } from "next/navigation";
+import PurchaseOrderForm from "@/views/inventory/purchase-order/form/form";
+
 export default function NewPurchaseOrderPage() {
-    return (
-        <div>
-            <NewPurchaseOrder />
-        </div>
-    );
+  const searchParams = useSearchParams();
+  const requisitionId = searchParams.get("requisitionId") || null;
+
+  return (
+    <div>
+      <PurchaseOrderForm requisitionId={requisitionId} />
+    </div>
+  );
 }

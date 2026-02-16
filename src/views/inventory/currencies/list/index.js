@@ -69,7 +69,7 @@ export default function CurrenciesList() {
       <DataTable
         data={data?.data?.data}
         columns={getCurrenciesColumns(handleEdit, handleDelete)}
-        emptyMessage="No Users found."
+        emptyMessage="No Currencies found."
         rowsPerPageOptions={[5, 10, 25, 50, 100, 500]}
         showGlobalFilter={true}
         globalFilterPlaceholder="Type here to search..."
