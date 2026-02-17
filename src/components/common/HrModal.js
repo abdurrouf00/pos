@@ -32,7 +32,7 @@ const HrModal = (props) => {
         {/* <DialogTrigger asChild>
           <div> {toggle}</div>
         </DialogTrigger> */}
-        <DialogContent className={`${size} max-h-[80vh] overflow-y-auto`}>
+        <DialogContent className={`${size} max-h-[90vh] overflow-y-auto`}>
           <DialogHeader>
             {title && (
               <DialogTitle className=" pb-3">{title}</DialogTitle>
