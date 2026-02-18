@@ -64,35 +64,54 @@ export const AllRoom = ({ floor, rooms, onBack }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Room Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-        {rooms.map((room) => {
-          const styles = getStatusStyles(room.status)
-          return (
-            <div 
-              key={room.no}
-              onClick={() => handleRoomClick(room)}
-              className={cn(
-                "group border rounded-2xl p-4 shadow-sm transition-all duration-300 cursor-pointer relative overflow-hidden",
-                styles.card,
-                room.status === 'available' ? 'active:scale-95' : 'cursor-not-allowed grayscale-[0.2] opacity-90'
-              )}
-            >
-              <div className="flex justify-between items-start mb-3 relative z-10">
-                <span className={cn("text-lg font-black", styles.text)}>#{room.no}</span>
-                <div className={cn("w-2.5 h-2.5 rounded-full shadow-sm animate-pulse", styles.dot)} />
-              </div>
-              
-              <div className="space-y-0.5 relative z-10">
-                <p className={cn("text-[10px] font-bold uppercase tracking-tighter", styles.subtext)}>
-                  {room.type}
-                </p>
-                <p className={cn("text-xs font-black truncate", styles.text)}>
-                  {styles.label}
-                </p>
-              </div>
+      <div className="space-y-8">
+        {Object.entries(
+          rooms.reduce((acc, room) => {
+            if (!acc[room.type]) acc[room.type] = [];
+            acc[room.type].push(room);
+            return acc;
+          }, {})
+        ).map(([category, categoryRooms]) => (
+          <div key={category} className="space-y-3">
+            <div className="flex items-center gap-3">
+              <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                {category}
+              </h4>
+              <div className="h-[1px] flex-1 bg-slate-100" />
             </div>
-          )
-        })}
+            
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              {categoryRooms.map((room) => {
+                const styles = getStatusStyles(room.status)
+                return (
+                  <div 
+                    key={room.no}
+                    onClick={() => handleRoomClick(room)}
+                    className={cn(
+                      "group border rounded-2xl p-4 shadow-sm transition-all duration-300 cursor-pointer relative overflow-hidden",
+                      styles.card,
+                      room.status === 'available' ? 'active:scale-95' : 'cursor-not-allowed grayscale-[0.2] opacity-90'
+                    )}
+                  >
+                    <div className="flex justify-between items-start mb-3 relative z-10">
+                      <span className={cn("text-lg font-black", styles.text)}>#{room.no}</span>
+                      <div className={cn("w-2.5 h-2.5 rounded-full shadow-sm animate-pulse", styles.dot)} />
+                    </div>
+                    
+                    <div className="space-y-0.5 relative z-10">
+                      <p className={cn("text-[10px] font-bold uppercase tracking-tighter", styles.subtext)}>
+                        {room.capacity || room.type}
+                      </p>
+                      <p className={cn("text-xs font-black truncate", styles.text)}>
+                        {styles.label}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Booking Modal */}

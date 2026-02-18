@@ -20,6 +20,22 @@ export const bookingListColumns = (handleDelete, handleEdit, handleView) => {
             ),
         },
         {
+            field: 'no_of_guest',
+            header: 'NO OF GUEST',
+            sortable: false,
+            body: (rowData) => (
+                <span className="text-center">{rowData.no_of_guest ?? '—'}</span>
+            ),
+        },
+        {
+            field: 'kids',
+            header: 'KIDS',
+            sortable: false,
+            body: (rowData) => (
+                <span className="text-center">{rowData.kids ?? '—'}</span>
+            ),
+        },
+        {
             field: 'check_in',
             header: 'CHECK IN',
             sortable: true,

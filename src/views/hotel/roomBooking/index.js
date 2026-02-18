@@ -17,8 +17,10 @@ import {
 } from 'lucide-react'
 import HrInput from '@/components/common/HrInput'
 import AllRoom from './allRoom'
+import AvailableRoomsModal from './model'
+import BookingForm from './bookingForm'
 
-const FloorStatusCard = ({ floor, stats, onSelect }) => {
+const FloorStatusCard = ({ floor, stats, onSelect, onAvailableClick }) => {
   return (
     <Card 
       onClick={() => onSelect(floor)}
@@ -41,7 +43,13 @@ const FloorStatusCard = ({ floor, stats, onSelect }) => {
 
         {/* Card Body - Status Grid */}
         <div className="p-4 grid grid-cols-2 gap-2">
-          <div className="space-y-1 p-3 rounded-xl bg-emerald-50/50 border border-emerald-100/50">
+          <div 
+            onClick={(e) => {
+              e.stopPropagation();
+              onAvailableClick(floor);
+            }}
+            className="space-y-1 p-3 rounded-xl bg-emerald-50/50 border border-emerald-100/50 hover:bg-emerald-100/70 transition-all active:scale-95 cursor-pointer"
+          >
             <div className="flex items-center gap-2 text-emerald-600">
               <CheckCircle className="w-3 h-3" />
               <span className="text-[10px] font-bold uppercase tracking-wider">Available</span>
@@ -106,6 +114,8 @@ export default function RoomList() {
       rooms: Array.from({ length: 34 }).map((_, i) => ({
         no: 101 + i,
         type: i % 5 === 0 ? 'Suite' : i % 3 === 0 ? 'Deluxe' : 'Standard',
+        capacity: i % 5 === 0 ? 'Family Room' : i % 3 === 0 ? 'Double Room' : 'Single Room',
+        price: i % 5 === 0 ? 250 : i % 3 === 0 ? 150 : 100,
         status: i < 8 ? 'available' : i < 20 ? 'booked' : i < 24 ? 'unclean' : i < 26 ? 'maintenance' : i < 29 ? 'todayCheckout' : 'tomorrowCheckout'
       }))
     },
@@ -115,6 +125,8 @@ export default function RoomList() {
       rooms: Array.from({ length: 26 }).map((_, i) => ({
         no: 201 + i,
         type: i % 4 === 0 ? 'Deluxe' : 'Standard',
+        capacity: i % 4 === 0 ? 'Double Room' : 'Single Room',
+        price: i % 4 === 0 ? 160 : 110,
         status: i < 15 ? 'available' : i < 20 ? 'booked' : i < 22 ? 'unclean' : i < 23 ? 'maintenance' : i < 25 ? 'todayCheckout' : 'tomorrowCheckout'
       }))
     },
@@ -124,6 +136,8 @@ export default function RoomList() {
       rooms: Array.from({ length: 29 }).map((_, i) => ({
         no: 301 + i,
         type: i % 3 === 0 ? 'Suite' : 'Standard',
+        capacity: i % 3 === 0 ? 'Family Room' : 'Single Room',
+        price: i % 3 === 0 ? 240 : 105,
         status: i < 10 ? 'available' : i < 20 ? 'booked' : i < 23 ? 'unclean' : i < 27 ? 'todayCheckout' : 'tomorrowCheckout'
       }))
     },
@@ -132,7 +146,9 @@ export default function RoomList() {
       stats: { available: 12, booked: 8, unclean: 1, maintenance: 3, todayCheckout: 1, tomorrowCheckout: 4 },
       rooms: Array.from({ length: 29 }).map((_, i) => ({
         no: 401 + i,
-        type: 'Standard',
+        type: i % 5 === 0 ? 'Suite' : i % 3 === 0 ? 'Deluxe' : 'Standard',
+        capacity: i % 5 === 0 ? 'Family Room' : i % 3 === 0 ? 'Double Room' : 'Single Room',
+        price: i % 5 === 0 ? 250 : i % 3 === 0 ? 150 : 100,
         status: i < 12 ? 'available' : i < 20 ? 'booked' : i < 21 ? 'unclean' : i < 24 ? 'maintenance' : i < 25 ? 'todayCheckout' : 'tomorrowCheckout'
       }))
     },
@@ -141,6 +157,22 @@ export default function RoomList() {
   const [fromDate, setFromDate] = React.useState('')
   const [toDate, setToDate] = React.useState('')
   const [searchRoom, setSearchRoom] = React.useState('')
+
+  // Modal States
+  const [isAvailableModalOpen, setIsAvailableModalOpen] = React.useState(false)
+  const [selectedFloorForModal, setSelectedFloorForModal] = React.useState(null)
+  const [selectedRoomForBooking, setSelectedRoomForBooking] = React.useState(null)
+  const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(false)
+
+  const handleAvailableClick = (floorId) => {
+    setSelectedFloorForModal(floorId)
+    setIsAvailableModalOpen(true)
+  }
+
+  const handleRoomClickInModal = (room) => {
+    setSelectedRoomForBooking(room)
+    setIsBookingModalOpen(true)
+  }
 
   const handleSelectFloor = (floorId) => {
     router.push(`?floor=${floorId}`)
@@ -266,9 +298,30 @@ export default function RoomList() {
                   floor={item.floor} 
                   stats={item.stats} 
                   onSelect={handleSelectFloor}
+                  onAvailableClick={handleAvailableClick}
                 />
               ))}
             </div>
+            
+            {/* Available Rooms Modal */}
+            {selectedFloorForModal && (
+              <AvailableRoomsModal 
+                isOpen={isAvailableModalOpen}
+                setIsOpen={setIsAvailableModalOpen}
+                floor={selectedFloorForModal}
+                rooms={floorData.find(f => f.floor === selectedFloorForModal)?.rooms || []}
+                onRoomClick={handleRoomClickInModal}
+              />
+            )}
+
+            {/* Booking Form Modal (when triggered from AvailableRoomsModal) */}
+            {selectedRoomForBooking && (
+              <BookingForm 
+                room={selectedRoomForBooking}
+                isOpen={isBookingModalOpen}
+                setIsOpen={setIsBookingModalOpen}
+              />
+            )}
             
             {filteredFloorData.length === 0 && (
               <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">

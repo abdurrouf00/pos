@@ -17,7 +17,8 @@ export default function BookingList() {
     {
       id: "1",
       booking_no: "BK-2026-001",
-      source: "DIRECT",
+      no_of_guest: "2",
+      kids: "0",
       check_in: "2026-02-15",
       check_out: "2026-02-18",
       room: { display_name: "Room 101 (Deluxe)" },
@@ -28,7 +29,8 @@ export default function BookingList() {
     {
       id: "2",
       booking_no: "BK-2026-002",
-      source: "REQUISITION",
+      no_of_guest: "2",
+      kids: "1",
       check_in: "2026-02-16",
       check_out: "2026-02-17",
       room: { display_name: "Room 205 (Standard)" },
@@ -39,7 +41,8 @@ export default function BookingList() {
     {
       id: "3",
       booking_no: "BK-2026-003",
-      source: "DIRECT",
+      no_of_guest: "2",
+      kids: "0",
       check_in: "2026-02-18",
       check_out: "2026-02-20",
       room: { display_name: "Room 302 (Suite)" },
