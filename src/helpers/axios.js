@@ -2,7 +2,10 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import toast from 'react-hot-toast'
-export const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}api/`
+// Use relative path in production to leverage Next.js rewrites and bypass CORS
+export const baseURL = process.env.NODE_ENV === 'production' 
+  ? '/proxy-api/' 
+  : `${process.env.NEXT_PUBLIC_BACKEND_URL}api/`
 
 const api = axios.create({
   baseURL: baseURL,

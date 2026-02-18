@@ -11,6 +11,14 @@ const nextConfig = {
     config.resolve.alias['@'] = path.join(__dirname, 'src')
     return config
   },
+  async rewrites() {
+    return [
+      {
+        source: '/proxy-api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}api/:path*`,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
